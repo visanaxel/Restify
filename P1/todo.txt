@@ -14,3 +14,14 @@ cards link to the same restaurant page for the demo.
 reachable through the restaurant page. That is, for the demo, we assume that the restaurant page is always accessed from the owner's view. Edit profile must 
 be accessible through the navbar. However, since we assume that the demo is from the perspective of a logged-in user, you can leave the login and signup forms 
 disconnected from the rest.
+
+Home page -> Kai
+Feed page -> Danyal
+create/edit/login -> Danyal
+Notification -> Kai
+Restaurant page -> Axel
+blog for restaurant -> Danyal
+Search page result -> Kai
+Profile user ->listen to recording -> Axel
+Blog post page with comments -> Axel
+
