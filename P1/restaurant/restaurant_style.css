@@ -1,0 +1,100 @@
+.center-block {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 30px;
+    margin-top: 4   0px;   
+ }
+
+ .center-text {
+    margin-top: 100px;   
+     text-align: center;
+ }
+
+ #price {
+     display: flex;
+     justify-content: center;
+ }
+
+ /* .card-deck {
+    float: left;
+    width: 33%;
+    padding: 10 10px;
+  } */
+
+
+
+ 
+
+
+  .card-deck {
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-bottom: 100px;
+  }
+
+
+
+.menu {
+    text-align: center;
+    font-family: cursive;
+    font-size: 48px;
+}
+
+.card-img-top {
+    height: 300px;
+    width: 400px;
+    object-fit: cover;
+}
+
+
+
+/* Card flips */
+
+.flip-card {
+    object-fit: contain;
+    width: 33%;
+    height: 400px;
+    perspective: 1000px; /* 3D effect */
+    text-align: center;
+    flex-direction: column;
+  }
+  
+  .flip-card-inner {
+position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  }
+
+.card-body-back {
+  height: 375px;
+}
+ 
+  
+.flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg); /* flip */
+  }
+  
+/* Position the front and back side */
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden;
+
+}
+
+/* Style the front side (fallback if image is missing) */
+.flip-card-front {
+  color: black;
+}
+
+/* Style the back side */
+.flip-card-back {
+  transform: rotateY(180deg);
+}
+
