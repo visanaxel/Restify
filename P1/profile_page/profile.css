@@ -16,14 +16,27 @@
   /* Add some padding inside the card container */
   .cus_container {
     padding: 5px 20px;
-    margin-left: 200px;
-    margin-right: 200px;
+    margin-left: 100px;
+    margin-right: 100px;
   }
 
+.center_submit {
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.profile_box {
+    background-color: #f2f2f2;
+    padding: 10px;
+    border: 1px solid gray;
+    margin: 0;
+    border-radius: 10px;
+  }
 
 .blog {
+    margin-top: 75px;
     text-align: center;
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif ;
     font-size: 48px;
 }
 
@@ -45,16 +58,61 @@
     width: 300px;
     height: 300px;
     object-fit: cover;
-    margin-right: 50px;
     margin-top: 50px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 30px;
+    width: 50%;
   }
 
+  * {
+    box-sizing: border-box;
+  }
+  
+  /* Style inputs */
+  input[type=text], select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    
+    border-radius: 5px;
+    resize: vertical;
 
-
-img {
-    float: right;
-    margin-bottom: 50px;
-}
+  }
+  
+  input[type=submit] {
+    background-color: rgb(53, 133, 190);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 5px;
+    margin-top: 15px;
+    cursor: pointer;
+  }
+  
+  input[type=submit]:hover {
+    background-color: rgb(66, 155, 219);
+    transition: 0.5s ease-out;
+  }
+  
+  .container {
+    background-color: #f2f2f2;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 10px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+  
+  /* Create two columns that float next to eachother */
+  .column {
+    margin-top: 6px;
+    padding: 20px;
+  }
+  
+  
   
 /* nav */
 li {
