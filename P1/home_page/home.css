@@ -62,3 +62,8 @@ body {
     cursor: pointer;
     /* border-color: darkgrey; */
 }
+
+li {
+    padding-left: 5px;
+    padding-right: 5px;
+}

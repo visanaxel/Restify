@@ -5,6 +5,8 @@
     <title>Home</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="home.css">
 </head>
 
@@ -22,10 +24,35 @@
                         <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Blogs</a>
+                        <a class="nav-link" href="#">Feed</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Profile</a>
+                        <a class="nav-link" href="#">My Restaurant</a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                              Profile
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                              <li><a class="dropdown-item" href="#">Profile</a></li>
+                              <li><a class="dropdown-item" href="#">Edit Profile</a></li>
+                            </ul>
+                          </div>
+                    </li>
+                    <li class="nav-item">
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                              Notifications
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                              <li><a class="dropdown-item" href="#">Subscribed</a></li>
+                              <li><a class="dropdown-item" href="#">Discover</a></li>
+                            </ul>
+                          </div>
+                    </li>
+                    <li id="logout" class="nav-item">
+                        <a class="nav-link" href="#">Logout</a>
                     </li>
                     <!-- <li class="nav-item">
                         <a class="nav-link disabled" href="#">Disabled</a>
