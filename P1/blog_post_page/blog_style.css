@@ -8,10 +8,32 @@
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   }
   
+  
   /* On mouse-over, add a deeper shadow */
   .card:hover {
     box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
   }
+
+  .like {
+    padding-top: 10px;
+    padding-right: 5px;
+    width: 5%;
+  }
+
+  .like:hover {
+    -webkit-filter: invert(.9);
+   filter: invert(.9);
+   transition: 0.1s ease-out;
+
+
+  }
+
+  .like:focus {
+    -webkit-filter: invert(.9);
+   filter: invert(.9);
+  }
+
+
   
   /* Add some padding inside the card container */
   .container {
