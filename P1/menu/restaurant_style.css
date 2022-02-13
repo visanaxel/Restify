@@ -36,8 +36,8 @@
 
 
 .menu {
+  margin-top: 75px;
     text-align: center;
-    font-family: cursive;
     font-size: 48px;
 }
 
@@ -98,3 +98,19 @@ position: relative;
   transform: rotateY(180deg);
 }
 
+/* nav */
+li {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#nav {
+position: fixed;
+top: 0;
+width: 100%;
+z-index: 1;
+}
+
+body {
+font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
