@@ -17,7 +17,7 @@
   .like {
     padding-top: 10px;
     padding-right: 5px;
-    width: 5%;
+    width: 4%;
   }
 
   .like:hover {
@@ -28,10 +28,6 @@
 
   }
 
-  .like:focus {
-    -webkit-filter: invert(.9);
-   filter: invert(.9);
-  }
 
 
   
