@@ -16,12 +16,14 @@ be accessible through the navbar. However, since we assume that the demo is from
 disconnected from the rest.
 
 Home page -> Kai
+Notification -> Kai
+Search page result -> Kai
+
 Feed page -> Danyal
 create/edit/login -> Danyal
-Notification -> Kai
-Restaurant page -> Axel
 blog for restaurant -> Danyal
-Search page result -> Kai
+
+Restaurant page -> Axel
 Profile user ->listen to recording -> Axel
 Blog post page with comments -> Axel
 
