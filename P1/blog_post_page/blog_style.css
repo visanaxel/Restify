@@ -97,7 +97,7 @@ input[type='checkbox'] {
 }
 
 /* new */
-.custom_li {
+li {
     padding-left: 5px;
     padding-right: 5px;
 }
