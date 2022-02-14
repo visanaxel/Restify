@@ -38,6 +38,7 @@
 .card-img-top {
     height: 300px;
     width: 100%;
+    object-fit: cover;
 }
 
 .card-deck {
