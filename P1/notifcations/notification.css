@@ -1,16 +1,17 @@
 img {
-    width: 100%;
-    height: auto;
+  width: 100%;
+  height: auto;
 }
 
 .profile_pic {
-    clip-path: circle();
-    width: 80%;
-    height: 80%;
-    
-    /* margin: auto;    
-    display: block; */
+  clip-path: circle();
+  width: 80%;
+  height: 80%;
+  
+  /* margin: auto;    
+  display: block; */
 }
+
 
 
 /* .picture_column {
