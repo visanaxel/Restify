@@ -1,3 +1,4 @@
+/*  */
 img {
   width: 100%;
   height: auto;
@@ -13,14 +14,7 @@ img {
 }
 
 
-
-/* .picture_column {
-    width: 90px;
-    height: 90px;
-    margin: auto;    
-    display: block;
-    
-} */
+/* https://stackoverflow.com/questions/31176937/image-responsive-in-bootstrap-to-fill-column */
 
 /* new */
 li {
