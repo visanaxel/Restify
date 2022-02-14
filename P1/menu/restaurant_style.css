@@ -34,6 +34,19 @@
     width: 100%;
   }
 
+  .button-holder {
+    text-align: center;
+    padding-bottom: 60px;
+}
+
+.button-holder2 {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  margin-top: 60px;
+}
+
 
 
 .menu {
