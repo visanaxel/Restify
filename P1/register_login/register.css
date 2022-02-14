@@ -14,3 +14,16 @@
     box-shadow: -1px 4px 26px 11px rgba(0,0,0,0.75);
     color: white;
 }
+
+/* nav */
+li {
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  
+  #nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+  }
