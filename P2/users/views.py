@@ -10,11 +10,11 @@ from rest_framework import status
 
 # Create your views here.
 class RegisterAPIView(APIView):
-    serialzer_class = UserRegisterSerializer
+    serializer_class = UserRegisterSerializer
 
     def post(self, request, *args, **kwargs):
         print("entered post!")
-        serializer = self.serialzer_class(data=request.data)
+        serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
             print("it is valid!")
@@ -41,6 +41,24 @@ class ProfileView(RetrieveAPIView):
         self.check_object_permissions(self.request, obj)
         return obj
 
+# class EditProfileView(UpdateAPIView):
+#     serializer_class = ProfileSerializer
+#     permission_classes = [IsAuthenticated]
+#     queryset = MyUser.objects.all()
+#     print('HERE')
+
+#     def post(self, request, *args, **kwargs):
+#         print("In post")
+#         serializer = self.serializer_class(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class EditProfileView(RetrieveAPIView, UpdateAPIView):
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated]
+    queryset = MyUser.objects.all()
+
+    def get_object(self):
+        return self.request.user
