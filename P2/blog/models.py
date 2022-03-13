@@ -1,4 +1,3 @@
-from turtle import mode
 from django.db import models
 from django.db.models import SET_NULL
 from users.models import MyUser

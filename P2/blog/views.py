@@ -9,7 +9,7 @@ from django.http import Http404
 # from users.serializers import UserRegisterSerializer
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.generics import get_object_or_404, RetrieveAPIView, UpdateAPIView
+from rest_framework.generics import get_object_or_404, RetrieveAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework import status
 
 # Create your views here.
@@ -95,5 +95,36 @@ class EditBlogAPIView(UpdateAPIView):
         return blog
         
     
+class DeleteBlogApiView(DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Blog.objects.all()
+    serializer_class = BlogViewSerializer
+    lookup_field = 'pk'
     
+    def delete(self, request, pk):
+        print("ENTERED delete OBJECT!")
+        user = self.request.user
+        blog_id = self.kwargs.get('pk')
+        blog = Blog.objects.filter(id = blog_id)
+        
+        if (bool(blog) == False):
+            print("Couldnt find blog")
+            raise Http404
+            # return Response({'error': 'DIS aint a blog dawg!'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        blog = blog[0]
+        restaurant = Restaurant.objects.filter(owner = user.id)
+        if (bool(restaurant) == False):
+            print("dis dude dont even own a restuarant wtf")
+            # return Response({'error': 'YOU DONT EVEN OWN A RESTAURANT!'}, status=status.HTTP_400_BAD_REQUEST)
+            raise Http404
+        if (restaurant[0] != blog.rid):
+            print(restaurant[0].id)
+            print(blog.rid)
+            print("dude reestaurant != blog restauarant")
+
+            # return Response({'error': 'YOU DONT OWN THIS BLOG!'}, status=status.HTTP_400_BAD_REQUEST)
+            raise Http404
+        blog.delete()
+        return Response({"message": "blog has been deleted"})
 
