@@ -9,5 +9,5 @@ app_name = 'restaurant'
 urlpatterns = [
     path('<restaurant_id>/menu/', ViewMenu.as_view(), name='menu'),
     path('<restaurant_id>/menu/add/', AddItem.as_view(), name='add'),
-    path('<restaurant_id>/menu/<item>/edit/', EditItem.as_view(), name='edit'),
+    path('<restaurant_id>/menu/<int:pk>/edit/', EditItem.as_view(), name='edit'),
 ] 
