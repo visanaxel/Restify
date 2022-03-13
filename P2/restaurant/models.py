@@ -11,6 +11,8 @@ class Restaurant(models.Model):
     postal_code = models.CharField(max_length=7) 
     phone_number = models.CharField(max_length=20) 
     owner = models.ForeignKey(to=MyUser, on_delete=SET_NULL, null=True)
+    likes = models.IntegerField(default=0)
+    followers = models.IntegerField(default=0)
 
 class ImageModel(models.Model):
     image = models.ImageField()
@@ -31,6 +33,6 @@ class Comment(models.Model):
     uid = models.ForeignKey(to=MyUser, on_delete=SET_NULL,  null=True)
 
 
-class Follows(models.Model):
-    rid = models.ForeignKey(to=Restaurant, on_delete=SET_NULL,  null=True, )
-    uid = models.ForeignKey(to=MyUser, on_delete=SET_NULL,  null=True)
+# class Follows(models.Model):
+#     rid = models.ForeignKey(to=Restaurant, on_delete=SET_NULL,  null=True, )
+#     uid = models.ForeignKey(to=MyUser, on_delete=SET_NULL,  null=True)
