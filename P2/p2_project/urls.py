@@ -21,5 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/', include('users.urls', namespace='users')),
     path('restaurant/', include('restaurant.urls', namespace='restaurant')),
-    path('blog/', include('blog.urls', namespace='blog'))  
+    path('blog/', include('blog.urls', namespace='blog')),
+    path('notifications/', include('notifications.urls', namespace='notifications')),
+    path('social/', include('social.urls', namespace='social')) 
 ]

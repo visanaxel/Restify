@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'users',
     'restaurant',
     'blog',
+    'social',
+    'notifications',
 ]
 
 MIDDLEWARE = [
