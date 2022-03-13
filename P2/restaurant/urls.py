@@ -1,10 +1,8 @@
 
 from django.urls import path, include
-from restaurant.views import ViewMenu, AddItem, EditItem
+from restaurant.views import AddRestaurantView, EditRestaurantView, RestaurantView, ViewMenu, AddItem, EditItem
 
 app_name = 'restaurant'  
-
-
   
 urlpatterns = [
     path('<restaurant_id>/menu/', ViewMenu.as_view(), name='menu'),
