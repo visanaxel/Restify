@@ -16,18 +16,20 @@ class ImageModel(models.Model):
     image = models.ImageField()
     rid = models.ForeignKey(to=Restaurant, on_delete=SET_NULL,  null=True)
 
+
+class MenuItem(models.Model):
+    name = models.CharField(max_length=200)
+    price = models.FloatField()
+    description = models.TextField()
+    image = models.ImageField(default='../media/koala.jpg')
+    rid = models.ForeignKey(to=Restaurant, on_delete=SET_NULL,  null=True)
+
 class Comment(models.Model):
     comment = models.CharField(max_length=400) # or maybe change to textfield
     date = models.DateTimeField(auto_now_add=True)
     rid = models.ForeignKey(to=Restaurant, on_delete=SET_NULL,  null=True)
     uid = models.ForeignKey(to=MyUser, on_delete=SET_NULL,  null=True)
 
-class MenuItem(models.Model):
-    name = models.CharField(max_length=200)
-    price = models.FloatField()
-    description = models.TextField()
-    image = models.ImageField()
-    rid = models.ForeignKey(to=Restaurant, on_delete=SET_NULL,  null=True)
 
 class Follows(models.Model):
     rid = models.ForeignKey(to=Restaurant, on_delete=SET_NULL,  null=True, )
