@@ -1,11 +1,13 @@
+from django.http import Http404
 from django.shortcuts import render
 from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView
 from restaurant.models import MenuItem
 from restaurant.models import Restaurant
-from restaurant.serializers import MenuItemSerializer
+from restaurant.serializers import AddRestaurantSerializer, MenuItemSerializer, RestaurantViewSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
@@ -38,7 +40,6 @@ class AddItem(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
 class EditItem(RetrieveAPIView, UpdateAPIView):
     serializer_class = MenuItemSerializer
 
@@ -56,3 +57,63 @@ class EditItem(RetrieveAPIView, UpdateAPIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+class RestaurantView(RetrieveAPIView):
+    queryset = Restaurant.objects.all()
+    serializer_class = RestaurantViewSerializer
+    look_field = 'pk'
+
+class AddRestaurantView(APIView):
+    serializer_class = AddRestaurantSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        print("entered post!")
+        # By here the user is valid, I want to see if this user is a restauarant owner, and if they own a restaurant first!
+        user = request.user
+
+        if (user.is_owner):
+            return Response({'error': 'already have restaurant registered'}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = self.serializer_class(data=request.data)
+
+        if serializer.is_valid():
+            rest = serializer.save()
+            rest.owner = user
+            rest.save()
+
+            user.is_owner = True
+            user.save()
+            serialized_data = serializer.data
+            return Response(serialized_data, status=status.HTTP_201_CREATED)
+        else:
+            print(serializer.error_messages)
+            print("it is not valid!")
+
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class EditRestaurantView(UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Restaurant.objects.all()
+    serializer_class = RestaurantViewSerializer
+    look_field = 'pk'
+
+    def get_object(self):
+        print("ENTERED GET OBJECT!")
+        user = self.request.user
+        rid = self.kwargs.get('pk')
+        rest = Restaurant.objects.filter(id = rid)
+
+        if (bool(rest) == False):
+            print("Couldnt find blog")
+            raise Http404
+            # return Response({'error': 'DIS aint a blog dawg!'}, status=status.HTTP_400_BAD_REQUEST)
+
+        rest = rest[0]
+        
+        if (rest.owner != user):
+            print("dis dude dont even own a restuarant wtf")
+
+            # return Response({'error': 'YOU DONT EVEN OWN A RESTAURANT!'}, status=status.HTTP_400_BAD_REQUEST)
+            raise Http404
+
+        return rest
