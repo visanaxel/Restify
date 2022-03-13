@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 from codecs import lookup
 from django.http import Http404, HttpResponseForbidden
-=======
 from django.http import Http404
->>>>>>> 2785fdd0be9d002d29def57d5e2f3502bf872ef1
 from django.shortcuts import render
 from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView
 from restaurant.models import MenuItem
@@ -65,12 +62,12 @@ class EditItem(RetrieveAPIView, UpdateAPIView):
     permission_classes = [IsAuthenticated]
 
     def patch(self, request, *args, **kwargs):
-        user = request.user
+        
         instance = self.get_object()
         d = request.data.dict()
         d['rid'] = kwargs['restaurant_id']
         d['id'] = kwargs['pk']
-
+        user = request.user
         restaurant = Restaurant.objects.filter(owner = user.id)
         if not bool(restaurant): 
             return Http404
