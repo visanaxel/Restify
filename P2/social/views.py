@@ -1,6 +1,5 @@
 from django.http import Http404
 from django.shortcuts import render
-from notifications.models import UserNotifications
 from rest_framework.views import APIView
 from restaurant.models import Restaurant
 from restaurant.serializers import AddRestaurantSerializer
@@ -13,7 +12,7 @@ from rest_framework.response import Response
 from social.serializers import AddFollowSerializer
 
 from blog.models import Blog
-from notifications.models import UserNotifications
+from notifications.models import OwnerNotifications
 from restaurant.models import Restaurant
 
 from rest_framework.generics import CreateAPIView, DestroyAPIView
@@ -24,11 +23,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from social.models import LikeBlog, LikeRest
-from social.serializers import LikeRestSerializer
 
-
-
-# Create your views here.
+# Views here:
 class AddFollowView(APIView):
     serializer_class = AddFollowSerializer
     permission_classes = [IsAuthenticated]
@@ -43,7 +39,6 @@ class AddFollowView(APIView):
             return Response(serialized_data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        # make sure user is not already following
         
 class DeleteFollowApiView(DestroyAPIView):
     permission_classes = [IsAuthenticated]
@@ -66,12 +61,6 @@ class DeleteFollowApiView(DestroyAPIView):
         
         follower.delete()
         return Response({"message": "You have unfollowed"})
-        
-        # someone not already following
-        
-
-
-# Create your views here.
 
 class LikeRestView(CreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -95,8 +84,8 @@ class LikeRestView(CreateAPIView):
         if bool(like_rest_q):
             return Response('User already liked the restaurant.', status=status.HTTP_400_BAD_REQUEST)
 
-        # Add new UserNotification object!
-        user_notif = UserNotifications(uid=user, rid=restaurant[0], notif_type='l', description=user.username + ' liked your restaurant: ' + restaurant[0].name)
+        # Add new OnwerNotification object!
+        user_notif = OwnerNotifications(uid=user, rid=restaurant[0], notif_type='l', description=user.username + ' liked your restaurant: ' + restaurant[0].name)
         user_notif.save()
 
         # increment restaurant likes count!
@@ -157,9 +146,9 @@ class LikeBlogView(CreateAPIView):
         if bool(like_rest_q):
             return Response('User already liked the blog.', status=status.HTTP_400_BAD_REQUEST)
 
-        # Create user notification!
+        # Create owner notification!
         restaurant = blog[0].rid
-        user_notif = UserNotifications(uid=user, rid=restaurant, notif_type='l', description=user.username + ' liked your blog: ' + blog[0].title)
+        user_notif = OwnerNotifications(uid=user, rid=restaurant, notif_type='l', description=user.username + ' liked your blog: ' + blog[0].title)
         user_notif.save()
 
         # increment blog likes count!
