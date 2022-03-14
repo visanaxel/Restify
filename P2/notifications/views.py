@@ -6,26 +6,27 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 
-from notifications.models import UserNotifications, RestNotifications
-from notifications.serializers import RestNotificationSerializer, UserNotificationSerializer
+from notifications.models import UserNotifications, OwnerNotifications
+from notifications.serializers import OwnerNotificationSerializer, UserNotificationSerializer
 from restaurant.models import Restaurant
 from rest_framework import status
 
 
 # Create your views here.
-class UserNotificationView(ListAPIView):
-    serializer_class = UserNotificationSerializer
+class OwnerNotificationView(ListAPIView):
+    serializer_class = OwnerNotificationSerializer
     permission_classes = [IsAuthenticated]
     
-    def get_queryset(self):
+    def get(self, request, *args, **kwargs):
 
-        user = self.request.user
+        user = request.user
+
+        if not user.is_owner:
+            return Response({'error': 'You do not own a restaurant'}, status=status.HTTP_400_BAD_REQUEST)
+
         restaurant = Restaurant.objects.filter(owner=user)
-        
-        if (bool(restaurant) == False):
-            return Response({'error': 'Yo dont got no restaurants'}, status=status.HTTP_400_BAD_REQUEST)
 
-        ret = UserNotifications.objects.filter(rid=restaurant[0])
+        ret = OwnerNotifications.objects.filter(rid=restaurant[0])
 
         for notif in ret:
             notif.delete()
@@ -33,16 +34,17 @@ class UserNotificationView(ListAPIView):
         return ret
 
 
-# NOTIFICATIONS IM GETTING FROM REST(NEW BLOG) SENDING TO USER
-class RestNotificationView(ListAPIView):
 
-    serializer_class = RestNotificationSerializer
+# NOTIFICATIONS IM GETTING FROM REST(NEW BLOG) SENDING TO USER
+class UserNotificationView(ListAPIView):
+
+    serializer_class = UserNotificationSerializer
 
     permission_classes = [IsAuthenticated]
     def get_queryset(self):
         user = self.request.user
         
-        ret = RestNotifications.objects.filter(uid=user)
+        ret = UserNotifications.objects.filter(uid=user)
         for notif in ret:
             notif.delete()
 
