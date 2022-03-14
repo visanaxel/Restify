@@ -194,6 +194,7 @@ class CommentRestaurantView(APIView):
 
 
     def post(self, request, *args, **kwargs):
+        print(request.user.id)
         user = request.user
 
         d = request.data.dict()
@@ -209,11 +210,12 @@ class CommentRestaurantView(APIView):
 
         # restaurant was found and valid
         # now find followers
-        notif = UserNotifications(rid=restaurant[0], uid = user, notif_type='c', \
-            description = user.username + " commented on your page:" + "\"" +  d['comment'] + "\".") 
+        UserNotifications.objects.create(rid=restaurant[0], uid = request.user, notif_type='c', \
+            description = user.username + " commented on your page: " + "\"" +  d['comment'] + "\".") 
 
 
         # notifs done
+        d['uid'] = request.user.id
         serializer = self.serializer_class(data=d)
         if serializer.is_valid():
             serializer.save()

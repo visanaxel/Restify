@@ -1,6 +1,7 @@
 from asyncio import run_coroutine_threadsafe
 import datetime
 from rest_framework import serializers
+from restaurant.models import Comment
 from users.models import MyUser
 from restaurant.models import MenuItem;
 from restaurant.models import Restaurant
@@ -73,7 +74,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
     class Meta:
-        model = MenuItem
+        model = Comment
         fields = [
             'uid',
             'rid',
