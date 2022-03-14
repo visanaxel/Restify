@@ -20,3 +20,18 @@ class RestNotificationSerializer(serializers.ModelSerializer):
             'notif_type',
             'description'
         ]
+
+class UserNotificationSerializer(serializers.ModelSerializer):
+    uid = MyUser
+    rid = Restaurant
+    notif_type = serializers.CharField(max_length=1)
+    description = serializers.CharField(max_length=100)
+
+    class Meta:
+        model = RestNotifications
+        fields = [
+            'uid',
+            'rid',
+            'notif_type',
+            'description'
+        ]
