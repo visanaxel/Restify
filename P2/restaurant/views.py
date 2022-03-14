@@ -4,14 +4,14 @@ from django.http import Http404, HttpResponseForbidden
 from django.http import Http404
 from django.shortcuts import render
 from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView
-from notifications.models import UserNotifications
+from notifications.models import OwnerNotifications
 from restaurant.models import Comment
 from restaurant.serializers import CommentSerializer
-from notifications.serializers import RestNotificationSerializer
+from notifications.serializers import UserNotificationSerializer
 from social.models import Follows
 from restaurant.models import MenuItem
 from restaurant.models import Restaurant
-from notifications.models import RestNotifications
+from notifications.models import UserNotifications
 from restaurant.serializers import AddRestaurantSerializer, MenuItemSerializer, RestaurantViewSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -34,7 +34,7 @@ class ViewMenu(ListAPIView):
 
 class AddItem(APIView):
     serializer_class = MenuItemSerializer
-    notif_serializer_class = RestNotificationSerializer
+    notif_serializer_class = UserNotificationSerializer
     model = MenuItem
     context_object_name = 'add_item'
     queryset = MenuItem.objects.all()
@@ -55,26 +55,26 @@ class AddItem(APIView):
         if (int(restaurant[0].id) != int(kwargs['restaurant_id'])):
             return Response("Forbidden", status=403)
 
-        # restaurant was found and valid
-        # now find followers
-        followers = Follows.objects.filter(rid=d['rid'])
-        for follower in followers:
-            qset_keys = list(self.request.data)
-            qset_vals = list(self.request.data.values())
-            name = qset_vals[qset_keys.index('name')]
-            desc = name.capitalize() + " was added to the restaurant " + restaurant[0].name + "!"
-            c = {'uid': follower.uid.id, 'rid': kwargs['restaurant_id'], 'notif_type': 'n', 'description': desc}
-            notif_serializer = self.notif_serializer_class(data=c)
-
-            if notif_serializer.is_valid():
-                notif_serializer.save()
-            else:
-                return Response(notif_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-        # notifs done
         serializer = self.serializer_class(data=d)
         if serializer.is_valid():
             serializer.save()
+            # restaurant was found and valid
+            # now find followers
+            followers = Follows.objects.filter(rid=d['rid'])
+            for follower in followers:
+                qset_keys = list(self.request.data)
+                qset_vals = list(self.request.data.values())
+                name = qset_vals[qset_keys.index('name')]
+                desc = name.capitalize() + " was added to the restaurant " + restaurant[0].name + "!"
+                c = {'uid': follower.uid.id, 'rid': kwargs['restaurant_id'], 'notif_type': 'n', 'description': desc}
+                notif_serializer = self.notif_serializer_class(data=c)
+
+                if notif_serializer.is_valid():
+                    notif_serializer.save()
+                else:
+                    return Response(notif_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            # notifs done
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -85,7 +85,7 @@ class EditItem(RetrieveAPIView, UpdateAPIView):
     context_object_name = 'edit_item'
     queryset = MenuItem.objects.all()
     permission_classes = [IsAuthenticated]
-    notif_serializer_class = RestNotificationSerializer
+    notif_serializer_class = UserNotificationSerializer
 
     def patch(self, request, *args, **kwargs):
         
@@ -186,7 +186,7 @@ class EditRestaurantView(UpdateAPIView):
 
 class CommentRestaurantView(APIView):
     serializer_class = CommentSerializer
-    # notif_serializer_class = RestNotificationSerializer
+    # notif_serializer_class = UserNotificationSerializer
     model = Comment
     context_object_name = 'add_comment'
     #queryset = Comment.objects.all()
@@ -203,14 +203,14 @@ class CommentRestaurantView(APIView):
         restaurant = Restaurant.objects.filter(owner = user.id)
 
         if not bool(restaurant): 
-            return Http404
+            return Response("Not Found", status=404)
         
         if (int(restaurant[0].id) != int(kwargs['restaurant_id'])):
             return Response("Forbidden", status=403)
 
         # restaurant was found and valid
         # now find followers
-        UserNotifications.objects.create(rid=restaurant[0], uid = request.user, notif_type='c', \
+        OwnerNotifications.objects.create(rid=restaurant[0], uid = request.user, notif_type='c', \
             description = user.username + " commented on your page: " + "\"" +  d['comment'] + "\".") 
 
 
