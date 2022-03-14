@@ -1,6 +1,7 @@
 from django.http import Http404
 from django.shortcuts import render
 from blog.models import Blog
+from notifications.models import UserNotifications
 from restaurant.models import Restaurant
 
 from rest_framework.generics import CreateAPIView, DestroyAPIView
@@ -37,6 +38,14 @@ class LikeRestView(CreateAPIView):
         if bool(like_rest_q):
             return Response('User already liked the restaurant.', status=status.HTTP_400_BAD_REQUEST)
 
+        # Add new UserNotification object!
+        user_notif = UserNotifications(uid=user, rid=restaurant[0], notif_type='l', description=user.username + ' liked your restaurant: ' + restaurant[0].name)
+        user_notif.save()
+
+        # increment restaurant likes count!
+        restaurant[0].likes += 1
+        restaurant[0].save()
+
         like_rest = LikeRest(uid=user, rid=restaurant[0])
         like_rest.save()
 
@@ -59,6 +68,10 @@ class UnlikeRestaurant(DestroyAPIView):
         like_rest_query = LikeRest.objects.filter(uid=user, rid=restaurant[0])
         if not bool(like_rest_query):
             return Response('User does not like the restaurant.', status=status.HTTP_400_BAD_REQUEST)
+
+        # decrement restaurant likes count!
+        restaurant[0].likes -= 1
+        restaurant[0].save()
 
         like_rest_instance = like_rest_query[0]
         like_rest_instance.delete()
@@ -87,6 +100,15 @@ class LikeBlogView(CreateAPIView):
         if bool(like_rest_q):
             return Response('User already liked the blog.', status=status.HTTP_400_BAD_REQUEST)
 
+        # Create user notification!
+        restaurant = blog[0].rid
+        user_notif = UserNotifications(uid=user, rid=restaurant, notif_type='l', description=user.username + ' liked your blog: ' + blog[0].title)
+        user_notif.save()
+
+        # increment blog likes count!
+        blog[0].likes += 1
+        blog[0].save()
+
         like_blog = LikeBlog(uid=user, bid=blog[0])
         like_blog.save()
 
@@ -109,6 +131,10 @@ class UnlikeBlogView(DestroyAPIView):
         like_blog_query = LikeBlog.objects.filter(uid=user, bid=blog[0])
         if not bool(like_blog_query):
             return Response('User did not like the blog.', status=status.HTTP_400_BAD_REQUEST)
+
+        # decrement blog likes count!
+        blog[0].likes -= 1
+        blog[0].save()
 
         like_blog_instance = like_blog_query[0]
         like_blog_instance.delete()
