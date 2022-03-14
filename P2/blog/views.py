@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from blog.models import Blog
 from blog.serializers import BlogRegisterSerializer, BlogViewSerializer
+from notifications.serializers import RestNotificationSerializer
 from restaurant.models import Restaurant
 from rest_framework.views import APIView
 from django.http import Http404
@@ -11,12 +12,17 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import get_object_or_404, RetrieveAPIView, UpdateAPIView, DestroyAPIView
 from rest_framework import status
+from social.models import Follows
 
 # Create your views here.
 # Anyone should be allowed to view a blog, no need for authentication
 class RegisterAPIView(APIView):
     serializer_class = BlogRegisterSerializer
     permission_classes = [IsAuthenticated]
+    
+    # axel stuff i dunno
+    notif_serializer_class = RestNotificationSerializer
+
 
 
     def post(self, request, *args, **kwargs):
@@ -48,6 +54,23 @@ class RegisterAPIView(APIView):
             blog.rid = restaurant[0]
             blog.author = user
             blog.save()
+            # ============================================================
+            followers = Follows.objects.filter(rid=restaurant[0])
+            for follower in followers:
+                qset_keys = list(self.request.data)
+                qset_vals = list(self.request.data.values())
+                
+                name = blog.title
+                desc = name.capitalize() + " blog was posted for " + restaurant[0].name + "!"
+                c = {'uid': follower.uid.id, 'rid': restaurant[0].id, 'notif_type': 'b', 'description': desc}
+                notif_serializer = self.notif_serializer_class(data=c)
+
+                if notif_serializer.is_valid():
+                    notif_serializer.save()
+                else:
+                    return Response(notif_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            # =================================================================
             serialized_data = serializer.data
             return Response(serialized_data, status=status.HTTP_201_CREATED)
         else:
