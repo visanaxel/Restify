@@ -7,7 +7,7 @@ from blog.models import Blog
 from restaurant.models import Restaurant
 
 user_notification_choices = (('l', 'like'), ('f', 'follow'), ('c', 'comment'))
-rest_notification_choices = (('m', 'menu change'), ('n', 'new item'))
+rest_notification_choices = (('m', 'menu change'), ('n', 'new item'), ('b', 'blog added'))
 # Create your models here.
 class UserNotifications(models.Model):
     uid = models.ForeignKey(to=MyUser, on_delete=SET_NULL, null=True)

@@ -3,7 +3,6 @@ import json
 from django.http import Http404, HttpResponseForbidden
 from django.http import Http404
 from django.shortcuts import render
-from pyparsing import FollowedBy
 from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView
 from notifications.models import UserNotifications
 from restaurant.models import Comment
