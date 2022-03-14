@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from blog.models import Blog
 from blog.serializers import BlogRegisterSerializer, BlogViewSerializer
-from notifications.serializers import RestNotificationSerializer
+from notifications.serializers import UserNotificationSerializer
 from restaurant.models import Restaurant
 from rest_framework.views import APIView
 from django.http import Http404
@@ -21,7 +21,7 @@ class RegisterAPIView(APIView):
     permission_classes = [IsAuthenticated]
     
     # axel stuff i dunno
-    notif_serializer_class = RestNotificationSerializer
+    notif_serializer_class = UserNotificationSerializer
 
 
 
@@ -115,8 +115,7 @@ class EditBlogAPIView(UpdateAPIView):
 
             # return Response({'error': 'YOU DONT OWN THIS BLOG!'}, status=status.HTTP_400_BAD_REQUEST)
             raise Http404
-        return blog
-        
+        return blog        
     
 class DeleteBlogApiView(DestroyAPIView):
     permission_classes = [IsAuthenticated]
