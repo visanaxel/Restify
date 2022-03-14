@@ -1,3 +1,5 @@
+# Note: VM uses python 3.10.2!
+
 # create venv
 python -m venv venv
 
