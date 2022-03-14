@@ -3,8 +3,10 @@ import json
 from django.http import Http404, HttpResponseForbidden
 from django.http import Http404
 from django.shortcuts import render
-from pyparsing import FollowedBy
 from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView
+from notifications.models import UserNotifications
+from restaurant.models import Comment
+from restaurant.serializers import CommentSerializer
 from notifications.serializers import RestNotificationSerializer
 from social.models import Follows
 from restaurant.models import MenuItem
@@ -181,3 +183,40 @@ class EditRestaurantView(UpdateAPIView):
             raise Http404
 
         return rest
+
+class CommentRestaurantView(APIView):
+    serializer_class = CommentSerializer
+    # notif_serializer_class = RestNotificationSerializer
+    model = Comment
+    context_object_name = 'add_comment'
+    #queryset = Comment.objects.all()
+    permission_classes = [IsAuthenticated]
+
+
+    def post(self, request, *args, **kwargs):
+        user = request.user
+
+        d = request.data.dict()
+        d['rid'] = kwargs['restaurant_id']
+
+        restaurant = Restaurant.objects.filter(owner = user.id)
+
+        if not bool(restaurant): 
+            return Http404
+        
+        if (int(restaurant[0].id) != int(kwargs['restaurant_id'])):
+            return Response("Forbidden", status=403)
+
+        # restaurant was found and valid
+        # now find followers
+        notif = UserNotifications(rid=restaurant[0], uid = user, notif_type='c', \
+            description = user.username + " commented on your page:" + "\"" +  d['comment'] + "\".") 
+
+
+        # notifs done
+        serializer = self.serializer_class(data=d)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

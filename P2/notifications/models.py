@@ -8,21 +8,20 @@ from restaurant.models import Restaurant
 
 user_notification_choices = (('l', 'like'), ('f', 'follow'), ('c', 'comment'))
 rest_notification_choices = (('m', 'menu change'), ('n', 'new item'), ('b', 'blog added'))
+
 # Create your models here.
 # THIS IS BEING SENT TO THE RESTAURANT!!!!!
 class UserNotifications(models.Model):
     uid = models.ForeignKey(to=MyUser, on_delete=SET_NULL, null=True)
     rid = models.ForeignKey(to=Restaurant, on_delete=SET_NULL, null=True)
-    # like follow comment
+    # m(('l', 'like'), ('f', 'follow'), ('c', 'comment'))
     notif_type = models.CharField(max_length=1, choices=user_notification_choices)
     description = models.CharField(max_length=400)
-    # create blog -> all followers follow this restaurant, save notification for each same with menu,
-    # Notification.objects.save(uid = request.user, rid = restaurant)
 
 # THIS IS BEING SENT TO THE USER!!!!!!
 class RestNotifications(models.Model):
     uid = models.ForeignKey(to=MyUser, on_delete=SET_NULL, null=True)
     rid = models.ForeignKey(to=Restaurant, on_delete=SET_NULL, null=True)
-    # add blog edit menu
+    # (('m', 'menu change'), ('n', 'new item'), ('b', 'blog added'))
     notif_type = models.CharField(max_length=1, choices=rest_notification_choices)
     description = models.CharField(max_length=100, default="")

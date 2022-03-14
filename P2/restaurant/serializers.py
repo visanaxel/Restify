@@ -1,5 +1,7 @@
 from asyncio import run_coroutine_threadsafe
+import datetime
 from rest_framework import serializers
+from users.models import MyUser
 from restaurant.models import MenuItem;
 from restaurant.models import Restaurant
 
@@ -64,11 +66,17 @@ class AddRestaurantSerializer(serializers.ModelSerializer):
         rest.save()
         return rest
 
-        # why return user I dont know youtube dude it
-        # return 
+class CommentSerializer(serializers.ModelSerializer):
+    uid = MyUser
+    rid = Restaurant
+    comment = serializers.CharField(max_length=400)
 
-        # else:
-        #     raise serializers.ValidationError({'error': 'Yo passwords dont match'})
 
-        # might need to uncomment this
-        # return super().create(validated_data)
+    class Meta:
+        model = MenuItem
+        fields = [
+            'uid',
+            'rid',
+            'comment',
+            'date'
+        ]
