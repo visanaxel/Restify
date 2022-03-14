@@ -23,7 +23,7 @@ class MenuItem(models.Model):
     name = models.CharField(max_length=200)
     price = models.FloatField()
     description = models.TextField()
-    image = models.ImageField(default='../media/koala.jpg')
+    image = models.ImageField(default='../media/koala.jpg', blank=True)
     rid = models.ForeignKey(to=Restaurant, on_delete=SET_NULL,  null=True)
 
 class Comment(models.Model):

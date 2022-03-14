@@ -1,10 +1,15 @@
 from codecs import lookup
+import json
 from django.http import Http404, HttpResponseForbidden
 from django.http import Http404
 from django.shortcuts import render
+from pyparsing import FollowedBy
 from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView
+from notifications.serializers import RestNotificationSerializer
+from social.models import Follows
 from restaurant.models import MenuItem
 from restaurant.models import Restaurant
+from notifications.models import RestNotifications
 from restaurant.serializers import AddRestaurantSerializer, MenuItemSerializer, RestaurantViewSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -27,6 +32,7 @@ class ViewMenu(ListAPIView):
 
 class AddItem(APIView):
     serializer_class = MenuItemSerializer
+    notif_serializer_class = RestNotificationSerializer
     model = MenuItem
     context_object_name = 'add_item'
     queryset = MenuItem.objects.all()
@@ -47,6 +53,23 @@ class AddItem(APIView):
         if (int(restaurant[0].id) != int(kwargs['restaurant_id'])):
             return Response("Forbidden", status=403)
 
+        # restaurant was found and valid
+        # now find followers
+        followers = Follows.objects.filter(rid=d['rid'])
+        for follower in followers:
+            qset_keys = list(self.request.data)
+            qset_vals = list(self.request.data.values())
+            name = qset_vals[qset_keys.index('name')]
+            desc = name.capitalize() + " was added to the restaurant " + restaurant[0].name + "!"
+            c = {'uid': follower.uid.id, 'rid': kwargs['restaurant_id'], 'notif_type': 'n', 'description': desc}
+            notif_serializer = self.notif_serializer_class(data=c)
+
+            if notif_serializer.is_valid():
+                notif_serializer.save()
+            else:
+                return Response(notif_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # notifs done
         serializer = self.serializer_class(data=d)
         if serializer.is_valid():
             serializer.save()
@@ -60,6 +83,7 @@ class EditItem(RetrieveAPIView, UpdateAPIView):
     context_object_name = 'edit_item'
     queryset = MenuItem.objects.all()
     permission_classes = [IsAuthenticated]
+    notif_serializer_class = RestNotificationSerializer
 
     def patch(self, request, *args, **kwargs):
         
@@ -74,6 +98,20 @@ class EditItem(RetrieveAPIView, UpdateAPIView):
         
         if (int(restaurant[0].id) != int(kwargs['restaurant_id'])):
             return Response("Forbidden", status=403)
+
+        # restaurant was found and valid
+        # now find followers
+        followers = Follows.objects.filter(rid=d['rid'])
+        for follower in followers:
+            item = MenuItem.objects.get(id=kwargs['pk'])
+            desc = item.name.capitalize() + " was modified within the restaurant " + restaurant[0].name + "!"
+            c = {'uid': follower.uid.id, 'rid': kwargs['restaurant_id'], 'notif_type': 'm', 'description': desc}
+            notif_serializer = self.notif_serializer_class(data=c)
+
+            if notif_serializer.is_valid():
+                notif_serializer.save()
+            else:
+                return Response(notif_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = self.get_serializer(instance, data=request.data, partial=True)
 

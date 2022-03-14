@@ -7,7 +7,7 @@ class MenuItemSerializer(serializers.ModelSerializer):
     name = serializers.CharField(max_length=200)
     price = serializers.FloatField()
     description = serializers.CharField(max_length=400)
-    image = serializers.ImageField()
+    image = serializers.ImageField(required=False)
     rid = Restaurant
 
     class Meta:
