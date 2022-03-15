@@ -3,7 +3,7 @@ from codecs import lookup
 from ctypes import addressof
 import json
 import re
-from django.http import Http404, HttpResponseForbidden
+from django.http import Http404, HttpResponseForbidden, QueryDict
 from django.http import Http404
 from django.shortcuts import render
 from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView, CreateAPIView, DestroyAPIView
@@ -156,69 +156,59 @@ class AddRestaurantView(CreateAPIView):
 
         return super().post(request, *args, **kwargs)
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
 class EditRestaurantView(UpdateAPIView):
-    permission_classes = [IsAuthenticated]
     queryset = Restaurant.objects.all()
-    serializer_class = RestaurantViewSerializer
-    look_field = 'pk'
-
-    def get_object(self):
-        print("ENTERED GET OBJECT!")
-        user = self.request.user
-        rid = self.kwargs.get('pk')
-        rest = Restaurant.objects.filter(id = rid)
-
-        if (bool(rest) == False):
-            print("Couldnt find blog")
-            raise Http404
-            # return Response({'error': 'DIS aint a blog dawg!'}, status=status.HTTP_400_BAD_REQUEST)
-
-        rest = rest[0]
-        
-        if (rest.owner != user):
-            print("dis dude dont even own a restuarant wtf")
-
-            # return Response({'error': 'YOU DONT EVEN OWN A RESTAURANT!'}, status=status.HTTP_400_BAD_REQUEST)
-            raise Http404
-
-        return rest
-
-class CommentRestaurantView(APIView):
-    serializer_class = CommentSerializer
-    # notif_serializer_class = UserNotificationSerializer
-    model = Comment
-    context_object_name = 'add_comment'
-    #queryset = Comment.objects.all()
+    serializer_class = RestaurantSerializer
+    lookup_field = 'pk'
     permission_classes = [IsAuthenticated]
 
+    def patch(self, request, *args, **kwargs):
+
+        # Restaurant not found!
+        restaurant = Restaurant.objects.filter(id=kwargs['pk'])
+        if not bool(restaurant):
+            return Response({'details': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        # User not owner!
+        if request.user != restaurant[0].owner:
+            return Response({'details': 'User not owner.'}, status=status.HTTP_403_FORBIDDEN)
+
+        return super().patch(request, *args, **kwargs)
+
+class CommentRestaurantView(CreateAPIView):
+    serializer_class = CommentSerializer
+    model = Comment
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        print(request.user.id)
-        user = request.user
+        # Restaurant not found!
+        restaurant = Restaurant.objects.filter(id=kwargs['restaurant_id'])
+        if not bool(restaurant):
+            return Response({'details': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-        d = request.data.dict()
-        d['rid'] = kwargs['restaurant_id']
+        errors = {}
 
-        restaurant = Restaurant.objects.filter(id=d['rid'])
+        if request.data.get('comment') == None:
+            errors['comment'] = ["This field is required."]
 
-        if not bool(restaurant): 
-            return Response("Not Found", status=404)
+        # Error check
+        if len(errors) > 0:
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
-        # restaurant was found
+        return super().post(request, *args, **kwargs)
 
-        # now find followers
-        OwnerNotifications.objects.create(rid=restaurant[0], uid = request.user, notif_type='c', \
-            description = user.username + " commented on your page: " + "\"" +  d['comment'] + "\".") 
+    def create(self, request, *args, **kwargs):
+        return super().create(request, *args, **kwargs)
 
-        # notifs done
-        
-        d['uid'] = request.user.id
-        serializer = self.serializer_class(data=d)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def perform_create(self, serializer):
+        user = self.request.user
+        restaurant = Restaurant.objects.get(id=self.kwargs['restaurant_id'])
+        serializer.save(uid=user, rid=restaurant)
+
+        # notify owner!
 
 class GetCommentsView(ListAPIView):
 
