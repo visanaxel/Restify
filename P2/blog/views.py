@@ -11,13 +11,6 @@ class AddBlogView(CreateAPIView):
     model = Blog
     permission_classes = [IsAuthenticated]
 
-    def create(self, request, *args, **kwargs):
-        # Add notifications for all user following this restaurant
-        user = self.request.user
-        restaurant = Restaurant.objects.get(owner=user)
-
-        return super().create(request, *args, **kwargs)
-
     def perform_create(self, serializer):
         user = self.request.user
         restaurant = Restaurant.objects.get(owner=user)
