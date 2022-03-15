@@ -10,7 +10,7 @@ from rest_framework.generics import get_object_or_404, RetrieveAPIView, UpdateAP
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
-from social.serializers import AddFollowSerializer
+from social.serializers import AddFollowSerializer, FollowSerializer
 
 from blog.models import Blog
 from notifications.models import OwnerNotifications
@@ -26,21 +26,32 @@ from rest_framework.views import APIView
 from social.models import LikeBlog, LikeRest
 
 # Views here:
-class AddFollowView(APIView):
-    serializer_class = AddFollowSerializer
+class AddFollowView(CreateAPIView):
+    serializer_class = FollowSerializer
     permission_classes = [IsAuthenticated]
-    
+
     def post(self, request, *args, **kwargs):
-        print("entered post follow!")
-        serializer = self.serializer_class(data=request.data, context = {'request': request})
-        if serializer.is_valid():
-            follow = serializer.save()
-            
-            serialized_data = serializer.data
-            return Response(serialized_data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        errors = {}
+
+        if request.data.get('rid') == None:
+            errors ['rid'] = ['This field is required.']
         
+        # Check errors
+        if len(errors) > 0:
+            Response(errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if restaurant exists
+        restaurant = Restaurant.objects.filter(id=request.data['rid'])
+        print(restaurant, bool(restaurant))
+        if not bool(restaurant):
+            return Response({'details': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        return super().post(request, *args, **kwargs)
+
+    def perform_create(self, serializer):
+        serializer.save(uid=self.request.user)
+
 class DeleteFollowApiView(DestroyAPIView):
     permission_classes = [IsAuthenticated]
     queryset = Follows.objects.all()

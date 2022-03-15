@@ -7,6 +7,14 @@ from social.models import LikeRest
 from notifications.models import UserNotifications
 from social.models import Follows
 
+class FollowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Follows
+        fields = [
+            'uid', 
+            'rid'
+        ]
+
 class LikeRestSerializer(serializers.ModelSerializer):
 
     class Meta:
