@@ -1,4 +1,5 @@
 from codecs import lookup
+from ctypes import addressof
 import json
 from django.http import Http404, HttpResponseForbidden
 from django.http import Http404
@@ -17,6 +18,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from itertools import chain
 
 # Create your views here.
 
@@ -256,4 +258,37 @@ class GetCommentsView(ListAPIView):
 
         return Response(all)
         
-        
+class SearchView(ListAPIView):
+    serializer_class = RestaurantViewSerializer
+    model = Restaurant
+    context_object_name = 'search'
+    
+    def get(self, *args, **kwargs):
+        queryset = Restaurant.objects.all()
+        item_queryset = MenuItem.objects.all()
+
+        obj_name = queryset.filter(name__contains=kwargs['search_query'])
+        obj_address = queryset.filter(address__contains=kwargs['search_query'])
+        obj_item = item_queryset.filter(name__contains=kwargs['search_query'])
+
+        l = set()
+
+        for i in obj_name:
+            l.add(i)
+
+        for i in obj_address:
+            l.add(i)
+
+        for i in obj_item:
+            print(queryset)
+            q = queryset.get(id=i.rid.id)
+            l.add(q)
+
+        all = []
+        for rest in l:
+            d = {}
+            d['name'] = rest.name
+            d['rid'] = rest.id
+            all.append(d)
+
+        return Response(all)
