@@ -27,12 +27,21 @@ class ViewMenu(ListAPIView):
     model = MenuItem
     context_object_name = 'menu'
     queryset = MenuItem.objects.all()
+
+    def get_queryset(self):
+
+        all = self.queryset
+
+        menu = all.filter(rid=self.kwargs['restaurant_id'])
+
+
+        return menu
     
-    def get(self, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-        print(queryset)
-        obj = queryset.filter(rid=kwargs['restaurant_id'])
-        return Response(list(obj.values()))
+    # def get(self, *args, **kwargs):
+    #     queryset = self.filter_queryset(self.get_queryset())
+    #     print(queryset)
+    #     obj = queryset.filter(rid=kwargs['restaurant_id'])
+    #     return Response(list(obj.values()))
 
 class AddItem(APIView):
     serializer_class = MenuItemSerializer
@@ -262,33 +271,22 @@ class SearchView(ListAPIView):
     serializer_class = RestaurantViewSerializer
     model = Restaurant
     context_object_name = 'search'
-    
-    def get(self, *args, **kwargs):
+
+    def get_queryset(self):
         queryset = Restaurant.objects.all()
         item_queryset = MenuItem.objects.all()
 
-        obj_name = queryset.filter(name__contains=kwargs['search_query'])
-        obj_address = queryset.filter(address__contains=kwargs['search_query'])
-        obj_item = item_queryset.filter(name__contains=kwargs['search_query'])
+        obj_name = queryset.filter(name__contains=self.kwargs['search_query'])
+        obj_address = queryset.filter(address__contains=self.kwargs['search_query'])
+        obj_item = item_queryset.filter(name__contains=self.kwargs['search_query'])
 
-        l = set()
-
-        for i in obj_name:
-            l.add(i)
-
-        for i in obj_address:
-            l.add(i)
+        combined = obj_name | obj_address
 
         for i in obj_item:
-            print(queryset)
-            q = queryset.get(id=i.rid.id)
-            l.add(q)
+            combined = combined | queryset.filter(id=i.rid.id)
+        
+        distinct = combined.distinct()
 
-        all = []
-        for rest in l:
-            d = {}
-            d['name'] = rest.name
-            d['rid'] = rest.id
-            all.append(d)
+        order = distinct.order_by('-likes')
 
-        return Response(all)
+        return order
