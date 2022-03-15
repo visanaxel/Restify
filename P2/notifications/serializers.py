@@ -10,7 +10,12 @@ class UserNotificationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserNotifications
-        fields = ['id', 'rid', 'description']
+        fields = [
+            'id', 
+            'rid', 
+            'notif_type',
+            'description'
+        ]
 
 class OwnerNotificationSerializer(serializers.ModelSerializer):
     
