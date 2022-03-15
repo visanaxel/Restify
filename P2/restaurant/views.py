@@ -11,7 +11,7 @@ from blog.models import Blog
 from blog.serializers import BlogSerializer
 from notifications.models import OwnerNotifications
 from restaurant.models import Comment, ImageModel
-from restaurant.serializers import CommentSerializer, ImageSerializer, ViewCommentSerializer
+from restaurant.serializers import CommentSerializer, ImageSerializer, RestaurantSerializer, ViewCommentSerializer
 from notifications.serializers import UserNotificationSerializer
 from social.models import Follows
 from restaurant.models import MenuItem
@@ -48,11 +48,12 @@ class AddItemView(CreateAPIView):
     queryset = MenuItem.objects.all()
     permission_classes = [IsAuthenticated]
 
-    def create(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
 
+        # Restaurant not found!
         restaurant = Restaurant.objects.filter(id=kwargs['restaurant_id'])
         if not bool(restaurant):
-            return Response('Restaurant not found.', status=status.HTTP_404_NOT_FOUND)
+            return Response({'details': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
 
         errors = {}
 
@@ -70,7 +71,13 @@ class AddItemView(CreateAPIView):
 
         if len(errors) > 0:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
-        
+
+        return super().post(request, *args, **kwargs)
+
+    def create(self, request, *args, **kwargs):
+
+        restaurant = Restaurant.objects.filter(id=kwargs['restaurant_id'])
+
         MenuItem.objects.create(name=request.data.get('name'), 
                                 price=request.data.get('price'),
                                 image=request.data.get('image'), 
@@ -95,6 +102,19 @@ class EditItemView(UpdateAPIView):
     permission_classes = [IsAuthenticated]
     lookup_field = 'pk'
 
+    def patch(self, request, *args, **kwargs):
+
+        # Restaurant not found!
+        restaurant = Restaurant.objects.filter(id=kwargs['pk'])
+        if not bool(restaurant):
+            return Response({'details': 'Menu not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        # User not owner!
+        if request.user != restaurant[0].owner:
+            return Response({'details': 'User not owner.'}, status=status.HTTP_403_FORBIDDEN)
+
+        return super().patch(request, *args, **kwargs)
+
     def perform_update(self, serializer):
         
         # no update
@@ -115,40 +135,26 @@ class EditItemView(UpdateAPIView):
                                                 notif_type='n',
                                                 description=desc)
 
-        
 class RestaurantView(RetrieveAPIView):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantViewSerializer
     look_field = 'pk'
 
-class AddRestaurantView(APIView):
-    serializer_class = AddRestaurantSerializer
+class AddRestaurantView(CreateAPIView):
+    serializer_class = RestaurantSerializer
+    model = Restaurant
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        print("entered post!")
-        # By here the user is valid, I want to see if this user is a restauarant owner, and if they own a restaurant first!
+        # Check is user already owns restaurant
+        if request.user.is_owner:
+            return Response({'details': 'User already has restaurant'}, status=status.HTTP_400_BAD_REQUEST)
+
         user = request.user
+        user.is_owner = True
+        user.save()
 
-        if (user.is_owner):
-            return Response({'error': 'already have restaurant registered'}, status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = self.serializer_class(data=request.data)
-
-        if serializer.is_valid():
-            rest = serializer.save()
-            rest.owner = user
-            rest.save()
-
-            user.is_owner = True
-            user.save()
-            serialized_data = serializer.data
-            return Response(serialized_data, status=status.HTTP_201_CREATED)
-        else:
-            print(serializer.error_messages)
-            print("it is not valid!")
-
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return super().post(request, *args, **kwargs)
 
 class EditRestaurantView(UpdateAPIView):
     permission_classes = [IsAuthenticated]
