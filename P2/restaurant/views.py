@@ -225,30 +225,70 @@ class CommentRestaurantView(APIView):
 
 class GetCommentsView(ListAPIView):
 
-    queryset = Comment.objects.all()
     serializer_class = ViewCommentSerializer
-
-    def get(self, request, *args, **kwargs):
-
-        # Check if restuarant exists
+    model = Comment
+    # context_object_name = 'restaurant_id'
+    look_field = 'pk'
+    
+    
+    
+    def get_queryset(self):
+        
         restaurant = Restaurant.objects.filter(id = self.kwargs.get('pk'))
         if (bool(restaurant) == False):
-            return Response('NOT FOUND', status=404)
-
-        return super().get(request, *args, **kwargs)
-
-    def get_queryset(self):
-
-        # Get all comments
-        all = self.queryset
-
-        # Get restaurant
+            restaurant = [-1]
+        
+        return Comment.objects.filter(rid=restaurant[0])
+    
+    def get(self, *args, **kwargs):
+        
         restaurant = Restaurant.objects.filter(id = self.kwargs.get('pk'))
+        if (bool(restaurant) == False):
+            raise Http404
+        
+        comments = Comment.objects.filter(rid=restaurant[0])
+        
+        all = []
+        for comment in comments:
+            d = {}
+            d['username'] = comment.uid.username
+            d['restaurant'] = comment.rid.name
+            d['comment'] = comment.comment
+            all.append(d)
 
-        # Select only comments from restaurant
-        rest_comment = all.filter(rid=restaurant[0])
+        return Response(all)
+        
+class SearchView(ListAPIView):
+    serializer_class = RestaurantViewSerializer
+    model = Restaurant
+    context_object_name = 'search'
+    
+    def get(self, *args, **kwargs):
+        queryset = Restaurant.objects.all()
+        item_queryset = MenuItem.objects.all()
 
-        # order by date
-        ordered_rest_comment = rest_comment.order_by('-date')
+        obj_name = queryset.filter(name__contains=kwargs['search_query'])
+        obj_address = queryset.filter(address__contains=kwargs['search_query'])
+        obj_item = item_queryset.filter(name__contains=kwargs['search_query'])
 
-        return ordered_rest_comment
+        l = set()
+
+        for i in obj_name:
+            l.add(i)
+
+        for i in obj_address:
+            l.add(i)
+
+        for i in obj_item:
+            print(queryset)
+            q = queryset.get(id=i.rid.id)
+            l.add(q)
+
+        all = []
+        for rest in l:
+            d = {}
+            d['name'] = rest.name
+            d['rid'] = rest.id
+            all.append(d)
+
+        return Response(all)
