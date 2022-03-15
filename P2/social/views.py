@@ -1,15 +1,16 @@
 from django.http import Http404
 from django.shortcuts import render
 from rest_framework.views import APIView
+from blog.serializers import BlogViewSerializer
 from restaurant.models import Restaurant
 from restaurant.serializers import AddRestaurantSerializer
 from social.models import Follows
-from rest_framework.generics import get_object_or_404, RetrieveAPIView, UpdateAPIView, DestroyAPIView
+from rest_framework.generics import get_object_or_404, RetrieveAPIView, UpdateAPIView, DestroyAPIView, ListAPIView
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
-from social.serializers import AddFollowSerializer
+from social.serializers import AddFollowSerializer, FeedSerializer
 
 from blog.models import Blog
 from notifications.models import OwnerNotifications
@@ -186,3 +187,32 @@ class UnlikeBlogView(DestroyAPIView):
         like_blog_instance.delete()
 
         return Response('Unliked blog', status=status.HTTP_200_OK)
+
+class FeedView(ListAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        
+        user = request.user
+        # queryset of all restaurant the user follows
+        restaurants = Follows.objects.filter(uid=user)
+
+        # Check if user follows any restaurants
+        if len(restaurants) < 1:
+            return Response([])
+
+        feeds = Blog.objects.filter(rid=restaurants[0].rid)
+        for i in range(1, len(restaurants)):
+            feeds = feeds |  Blog.objects.filter(rid=restaurants[i].rid)
+
+        # all blogs 
+        feeds = feeds.order_by('-date')
+
+        all = []
+        for feed in feeds:
+            d = {}
+            d['bid'] = feed.id
+            d['title'] = feed.title
+            all.append(d)
+
+        return Response(all)
