@@ -5,11 +5,21 @@ from restaurant.models import Restaurant
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import RetrieveAPIView, UpdateAPIView, DestroyAPIView, CreateAPIView
 from social.models import Follows
+from rest_framework.response import Response
 
 class AddBlogView(CreateAPIView):
     serializer_class = BlogSerializer
     model = Blog
     permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+
+        # Check if user has a restaurant
+        if not request.user.is_owner:
+            return Response()
+
+        return super().post(request, *args, **kwargs)
+
 
     def perform_create(self, serializer):
         user = self.request.user
