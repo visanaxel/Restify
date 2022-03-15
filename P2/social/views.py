@@ -34,27 +34,29 @@ class AddFollowView(CreateAPIView):
     def post(self, request, *args, **kwargs):
 
         errors = {}
-
         if request.data.get('rid') == None:
-            errors ['rid'] = ['This field is required.']
+            errors['rid'] = ['This field is required.']
         
         # Check errors
         if len(errors) > 0:
-            Response(errors, status=status.HTTP_400_BAD_REQUEST)
+            print('HI')
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
         # Check if restaurant exists
         restaurant = Restaurant.objects.filter(id=request.data['rid'])
         print(restaurant, bool(restaurant))
         if not bool(restaurant):
-            return Response({'details': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
 
         # Check if already following
         follow = Follows.objects.filter(uid=request.user, rid=restaurant[0])
         if bool(follow):
-            return Response({'details': 'User already following restaurant.'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'User already following restaurant.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        restaurant.followers += 1
-        restaurant.save()
+        # increment followers
+        restaurant[0].followers += 1
+        restaurant[0].save()
+
         return super().post(request, *args, **kwargs)
 
     def perform_create(self, serializer):
@@ -70,14 +72,16 @@ class DeleteFollowView(DestroyAPIView):
         # Check if restaurant exists
         restaurant = Restaurant.objects.filter(id=kwargs['rid'])
         if not bool(restaurant):
-            return Response({'details': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
 
         # Check if following
         follow = Follows.objects.filter(uid=request.user, rid=restaurant[0])
         if not bool(follow):
-            return Response({'details': 'User not following restaurant.'}, status=status.HTTP_400_BAD_REQUEST)
-        restaurant.followers -= 1
-        restaurant.save()
+            return Response({'error': 'User not following restaurant.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # decrement followers
+        restaurant[0].followers -= 1
+        restaurant[0].save()
         follow.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)
@@ -90,19 +94,22 @@ class LikeRestView(CreateAPIView):
         user = request.user
         rid = request.POST.get('rid')
 
-        # Check if rid is provided!
+        error = {}
+
+        # Check errors
         if rid == None:
-            return Response('Missing rid in body.', status=status.HTTP_400_BAD_REQUEST)
+            error['rid'] = ['This field is required.']
+            return Response(error, status=status.HTTP_400_BAD_REQUEST)
 
         # Check if restaurant exists
         restaurant = Restaurant.objects.filter(id=rid)
         if not bool(restaurant):
-            return Response('Restaurant not found.', status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
 
         # Check if user already liked the restaurant
         like_rest_q = LikeRest.objects.filter(uid=user, rid=restaurant[0])
         if bool(like_rest_q):
-            return Response('User already liked the restaurant.', status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'User already liked the restaurant.'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Add new OnwerNotification object!
         user_notif = OwnerNotifications(uid=user, rid=restaurant[0], notif_type='l', description=user.username + ' liked your restaurant: ' + restaurant[0].name)
@@ -115,7 +122,7 @@ class LikeRestView(CreateAPIView):
         like_rest = LikeRest(uid=user, rid=restaurant[0])
         like_rest.save()
 
-        return Response('Liked restaurant.', status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
 
 class UnlikeRestaurant(DestroyAPIView):
     permission_classes = [IsAuthenticated]
@@ -128,12 +135,12 @@ class UnlikeRestaurant(DestroyAPIView):
         # Check if restaurant exists
         restaurant = Restaurant.objects.filter(id=rid)
         if not bool(restaurant):
-            return Response('Restaurant not found.', status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
 
         # Check if user has like the restaurant
         like_rest_query = LikeRest.objects.filter(uid=user, rid=restaurant[0])
         if not bool(like_rest_query):
-            return Response('User does not like the restaurant.', status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'User does not like the restaurant.'}, status=status.HTTP_400_BAD_REQUEST)
 
         # decrement restaurant likes count!
         restaurant[0].likes -= 1
@@ -142,7 +149,7 @@ class UnlikeRestaurant(DestroyAPIView):
         like_rest_instance = like_rest_query[0]
         like_rest_instance.delete()
 
-        return Response('Unliked restaurant', status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
 
 class LikeBlogView(CreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -154,17 +161,17 @@ class LikeBlogView(CreateAPIView):
 
         # Check if rid is provided!
         if bid == None:
-            return Response('Missing bid in body.', status=status.HTTP_400_BAD_REQUEST)
+            return Response({'bid': ['This field is required.']}, status=status.HTTP_400_BAD_REQUEST)
 
         # Check if blog exists
         blog = Blog.objects.filter(id=bid)
         if not bool(blog):
-            return Response('Blog not found.', status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Blog not found.'}, status=status.HTTP_404_NOT_FOUND)
 
         # Check if user already liked the restaurant
         like_rest_q = LikeBlog.objects.filter(uid=user, bid=blog[0])
         if bool(like_rest_q):
-            return Response('User already liked the blog.', status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'User already liked the blog.'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Create owner notification!
         restaurant = blog[0].rid
@@ -178,7 +185,7 @@ class LikeBlogView(CreateAPIView):
         like_blog = LikeBlog(uid=user, bid=blog[0])
         like_blog.save()
 
-        return Response('Liked blog.', status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
 
 class UnlikeBlogView(DestroyAPIView):
     permission_classes = [IsAuthenticated]
@@ -191,12 +198,12 @@ class UnlikeBlogView(DestroyAPIView):
         # Check if restaurant exists
         blog = Blog.objects.filter(id=bid)
         if not bool(blog):
-            return Response('Blog not found.', status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Blog not found.'}, status=status.HTTP_404_NOT_FOUND)
 
         # Check if user has like the restaurant
         like_blog_query = LikeBlog.objects.filter(uid=user, bid=blog[0])
         if not bool(like_blog_query):
-            return Response('User did not like the blog.', status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'User did not like the blog'}, status=status.HTTP_400_BAD_REQUEST)
 
         # decrement blog likes count!
         blog[0].likes -= 1
@@ -205,7 +212,7 @@ class UnlikeBlogView(DestroyAPIView):
         like_blog_instance = like_blog_query[0]
         like_blog_instance.delete()
 
-        return Response('Unliked blog', status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_200_OK)
 
 class FeedView(ListAPIView):
     serializer_class = BlogSerializer
