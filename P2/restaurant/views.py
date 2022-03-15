@@ -7,6 +7,8 @@ from django.http import Http404, HttpResponseForbidden
 from django.http import Http404
 from django.shortcuts import render
 from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView, CreateAPIView, DestroyAPIView
+from blog.models import Blog
+from blog.serializers import BlogViewSerializer
 from notifications.models import OwnerNotifications
 from restaurant.models import Comment, ImageModel
 from restaurant.serializers import CommentSerializer, ImageSerializer, ViewCommentSerializer
@@ -349,6 +351,30 @@ class ImageView(ListAPIView):
         rest_images = all.filter(rid=self.kwargs['restaurant_id'])
 
         return rest_images
+
+    def get(self, request, *args, **kwargs):
+
+        # Check if restaurant exists
+        restaurant = Restaurant.objects.filter(id=kwargs['restaurant_id'])
+        if not bool(restaurant):
+            error = {'error': 'restaurant not found.'}
+            return Response(error, status=status.HTTP_404_NOT_FOUND)
+
+        return super().get(request, *args, **kwargs)
+
+class RestBlogView(ListAPIView):
+
+    queryset = Blog.objects.all()
+    serializer_class = BlogViewSerializer
+    model = Blog
+
+    def get_queryset(self):
+
+        all = self.queryset
+
+        rest_blogs = all.filter(rid=self.kwargs['restaurant_id'])
+
+        return rest_blogs
 
     def get(self, request, *args, **kwargs):
 
