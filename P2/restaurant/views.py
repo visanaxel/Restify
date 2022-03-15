@@ -148,7 +148,27 @@ class AddRestaurantView(CreateAPIView):
     def post(self, request, *args, **kwargs):
         # Check is user already owns restaurant
         if request.user.is_owner:
-            return Response({'details': 'User already has restaurant'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'User already has restaurant'}, status=status.HTTP_400_BAD_REQUEST)
+
+        errors = {}
+
+        if request.data.get('name') == None:
+            errors['name'] = ["This field is required."]
+
+        if request.data.get('address') == None:
+            errors['address'] = ["This field is required."]
+
+        if request.data.get('logo') == None:
+            errors['logo'] = ["This field is required."]
+
+        if request.data.get('postal_code') == None:
+            errors['postal_code'] = ["This field is required."]
+
+        if request.data.get('phone_number') == None:
+            errors['phone_number'] = ["This field is required."]
+
+        if len(errors) > 0:
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
 
         user = request.user
         user.is_owner = True
