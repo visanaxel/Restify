@@ -10,7 +10,7 @@ from rest_framework.generics import get_object_or_404, RetrieveAPIView, UpdateAP
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from rest_framework.response import Response
-from social.serializers import AddFollowSerializer, FeedSerializer
+from social.serializers import AddFollowSerializer
 
 from blog.models import Blog
 from notifications.models import OwnerNotifications
