@@ -91,7 +91,7 @@ class AddItemView(CreateAPIView):
 
         restaurant = Restaurant.objects.filter(id=kwargs['restaurant_id'])
 
-        MenuItem.objects.create(name=request.data.get('name'), 
+        new = MenuItem.objects.create(name=request.data.get('name'), 
                                 price=request.data.get('price'),
                                 image=request.data.get('image'), 
                                 description=request.data.get('description'),
@@ -101,6 +101,7 @@ class AddItemView(CreateAPIView):
         for follower in followers:
                 name = request.data.get('name')
                 desc = name.capitalize() + " was added to the restaurant " + restaurant[0].name + "!"
+                desc = restaurant[0].name + ': Menu item #' + str(new.id) + ' was added!'
 
                 UserNotifications.objects.create(uid=follower.uid, 
                                                 rid=restaurant[0], 
@@ -118,14 +119,15 @@ class EditItemView(UpdateAPIView):
 
     def patch(self, request, *args, **kwargs):
 
-        # Restaurant not found!
-        restaurant = Restaurant.objects.filter(id=kwargs['pk'])
-        if not bool(restaurant):
-            return Response({'details': 'Menu not found.'}, status=status.HTTP_404_NOT_FOUND)
-
+        # item not found!
+        item = MenuItem.objects.filter(id=kwargs['pk'])
+        if not bool(item):
+            return Response({'error': 'Item not found.'}, status=status.HTTP_404_NOT_FOUND)
+        
+        restaurant = item[0].rid
         # User not owner!
-        if request.user != restaurant[0].owner:
-            return Response({'details': 'User not owner.'}, status=status.HTTP_403_FORBIDDEN)
+        if request.user != restaurant.owner:
+            return Response({'error': 'User not owner.'}, status=status.HTTP_403_FORBIDDEN)
 
         return super().patch(request, *args, **kwargs)
 
@@ -141,8 +143,7 @@ class EditItemView(UpdateAPIView):
         followers = Follows.objects.filter(rid=restaurant[0])
         for follower in followers:
                 item = MenuItem.objects.get(id=self.kwargs['pk'])
-                name = item.name
-                desc = name.capitalize() + " was modified within restaurant " + restaurant[0].name + "!"
+                desc = restaurant[0].name + ": modified menu item #" + str(item.id) + "!"
 
                 UserNotifications.objects.create(uid=follower.uid, 
                                                 rid=restaurant[0], 
@@ -244,9 +245,6 @@ class CommentRestaurantView(CreateAPIView):
 
         return super().post(request, *args, **kwargs)
 
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
-
     def perform_create(self, serializer):
         user = self.request.user
         restaurant = Restaurant.objects.get(id=self.kwargs['restaurant_id'])
@@ -254,7 +252,7 @@ class CommentRestaurantView(CreateAPIView):
 
         # notify owner!
         OwnerNotifications.objects.create(rid=restaurant, uid = user, notif_type='c', \
-            description = user.username + " commented on your page: " + "\"" +  self.request.data['comment'] + "\".") 
+            description = user.username + " commented on your page: " + self.request.data['comment']) 
 
 class GetCommentsView(ListAPIView):
 
@@ -391,14 +389,16 @@ class RestBlogView(ListAPIView):
 
         rest_blogs = all.filter(rid=self.kwargs['restaurant_id'])
 
-        return rest_blogs
+        order = rest_blogs.order_by('-date')
+
+        return order
 
     def get(self, request, *args, **kwargs):
 
         # Check if restaurant exists
         restaurant = Restaurant.objects.filter(id=kwargs['restaurant_id'])
         if not bool(restaurant):
-            error = {'error': 'restaurant not found.'}
+            error = {'error': 'Restaurant not found.'}
             return Response(error, status=status.HTTP_404_NOT_FOUND)
 
         return super().get(request, *args, **kwargs)
