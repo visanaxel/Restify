@@ -15,6 +15,7 @@ class OwnerNotifications(models.Model):
     # m(('l', 'like'), ('f', 'follow'), ('c', 'comment'))
     notif_type = models.CharField(max_length=1, choices=owner_notification_choices)
     description = models.CharField(max_length=400)
+    date = models.DateTimeField(auto_now_add=True)
 
 class UserNotifications(models.Model):
     uid = models.ForeignKey(to=MyUser, on_delete=SET_NULL, null=True)
@@ -22,3 +23,4 @@ class UserNotifications(models.Model):
     # (('m', 'menu change'), ('n', 'new item'), ('b', 'blog added'))
     notif_type = models.CharField(max_length=1, choices=user_notification_choices)
     description = models.CharField(max_length=100, default="")
+    date = models.DateTimeField(auto_now_add=True)

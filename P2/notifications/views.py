@@ -31,9 +31,9 @@ class OwnerNotificationView(ListAPIView):
         # Current owner notifications
         owner_notif = all.filter(rid=restaurant)
 
-        #TODO: delete
+        order = owner_notif.order_by('-date')
 
-        return owner_notif
+        return order
 
     def get(self, request, *args, **kwargs):
 
@@ -58,8 +58,8 @@ class UserNotificationView(ListAPIView):
         # Current user notifications
         user_notif = all.filter(uid=self.request.user)
 
-        #TODO: delete
-
-        return user_notif
+        order = user_notif.order_by('-date')
+        
+        return order 
     
 
