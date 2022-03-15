@@ -104,4 +104,4 @@ class ViewCommentSerializer(serializers.ModelSerializer):
         return comment.rid.name
     
     def get_comment_from_comment(self, comment):
-        return comment.name
+        return comment.comment

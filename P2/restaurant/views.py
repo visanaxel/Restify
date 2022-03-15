@@ -223,37 +223,30 @@ class CommentRestaurantView(APIView):
 
 class GetCommentsView(ListAPIView):
 
+    queryset = Comment.objects.all()
     serializer_class = ViewCommentSerializer
-    model = Comment
-    # context_object_name = 'restaurant_id'
-    look_field = 'pk'
-    
-    
-    
-    def get_queryset(self):
-        
-        restaurant = Restaurant.objects.filter(id = self.kwargs.get('pk'))
-        if (bool(restaurant) == False):
-            restaurant = [-1]
-        
-        return Comment.objects.filter(rid=restaurant[0])
-    
-    def get(self, *args, **kwargs):
-        
-        restaurant = Restaurant.objects.filter(id = self.kwargs.get('pk'))
-        if (bool(restaurant) == False):
-            raise Http404
-        
-        comments = Comment.objects.filter(rid=restaurant[0])
-        
-        all = []
-        for comment in comments:
-            d = {}
-            d['username'] = comment.uid.username
-            d['restaurant'] = comment.rid.name
-            d['comment'] = comment.comment
-            all.append(d)
 
-        return Response(all)
-        
-        
+    def get(self, request, *args, **kwargs):
+
+        # Check if restuarant exists
+        restaurant = Restaurant.objects.filter(id = self.kwargs.get('pk'))
+        if (bool(restaurant) == False):
+            return Response('NOT FOUND', status=404)
+
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+
+        # Get all comments
+        all = self.queryset
+
+        # Get restaurant
+        restaurant = Restaurant.objects.filter(id = self.kwargs.get('pk'))
+
+        # Select only comments from restaurant
+        rest_comment = all.filter(rid=restaurant[0])
+
+        # order by date
+        ordered_rest_comment = rest_comment.order_by('-date')
+
+        return ordered_rest_comment
