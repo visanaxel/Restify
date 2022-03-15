@@ -17,5 +17,18 @@ class BlogSerializer(serializers.ModelSerializer):
             'content',
             'image',
             'rid',
-            'author'      
+            'author',      
+        ]
+        
+class BlogEditSerializer(serializers.ModelSerializer):
+    rid = RestaurantSerializer
+    author = MyUserSerializer
+
+    class Meta:
+        model = Blog
+        fields = [
+            'title',
+            'content',
+            'image',
+               
         ]
