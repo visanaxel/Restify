@@ -26,7 +26,7 @@ from itertools import chain
 
 # Create your views here.
 
-class ViewMenu(ListAPIView):
+class MenuView(ListAPIView):
     serializer_class = MenuItemSerializer
     model = MenuItem
     context_object_name = 'menu'
@@ -38,16 +38,9 @@ class ViewMenu(ListAPIView):
 
         menu = all.filter(rid=self.kwargs['restaurant_id'])
 
-
         return menu
-    
-    # def get(self, *args, **kwargs):
-    #     queryset = self.filter_queryset(self.get_queryset())
-    #     print(queryset)
-    #     obj = queryset.filter(rid=kwargs['restaurant_id'])
-    #     return Response(list(obj.values()))
 
-class AddItem(APIView):
+class AddItemView(APIView):
     serializer_class = MenuItemSerializer
     notif_serializer_class = UserNotificationSerializer
     model = MenuItem
@@ -94,7 +87,7 @@ class AddItem(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class EditItem(RetrieveAPIView, UpdateAPIView):
+class EditItemView(RetrieveAPIView, UpdateAPIView):
     serializer_class = MenuItemSerializer
     model = MenuItem
     context_object_name = 'edit_item'
