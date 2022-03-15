@@ -9,7 +9,7 @@ from rest_framework.generics import get_object_or_404, RetrieveAPIView, UpdateAP
 from rest_framework import status
 
 # Create your views here.
-class RegisterAPIView(APIView):
+class RegisterUserView(APIView):
     serializer_class = UserRegisterSerializer
 
     def post(self, request, *args, **kwargs):

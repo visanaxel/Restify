@@ -64,3 +64,25 @@ class ProfileSerializer(serializers.ModelSerializer):
     #     instance.save()
     #     return instance
 
+class MyUserSerializer(serializers.ModelSerializer):
+
+    password = serializers.CharField(required=True, write_only = True)
+    password2 = serializers.CharField(required=True, write_only = True)
+    
+    class Meta:
+        model = MyUser
+
+        fields = [
+            'username',
+            'email',
+            'password', 
+            'password2',
+            'description',
+            'profile_pic',
+            'is_owner'     
+        ]
+
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'password2': {'write_only': True}
+        }

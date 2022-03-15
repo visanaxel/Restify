@@ -7,6 +7,8 @@ from restaurant.models import MenuItem;
 from restaurant.models import Restaurant
 from django.db import models
 
+from users.serializers import MyUserSerializer
+
 class MenuItemSerializer(serializers.ModelSerializer):
     name = serializers.CharField(max_length=200)
     price = serializers.FloatField()
@@ -105,29 +107,6 @@ class ViewCommentSerializer(serializers.ModelSerializer):
     
     def get_comment_from_comment(self, comment):
         return comment.comment
-
-class MyUserSerializer(serializers.ModelSerializer):
-
-    password = serializers.CharField(required=True, write_only = True)
-    password2 = serializers.CharField(required=True, write_only = True)
-    
-    class Meta:
-        model = MyUser
-
-        fields = [
-            'username',
-            'email',
-            'password', 
-            'password2',
-            'description',
-            'profile_pic',
-            'is_owner'     
-        ]
-
-        extra_kwargs = {
-            'password': {'write_only': True},
-            'password2': {'write_only': True}
-        }
 
 class RestaurantSerializer(serializers.ModelSerializer):
     owner = MyUserSerializer
