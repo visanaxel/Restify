@@ -245,9 +245,6 @@ class CommentRestaurantView(CreateAPIView):
 
         return super().post(request, *args, **kwargs)
 
-    def create(self, request, *args, **kwargs):
-        return super().create(request, *args, **kwargs)
-
     def perform_create(self, serializer):
         user = self.request.user
         restaurant = Restaurant.objects.get(id=self.kwargs['restaurant_id'])
@@ -255,7 +252,7 @@ class CommentRestaurantView(CreateAPIView):
 
         # notify owner!
         OwnerNotifications.objects.create(rid=restaurant, uid = user, notif_type='c', \
-            description = user.username + " commented on your page: " + "\"" +  self.request.data['comment'] + "\".") 
+            description = user.username + " commented on your page: " + '"' +  self.request.data['comment'] + '".') 
 
 class GetCommentsView(ListAPIView):
 
