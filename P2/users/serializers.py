@@ -17,6 +17,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         fields = [
             'username',
             'profile_pic',
+            'phone_number',
             'first_name',
             'last_name',
             'email',
@@ -37,6 +38,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         profile_pic = validated_data.get('profile_pic')
         first_name = validated_data.get('first_name')
         last_name = validated_data.get('last_name')
+        phone_number = validated_data.get('phone_number')
         print(last_name)
         password = validated_data.get('password')
         password2 = validated_data.get('password2')
@@ -44,7 +46,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         print(password)
         print(password2)
         if password == password2:
-            user = MyUser(username=username, email=email, profile_pic=profile_pic, first_name = first_name, last_name=last_name)
+            user = MyUser(username=username, email=email, profile_pic=profile_pic, first_name = first_name, last_name=last_name, phone_number=phone_number)
             user.set_password(password)
             user.save()
             # why return user I dont know youtube dude it
@@ -66,6 +68,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             'first_name',
             'last_name',
             'email',
+            'phone_number'
             # 'profile_pic'
         ]
 
