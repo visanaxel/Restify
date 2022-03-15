@@ -241,8 +241,6 @@ class GetCommentsView(ListAPIView):
     # context_object_name = 'restaurant_id'
     look_field = 'pk'
     
-    
-    
     def get_queryset(self):
         
         restaurant = Restaurant.objects.filter(id = self.kwargs.get('pk'))
@@ -338,3 +336,26 @@ class RemoveImageView(DestroyAPIView):
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
 
+class ImageView(ListAPIView):
+
+    queryset = ImageModel.objects.all()
+    serializer_class = ImageSerializer
+    model = ImageModel
+
+    def get_queryset(self):
+
+        all = self.queryset
+
+        rest_images = all.filter(rid=self.kwargs['restaurant_id'])
+
+        return rest_images
+
+    def get(self, request, *args, **kwargs):
+
+        # Check if restaurant exists
+        restaurant = Restaurant.objects.filter(id=kwargs['restaurant_id'])
+        if not bool(restaurant):
+            error = {'error': 'restaurant not found.'}
+            return Response(error, status=status.HTTP_404_NOT_FOUND)
+
+        return super().get(request, *args, **kwargs)
