@@ -18,7 +18,6 @@ class OwnerNotificationView(ListAPIView):
     permission_classes = [IsAuthenticated]
     
     def get(self, request, *args, **kwargs):
-
         user = request.user
 
         if not user.is_owner:
@@ -31,23 +30,20 @@ class OwnerNotificationView(ListAPIView):
         for notif in ret:
             notif.delete()
 
-        return ret
+        return Response(ret)
 
-
-
-# NOTIFICATIONS IM GETTING FROM REST(NEW BLOG) SENDING TO USER
 class UserNotificationView(ListAPIView):
 
     serializer_class = UserNotificationSerializer
-
     permission_classes = [IsAuthenticated]
-    def get_queryset(self):
-        user = self.request.user
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
         
         ret = UserNotifications.objects.filter(uid=user)
         for notif in ret:
             notif.delete()
 
-        return ret
+        return Response(ret)
 
 
