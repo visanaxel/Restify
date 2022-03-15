@@ -40,7 +40,7 @@ class MenuView(ListAPIView):
 
         return menu
 
-class AddItemView(APIView):
+class AddItemView(CreateAPIView):
     serializer_class = MenuItemSerializer
     notif_serializer_class = UserNotificationSerializer
     model = MenuItem
@@ -48,44 +48,35 @@ class AddItemView(APIView):
     queryset = MenuItem.objects.all()
     permission_classes = [IsAuthenticated]
 
+    def create(self, request, *args, **kwargs):
 
-    def post(self, request, *args, **kwargs):
-        user = request.user
+        restaurant = Restaurant.objects.filter(id=kwargs['restaurant_id'])
+        if not bool(restaurant):
+            return Response('Restaurant not found.', status=status.HTTP_404_NOT_FOUND)
 
-        d = request.data.dict()
-        d['rid'] = kwargs['restaurant_id']
+        errors = {}
 
-        restaurant = Restaurant.objects.filter(owner = user.id)
+        if request.data.get('name') == None:
+            errors['name'] = ["This field is required."]
 
-        if not bool(restaurant): 
-            return Http404
+        if request.data.get('price') == None:
+            errors['price'] = ["This field is required."]
+
+        if request.data.get('image') == None:
+            errors['image'] = ["This field is required."]
+
+        if request.data.get('description') == None:
+            errors['description'] = ["This field is required."]
+
+        if len(errors) > 0:
+            return Response(errors, status=status.HTTP_400_BAD_REQUEST)
         
-        if (int(restaurant[0].id) != int(kwargs['restaurant_id'])):
-            return Response("Forbidden", status=403)
+        MenuItem.objects.create(name=request.data.get('name'), 
+                                price=request.data.get('price'),
+                                image=request.data.get('image'), 
+                                description=request.data.get('description'))
 
-        serializer = self.serializer_class(data=d)
-        if serializer.is_valid():
-            serializer.save()
-            # restaurant was found and valid
-            # now find followers
-            followers = Follows.objects.filter(rid=d['rid'])
-            for follower in followers:
-                qset_keys = list(self.request.data)
-                qset_vals = list(self.request.data.values())
-                name = qset_vals[qset_keys.index('name')]
-                desc = name.capitalize() + " was added to the restaurant " + restaurant[0].name + "!"
-                c = {'uid': follower.uid.id, 'rid': kwargs['restaurant_id'], 'notif_type': 'n', 'description': desc}
-                notif_serializer = self.notif_serializer_class(data=c)
-
-                if notif_serializer.is_valid():
-                    notif_serializer.save()
-                else:
-                    return Response(notif_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-            # notifs done
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response('Item added!', status=status.HTTP_201_CREATED)
 
 class EditItemView(RetrieveAPIView, UpdateAPIView):
     serializer_class = MenuItemSerializer

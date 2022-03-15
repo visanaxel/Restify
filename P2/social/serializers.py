@@ -1,15 +1,21 @@
 from asyncio import run_coroutine_threadsafe
 from rest_framework import serializers
-from blog.models import Blog
 from restaurant.models import MenuItem;
 from restaurant.models import Restaurant
 from social.models import LikeRest
 
-from notifications.models import OwnerNotifications
+from notifications.models import UserNotifications
 from social.models import Follows
-from django.db import models
-from users.models import MyUser
-from django.db.models import SET_NULL
+
+class LikeRestSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = LikeRest
+        fields = ['rid']
+
+    # validated data is what the user sent
+    def create(self, validated_data):
+        return validated_data.get('rid')
 
 class AddFollowSerializer(serializers.ModelSerializer):
     pass
@@ -34,7 +40,7 @@ class AddFollowSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'error': 'you already follow this person'})
         
         print(user)
-        notif = OwnerNotifications(rid=restaurant[0], uid = user, notif_type='f', description = user.username + " has followed you!")
+        notif = UserNotifications(rid=restaurant[0], uid = user, notif_type='f', description = user.username + " has followed you!")
         notif.save()
         follow = Follows(uid = user, rid = restaurant[0])
         follow.save()
