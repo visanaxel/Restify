@@ -252,7 +252,7 @@ class CommentRestaurantView(CreateAPIView):
 
         # notify owner!
         OwnerNotifications.objects.create(rid=restaurant, uid = user, notif_type='c', \
-            description = user.username + " commented on your page: " + '"' +  self.request.data['comment'] + '".') 
+            description = user.username + " commented on your page: " + self.request.data['comment']) 
 
 class GetCommentsView(ListAPIView):
 
