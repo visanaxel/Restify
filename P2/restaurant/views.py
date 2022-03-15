@@ -101,7 +101,8 @@ class EditItemView(UpdateAPIView):
 
         followers = Follows.objects.filter(rid=restaurant[0])
         for follower in followers:
-                name = self.request.data['name']
+                item = MenuItem.objects.get(id=self.kwargs['pk'])
+                name = item.name
                 desc = name.capitalize() + " was added to the restaurant " + restaurant[0].name + "!"
 
                 UserNotifications.objects.create(uid=follower.uid, 
