@@ -1,13 +1,15 @@
+from ast import Delete
 from codecs import lookup
 from ctypes import addressof
 import json
+import re
 from django.http import Http404, HttpResponseForbidden
 from django.http import Http404
 from django.shortcuts import render
-from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView, CreateAPIView, DestroyAPIView
 from notifications.models import OwnerNotifications
-from restaurant.models import Comment
-from restaurant.serializers import CommentSerializer, ViewCommentSerializer
+from restaurant.models import Comment, ImageModel
+from restaurant.serializers import CommentSerializer, ImageSerializer, ViewCommentSerializer
 from notifications.serializers import UserNotificationSerializer
 from social.models import Follows
 from restaurant.models import MenuItem
@@ -290,3 +292,49 @@ class SearchView(ListAPIView):
         order = distinct.order_by('-likes')
 
         return order
+
+class AddImageView(CreateAPIView):
+    
+    serializer_class = ImageSerializer
+    model = ImageModel
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request, *args, **kwargs):
+        request.data['rid'] = kwargs['restaurant_id']
+        return super().create(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+
+        # Check if restaurant exists
+        restaurant = Restaurant.objects.filter(id=kwargs['restaurant_id'])
+        if not bool(restaurant):
+            error = {'error': 'restaurant not found.'}
+            return Response(error, status=status.HTTP_404_NOT_FOUND)
+
+        return super().post(request, *args, **kwargs)
+
+class RemoveImageView(DestroyAPIView):
+
+    serializer_class = ImageSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = ImageModel.objects.all()
+    lookup_field = 'pk'
+
+    def delete(self, request, *args, **kwargs):
+
+        # Check if image exists
+        image = ImageModel.objects.filter(id=kwargs['pk'])
+        if not bool(image):
+            error = {'error': 'image not found.'}
+            return Response(error, status=status.HTTP_404_NOT_FOUND)
+
+        # Check if user is owner of rest
+        if image[0].rid.owner != request.user:
+            error = {'error': 'you are not the owner.'}
+            return Response(error, status=status.HTTP_403_FORBIDDEN)
+
+        return super().delete( request, *args, **kwargs)
+    
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+

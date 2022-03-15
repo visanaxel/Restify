@@ -1,10 +1,11 @@
 from asyncio import run_coroutine_threadsafe
 import datetime
 from rest_framework import serializers
-from restaurant.models import Comment
+from restaurant.models import Comment, ImageModel
 from users.models import MyUser
 from restaurant.models import MenuItem;
 from restaurant.models import Restaurant
+from django.db import models
 
 class MenuItemSerializer(serializers.ModelSerializer):
     name = serializers.CharField(max_length=200)
@@ -34,7 +35,6 @@ class RestaurantViewSerializer(serializers.ModelSerializer):
                 'phone_number', 
                 'owner'
         ]
-
 
 class AddRestaurantSerializer(serializers.ModelSerializer):
     # youtube dude didnt have to import but he didnt extend so I dunno tbh nvm he did
@@ -105,3 +105,51 @@ class ViewCommentSerializer(serializers.ModelSerializer):
     
     def get_comment_from_comment(self, comment):
         return comment.comment
+
+class MyUserSerializer(serializers.ModelSerializer):
+
+    password = serializers.CharField(required=True, write_only = True)
+    password2 = serializers.CharField(required=True, write_only = True)
+    
+    class Meta:
+        model = MyUser
+
+        fields = [
+            'username',
+            'email',
+            'password', 
+            'password2',
+            'description',
+            'profile_pic',
+            'is_owner'     
+        ]
+
+        extra_kwargs = {
+            'password': {'write_only': True},
+            'password2': {'write_only': True}
+        }
+
+class RestaurantSerializer(serializers.ModelSerializer):
+    owner = MyUserSerializer
+
+    class Meta:
+        model = Restaurant
+        fields = [
+            'name',
+            'address',
+            'logo',
+            'postal_code',
+            'phone_number',
+            'owner',
+        ]
+
+class ImageSerializer(serializers.ModelSerializer):
+
+    rid = RestaurantSerializer
+
+    class Meta:
+        model = ImageModel
+        fields = [
+            'image',
+            'rid'
+        ]
