@@ -53,6 +53,8 @@ class AddFollowView(CreateAPIView):
         if bool(follow):
             return Response({'details': 'User already following restaurant.'}, status=status.HTTP_400_BAD_REQUEST)
 
+        restaurant.followers += 1
+        restaurant.save()
         return super().post(request, *args, **kwargs)
 
     def perform_create(self, serializer):
@@ -74,7 +76,8 @@ class DeleteFollowView(DestroyAPIView):
         follow = Follows.objects.filter(uid=request.user, rid=restaurant[0])
         if not bool(follow):
             return Response({'details': 'User not following restaurant.'}, status=status.HTTP_400_BAD_REQUEST)
-
+        restaurant.followers -= 1
+        restaurant.save()
         follow.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT)

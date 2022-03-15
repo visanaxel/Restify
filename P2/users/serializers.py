@@ -7,11 +7,18 @@ class UserRegisterSerializer(serializers.ModelSerializer):
 
     password = serializers.CharField(required=True, write_only = True)
     password2 = serializers.CharField(required=True, write_only = True)
+    # username = serializers.CharField(required=True)
+    
+    first_name = serializers.CharField(required=True)
+    last_name = serializers.CharField(required=True)
     email = serializers.EmailField(required=True)
     class Meta:
         model = MyUser
         fields = [
             'username',
+            'profile_pic',
+            'first_name',
+            'last_name',
             'email',
             'password', 
             'password2',     
@@ -27,15 +34,17 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         print("entered create method")
         username = validated_data.get('username')
         email = validated_data.get('email')
+        profile_pic = validated_data.get('profile_pic')
+        first_name = validated_data.get('first_name')
+        last_name = validated_data.get('last_name')
+        print(last_name)
         password = validated_data.get('password')
         password2 = validated_data.get('password2')
-        # print(username)
-        # print(password)
-        # check if password and password2 ask on piazza if we want check here or on the backend
+        
         print(password)
         print(password2)
         if password == password2:
-            user = MyUser(username=username, email=email)
+            user = MyUser(username=username, email=email, profile_pic=profile_pic, first_name = first_name, last_name=last_name)
             user.set_password(password)
             user.save()
             # why return user I dont know youtube dude it
