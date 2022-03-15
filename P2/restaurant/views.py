@@ -32,6 +32,14 @@ class MenuView(ListAPIView):
     context_object_name = 'menu'
     queryset = MenuItem.objects.all()
 
+    def get(self, request, *args, **kwargs):
+        # Check if restaurant exists!
+        restaurant = Restaurant.objects.filter(id=kwargs['restaurant_id'])
+        if not bool(restaurant):
+            return Response({'error': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        return super().get(request, *args, **kwargs)
+
     def get_queryset(self):
 
         all = self.queryset
@@ -50,11 +58,6 @@ class AddItemView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
 
-        # Restaurant not found!
-        restaurant = Restaurant.objects.filter(id=kwargs['restaurant_id'])
-        if not bool(restaurant):
-            return Response({'details': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
-
         errors = {}
 
         if request.data.get('name') == None:
@@ -69,8 +72,18 @@ class AddItemView(CreateAPIView):
         if request.data.get('description') == None:
             errors['description'] = ["This field is required."]
 
+        # Check fields
         if len(errors) > 0:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # Restaurant not found!
+        restaurant = Restaurant.objects.filter(id=kwargs['restaurant_id'])
+        if not bool(restaurant):
+            return Response({'error': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        # User not restaurant
+        if request.user != restaurant[0].owner:
+            return Response({'error': 'User is not the owner.'}, status=status.HTTP_403_FORBIDDEN)
 
         return super().post(request, *args, **kwargs)
 
@@ -81,7 +94,8 @@ class AddItemView(CreateAPIView):
         MenuItem.objects.create(name=request.data.get('name'), 
                                 price=request.data.get('price'),
                                 image=request.data.get('image'), 
-                                description=request.data.get('description'))
+                                description=request.data.get('description'),
+                                rid=restaurant[0])
         
         followers = Follows.objects.filter(rid=restaurant[0])
         for follower in followers:
@@ -93,7 +107,7 @@ class AddItemView(CreateAPIView):
                                                 notif_type='n',
                                                 description=desc)
 
-        return Response('Item added!', status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_201_CREATED)
 
 class EditItemView(UpdateAPIView):
     serializer_class = MenuItemSerializer
@@ -137,8 +151,17 @@ class EditItemView(UpdateAPIView):
 
 class RestaurantView(RetrieveAPIView):
     queryset = Restaurant.objects.all()
-    serializer_class = RestaurantViewSerializer
+    serializer_class = RestaurantSerializer
     look_field = 'pk'
+
+    def get(self, request, *args, **kwargs):
+
+        # Check if restaurant exists
+        restaurant = Restaurant.objects.filter(id=kwargs['pk'])
+        if not bool(restaurant):
+            return Response({'error': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        return super().get(request, *args, **kwargs)
 
 class AddRestaurantView(CreateAPIView):
     serializer_class = RestaurantSerializer
@@ -190,11 +213,11 @@ class EditRestaurantView(UpdateAPIView):
         # Restaurant not found!
         restaurant = Restaurant.objects.filter(id=kwargs['pk'])
         if not bool(restaurant):
-            return Response({'details': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
 
         # User not owner!
         if request.user != restaurant[0].owner:
-            return Response({'details': 'User not owner.'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'error': 'User is not the owner.'}, status=status.HTTP_403_FORBIDDEN)
 
         return super().patch(request, *args, **kwargs)
 
@@ -204,10 +227,6 @@ class CommentRestaurantView(CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
-        # Restaurant not found!
-        restaurant = Restaurant.objects.filter(id=kwargs['restaurant_id'])
-        if not bool(restaurant):
-            return Response({'details': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
 
         errors = {}
 
@@ -217,6 +236,11 @@ class CommentRestaurantView(CreateAPIView):
         # Error check
         if len(errors) > 0:
             return Response(errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # Restaurant not found!
+        restaurant = Restaurant.objects.filter(id=kwargs['restaurant_id'])
+        if not bool(restaurant):
+            return Response({'error': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
 
         return super().post(request, *args, **kwargs)
 
@@ -243,8 +267,8 @@ class GetCommentsView(ListAPIView):
 
         # Check if restaurant exists!
         restaurant = Restaurant.objects.filter(id = self.kwargs['pk'])
-        if (bool(restaurant) == False):
-            return Response({'details': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
+        if not bool(restaurant):
+            return Response({'error': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
 
         return super().get(request, *args, **kwargs)
     
@@ -253,11 +277,13 @@ class GetCommentsView(ListAPIView):
         restaurant = Restaurant.objects.get(id=self.kwargs['pk'])
         
         rest_comment = self.queryset.filter(rid=restaurant)
+
+        order = rest_comment.order_by('-date')
         
-        return rest_comment
+        return order
         
 class SearchView(ListAPIView):
-    serializer_class = RestaurantViewSerializer
+    serializer_class = RestaurantSerializer
     model = Restaurant
     context_object_name = 'search'
 
@@ -298,6 +324,10 @@ class AddImageView(CreateAPIView):
             error = {'error': 'restaurant not found.'}
             return Response(error, status=status.HTTP_404_NOT_FOUND)
 
+        # Check if user is owner
+        if request.user != restaurant[0].owner:
+            return Response({'error': 'User is not owner.'}, status=status.HTTP_403_FORBIDDEN)
+
         return super().post(request, *args, **kwargs)
 
 class RemoveImageView(DestroyAPIView):
@@ -317,7 +347,7 @@ class RemoveImageView(DestroyAPIView):
 
         # Check if user is owner of rest
         if image[0].rid.owner != request.user:
-            error = {'error': 'you are not the owner.'}
+            error = {'error': 'User is not owner.'}
             return Response(error, status=status.HTTP_403_FORBIDDEN)
 
         return super().delete( request, *args, **kwargs)

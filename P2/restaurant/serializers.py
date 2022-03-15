@@ -18,6 +18,8 @@ class RestaurantSerializer(serializers.ModelSerializer):
             'name',
             'address',
             'logo',
+            'likes',
+            'followers',
             'postal_code',
             'phone_number',
             'owner',
