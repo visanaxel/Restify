@@ -23,9 +23,6 @@ class RegisterUserView(APIView):
             serialized_data = serializer.data
             return Response(serialized_data, status=status.HTTP_201_CREATED)
         else:
-            print(serializer.error_messages)
-            print("it is not valid!")
-
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
