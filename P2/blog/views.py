@@ -36,11 +36,13 @@ class AddBlogView(CreateAPIView):
         serializer.save(author=user)
 
         # Add notifications for all user following this restaurant
+        print("something")
         followers = Follows.objects.filter(rid=restaurant)
         for follower in followers:
             type = 'b'
-            desc = 0
-            UserNotifications.objects.create()
+            desc = serializer.data['title'].capitalize() + " blog was posted for " + serializer.data['rid'].name + "!"
+            new_notif = UserNotifications.objects.create(uid=follower, rid=restaurant, notif_type=type, description=desc)
+            new_notif.save()
         
 
 class BlogView(RetrieveAPIView):
