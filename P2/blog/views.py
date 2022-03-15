@@ -2,6 +2,7 @@ from cgitb import lookup
 from django.shortcuts import render
 from blog.models import Blog
 from blog.serializers import BlogSerializer
+from notifications.models import UserNotifications
 from notifications.serializers import UserNotificationSerializer
 from restaurant.models import Restaurant
 from rest_framework.views import APIView
@@ -36,6 +37,10 @@ class AddBlogView(CreateAPIView):
 
         # Add notifications for all user following this restaurant
         followers = Follows.objects.filter(rid=restaurant)
+        for follower in followers:
+            type = 'b'
+            desc = 0
+            UserNotifications.objects.create()
         
 
 class BlogView(RetrieveAPIView):
