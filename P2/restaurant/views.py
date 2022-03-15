@@ -209,39 +209,32 @@ class CommentRestaurantView(CreateAPIView):
         serializer.save(uid=user, rid=restaurant)
 
         # notify owner!
+        OwnerNotifications.objects.create(rid=restaurant, uid = user, notif_type='c', \
+            description = user.username + " commented on your page: " + "\"" +  self.request.data['comment'] + "\".") 
 
 class GetCommentsView(ListAPIView):
 
     serializer_class = ViewCommentSerializer
     model = Comment
-    # context_object_name = 'restaurant_id'
+    queryset= Comment.objects.all()
     look_field = 'pk'
+
+    def get(self, request, *args, **kwargs):
+
+        # Check if restaurant exists!
+        restaurant = Restaurant.objects.filter(id = self.kwargs['pk'])
+        if (bool(restaurant) == False):
+            return Response({'details': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        return super().get(request, *args, **kwargs)
     
     def get_queryset(self):
         
-        restaurant = Restaurant.objects.filter(id = self.kwargs.get('pk'))
-        if (bool(restaurant) == False):
-            restaurant = [-1]
+        restaurant = Restaurant.objects.get(id=self.kwargs['pk'])
         
-        return Comment.objects.filter(rid=restaurant[0])
-    
-    def get(self, *args, **kwargs):
+        rest_comment = self.queryset.filter(rid=restaurant)
         
-        restaurant = Restaurant.objects.filter(id = self.kwargs.get('pk'))
-        if (bool(restaurant) == False):
-            raise Http404
-        
-        comments = Comment.objects.filter(rid=restaurant[0])
-        
-        all = []
-        for comment in comments:
-            d = {}
-            d['username'] = comment.uid.username
-            d['restaurant'] = comment.rid.name
-            d['comment'] = comment.comment
-            all.append(d)
-
-        return Response(all)
+        return rest_comment
         
 class SearchView(ListAPIView):
     serializer_class = RestaurantViewSerializer
