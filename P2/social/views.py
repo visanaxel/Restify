@@ -1,3 +1,4 @@
+from importlib.resources import read_text
 from django.http import Http404
 from django.shortcuts import render
 from rest_framework.views import APIView
@@ -47,32 +48,36 @@ class AddFollowView(CreateAPIView):
         if not bool(restaurant):
             return Response({'details': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
 
+        # Check if already following
+        follow = Follows.objects.filter(uid=request.user, rid=restaurant[0])
+        if bool(follow):
+            return Response({'details': 'User already following restaurant.'}, status=status.HTTP_400_BAD_REQUEST)
+
         return super().post(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         serializer.save(uid=self.request.user)
 
-class DeleteFollowApiView(DestroyAPIView):
-    permission_classes = [IsAuthenticated]
+class DeleteFollowView(DestroyAPIView):
     queryset = Follows.objects.all()
+    serializer_class = FollowSerializer
+    permission_classes = [IsAuthenticated]
     
-    
-    def delete(self, request, rid):
-        user = request.user
-        print(user)
-        
-        restaurant_found = Restaurant.objects.filter(id = rid)
-        if (bool(restaurant_found) == False):
-            return Response({'error': 'Aint a valid restaurant'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        
-        
-        follower = Follows.objects.filter(uid = user, rid = restaurant_found[0])
-        if (bool(follower) == False):
-            return Response({'error': 'You dont even follow dis dude stoopid'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        follower.delete()
-        return Response({"message": "You have unfollowed"})
+    def delete(self, request, *args, **kwargs):
+
+        # Check if restaurant exists
+        restaurant = Restaurant.objects.filter(id=kwargs['rid'])
+        if not bool(restaurant):
+            return Response({'details': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Check if following
+        follow = Follows.objects.filter(uid=request.user, rid=restaurant[0])
+        if not bool(follow):
+            return Response({'details': 'User not following restaurant.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        follow.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 class LikeRestView(CreateAPIView):
     permission_classes = [IsAuthenticated]
@@ -200,30 +205,25 @@ class UnlikeBlogView(DestroyAPIView):
         return Response('Unliked blog', status=status.HTTP_200_OK)
 
 class FeedView(ListAPIView):
+    serializer_class = BlogSerializer
+    model = Blog
     permission_classes = [IsAuthenticated]
 
-    def get(self, request, *args, **kwargs):
+    def get_queryset(self):
         
-        user = request.user
+        user = self.request.user
+
         # queryset of all restaurant the user follows
         restaurants = Follows.objects.filter(uid=user)
 
         # Check if user follows any restaurants
         if len(restaurants) < 1:
-            return Response([])
+            return restaurants
 
         feeds = Blog.objects.filter(rid=restaurants[0].rid)
         for i in range(1, len(restaurants)):
             feeds = feeds |  Blog.objects.filter(rid=restaurants[i].rid)
 
-        # all blogs 
-        feeds = feeds.order_by('-date')
+        order = feeds.order_by('-date')
 
-        all = []
-        for feed in feeds:
-            d = {}
-            d['bid'] = feed.id
-            d['title'] = feed.title
-            all.append(d)
-
-        return Response(all)
+        return order
