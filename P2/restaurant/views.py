@@ -8,7 +8,7 @@ from django.http import Http404
 from django.shortcuts import render
 from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView, CreateAPIView, DestroyAPIView
 from blog.models import Blog
-from blog.serializers import BlogViewSerializer
+from blog.serializers import BlogSerializer
 from notifications.models import OwnerNotifications
 from restaurant.models import Comment, ImageModel
 from restaurant.serializers import CommentSerializer, ImageSerializer, ViewCommentSerializer
@@ -365,7 +365,7 @@ class ImageView(ListAPIView):
 class RestBlogView(ListAPIView):
 
     queryset = Blog.objects.all()
-    serializer_class = BlogViewSerializer
+    serializer_class = BlogSerializer
     model = Blog
 
     def get_queryset(self):
