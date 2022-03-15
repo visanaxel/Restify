@@ -200,21 +200,19 @@ class CommentRestaurantView(APIView):
         d = request.data.dict()
         d['rid'] = kwargs['restaurant_id']
 
-        restaurant = Restaurant.objects.filter(owner = user.id)
+        restaurant = Restaurant.objects.filter(id=d['rid'])
 
         if not bool(restaurant): 
             return Response("Not Found", status=404)
-        
-        if (int(restaurant[0].id) != int(kwargs['restaurant_id'])):
-            return Response("Forbidden", status=403)
 
-        # restaurant was found and valid
+        # restaurant was found
+
         # now find followers
         OwnerNotifications.objects.create(rid=restaurant[0], uid = request.user, notif_type='c', \
             description = user.username + " commented on your page: " + "\"" +  d['comment'] + "\".") 
 
-
         # notifs done
+        
         d['uid'] = request.user.id
         serializer = self.serializer_class(data=d)
         if serializer.is_valid():
