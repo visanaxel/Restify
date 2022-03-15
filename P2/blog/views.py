@@ -15,15 +15,13 @@ class AddBlogView(CreateAPIView):
         # Add notifications for all user following this restaurant
         user = self.request.user
         restaurant = Restaurant.objects.get(owner=user)
-        followers = Follows.objects.filter(rid=restaurant)
 
         return super().create(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         user = self.request.user
         restaurant = Restaurant.objects.get(owner=user)
-        serializer.save(rid=restaurant)
-        serializer.save(author=user)
+        serializer.save(rid=restaurant, author=user)
 
         # Add notifications for all user following this restaurant
         followers = Follows.objects.filter(rid=restaurant)
