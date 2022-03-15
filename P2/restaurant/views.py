@@ -96,6 +96,11 @@ class EditItemView(UpdateAPIView):
     lookup_field = 'pk'
 
     def perform_update(self, serializer):
+        
+        # no update
+        if self.request.data.get('name') == None and self.request.data.get('price') == None and self.request.data.get('description') == None and self.request.data.get('image') == None:
+            return 
+
         restaurant = Restaurant.objects.filter(owner=self.request.user)
         serializer.save(rid=restaurant[0])
 
@@ -103,7 +108,7 @@ class EditItemView(UpdateAPIView):
         for follower in followers:
                 item = MenuItem.objects.get(id=self.kwargs['pk'])
                 name = item.name
-                desc = name.capitalize() + " was added to the restaurant " + restaurant[0].name + "!"
+                desc = name.capitalize() + " was modified within restaurant " + restaurant[0].name + "!"
 
                 UserNotifications.objects.create(uid=follower.uid, 
                                                 rid=restaurant[0], 
