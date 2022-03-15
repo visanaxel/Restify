@@ -13,7 +13,7 @@ class RegisterUserView(APIView):
     serializer_class = UserRegisterSerializer
 
     def post(self, request, *args, **kwargs):
-        print("entered post!")
+
         serializer = self.serializer_class(data=request.data)
 
         if serializer.is_valid():
