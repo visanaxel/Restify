@@ -1,11 +1,15 @@
 from asyncio import run_coroutine_threadsafe
 from rest_framework import serializers
+from blog.models import Blog
 from restaurant.models import MenuItem;
 from restaurant.models import Restaurant
 from social.models import LikeRest
 
 from notifications.models import OwnerNotifications
 from social.models import Follows
+from django.db import models
+from users.models import MyUser
+from django.db.models import SET_NULL
 
 class AddFollowSerializer(serializers.ModelSerializer):
     pass
