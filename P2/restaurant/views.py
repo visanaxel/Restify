@@ -100,7 +100,6 @@ class AddItemView(CreateAPIView):
         followers = Follows.objects.filter(rid=restaurant[0])
         for follower in followers:
                 name = request.data.get('name')
-                desc = name.capitalize() + " was added to the restaurant " + restaurant[0].name + "!"
                 desc = restaurant[0].name + ': Menu item #' + str(new.id) + ' was added!'
 
                 UserNotifications.objects.create(uid=follower.uid, 
