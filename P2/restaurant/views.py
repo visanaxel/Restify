@@ -6,7 +6,7 @@ from django.shortcuts import render
 from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView
 from notifications.models import OwnerNotifications
 from restaurant.models import Comment
-from restaurant.serializers import CommentSerializer
+from restaurant.serializers import CommentSerializer, ViewCommentSerializer
 from notifications.serializers import UserNotificationSerializer
 from social.models import Follows
 from restaurant.models import MenuItem
@@ -222,3 +222,40 @@ class CommentRestaurantView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class GetCommentsView(ListAPIView):
+
+    serializer_class = ViewCommentSerializer
+    model = Comment
+    # context_object_name = 'restaurant_id'
+    look_field = 'pk'
+    
+    
+    
+    def get_queryset(self):
+        
+        restaurant = Restaurant.objects.filter(id = self.kwargs.get('pk'))
+        if (bool(restaurant) == False):
+            restaurant = [-1]
+        
+        return Comment.objects.filter(rid=restaurant[0])
+    
+    def get(self, *args, **kwargs):
+        
+        restaurant = Restaurant.objects.filter(id = self.kwargs.get('pk'))
+        if (bool(restaurant) == False):
+            raise Http404
+        
+        comments = Comment.objects.filter(rid=restaurant[0])
+        
+        all = []
+        for comment in comments:
+            d = {}
+            d['username'] = comment.uid.username
+            d['restaurant'] = comment.rid.name
+            d['comment'] = comment.comment
+            all.append(d)
+
+        return Response(all)
+        
+        

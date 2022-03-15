@@ -81,3 +81,27 @@ class CommentSerializer(serializers.ModelSerializer):
             'comment',
             'date'
         ]
+        
+class ViewCommentSerializer(serializers.ModelSerializer):
+    
+    comment = serializers.SerializerMethodField('get_comment_from_comment')
+    username = serializers.SerializerMethodField('get_username_from_comment')
+    restaurant = serializers.SerializerMethodField('get_restaurant_name_from_comment')
+
+
+    class Meta:
+        model = Comment
+        fields = [
+            'username',
+            'restaurant',
+            'comment',    
+        ]
+        
+    def get_username_from_comment(self, commment):
+        return commment.uid.username
+        
+    def get_restaurant_name_from_comment(self, comment):
+        return comment.rid.name
+    
+    def get_comment_from_comment(self, comment):
+        return comment.name
