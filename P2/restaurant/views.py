@@ -75,52 +75,40 @@ class AddItemView(CreateAPIView):
                                 price=request.data.get('price'),
                                 image=request.data.get('image'), 
                                 description=request.data.get('description'))
+        
+        followers = Follows.objects.filter(rid=restaurant[0])
+        for follower in followers:
+                name = request.data.get('name')
+                desc = name.capitalize() + " was added to the restaurant " + restaurant[0].name + "!"
+
+                UserNotifications.objects.create(uid=follower.uid, 
+                                                rid=restaurant[0], 
+                                                notif_type='n',
+                                                description=desc)
 
         return Response('Item added!', status=status.HTTP_201_CREATED)
 
-class EditItemView(RetrieveAPIView, UpdateAPIView):
+class EditItemView(UpdateAPIView):
     serializer_class = MenuItemSerializer
     model = MenuItem
-    context_object_name = 'edit_item'
     queryset = MenuItem.objects.all()
     permission_classes = [IsAuthenticated]
-    notif_serializer_class = UserNotificationSerializer
+    lookup_field = 'pk'
 
-    def patch(self, request, *args, **kwargs):
-        
-        instance = self.get_object()
-        d = request.data.dict()
-        d['rid'] = kwargs['restaurant_id']
-        d['id'] = kwargs['pk']
-        user = request.user
-        restaurant = Restaurant.objects.filter(owner = user.id)
-        if not bool(restaurant): 
-            return Http404
-        
-        if (int(restaurant[0].id) != int(kwargs['restaurant_id'])):
-            return Response("Forbidden", status=403)
+    def perform_update(self, serializer):
+        restaurant = Restaurant.objects.filter(owner=self.request.user)
+        serializer.save(rid=restaurant[0])
 
-        # restaurant was found and valid
-        # now find followers
-        followers = Follows.objects.filter(rid=d['rid'])
+        followers = Follows.objects.filter(rid=restaurant[0])
         for follower in followers:
-            item = MenuItem.objects.get(id=kwargs['pk'])
-            desc = item.name.capitalize() + " was modified within the restaurant " + restaurant[0].name + "!"
-            c = {'uid': follower.uid.id, 'rid': kwargs['restaurant_id'], 'notif_type': 'm', 'description': desc}
-            notif_serializer = self.notif_serializer_class(data=c)
+                name = self.request.data['name']
+                desc = name.capitalize() + " was added to the restaurant " + restaurant[0].name + "!"
 
-            if notif_serializer.is_valid():
-                notif_serializer.save()
-            else:
-                return Response(notif_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                UserNotifications.objects.create(uid=follower.uid, 
+                                                rid=restaurant[0], 
+                                                notif_type='n',
+                                                description=desc)
 
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 class RestaurantView(RetrieveAPIView):
     queryset = Restaurant.objects.all()

@@ -9,12 +9,26 @@ from django.db import models
 
 from users.serializers import MyUserSerializer
 
+class RestaurantSerializer(serializers.ModelSerializer):
+    owner = MyUserSerializer
+
+    class Meta:
+        model = Restaurant
+        fields = [
+            'name',
+            'address',
+            'logo',
+            'postal_code',
+            'phone_number',
+            'owner',
+        ]
+
 class MenuItemSerializer(serializers.ModelSerializer):
     name = serializers.CharField(max_length=200)
     price = serializers.FloatField()
     description = serializers.CharField(max_length=400)
     image = serializers.ImageField(required=False)
-    rid = Restaurant
+    rid = RestaurantSerializer
 
     class Meta:
         model = MenuItem
@@ -107,20 +121,6 @@ class ViewCommentSerializer(serializers.ModelSerializer):
     
     def get_comment_from_comment(self, comment):
         return comment.comment
-
-class RestaurantSerializer(serializers.ModelSerializer):
-    owner = MyUserSerializer
-
-    class Meta:
-        model = Restaurant
-        fields = [
-            'name',
-            'address',
-            'logo',
-            'postal_code',
-            'phone_number',
-            'owner',
-        ]
 
 class ImageSerializer(serializers.ModelSerializer):
 
