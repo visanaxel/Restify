@@ -7,10 +7,10 @@ app_name = 'social'
   
 urlpatterns = [
     path('follow/', AddFollowView.as_view(), name='follow'),
-    path('unfollow/<rid>/', DeleteFollowView.as_view(), name='unfollow'),
+    path('unfollow/<int:rid>/', DeleteFollowView.as_view(), name='unfollow'),
     path('like/restaurant/', LikeRestView.as_view(), name='like_rest'),
-    path('unlike/restaurant/<rid>/', UnlikeRestaurant.as_view(), name='unlike_rest'),
+    path('unlike/restaurant/<int:rid>/', UnlikeRestaurant.as_view(), name='unlike_rest'),
     path('like/blog/', LikeBlogView.as_view(), name='like_blog'),
-    path('unlike/blog/<bid>/', UnlikeBlogView.as_view(), name='unlike_blog'),
+    path('unlike/blog/<int:bid>/', UnlikeBlogView.as_view(), name='unlike_blog'),
     path('feed/', FeedView.as_view(), name='feed')
     ]

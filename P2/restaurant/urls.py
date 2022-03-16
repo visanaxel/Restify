@@ -8,17 +8,17 @@ from restaurant.views import AddRestaurantView, EditRestaurantView, RestaurantVi
 app_name = 'restaurant'  
   
 urlpatterns = [
-    path('<restaurant_id>/menu/', MenuView.as_view(), name='menu'),
-    path('<restaurant_id>/menu/add/', AddItemView.as_view(), name='add'),
+    path('<int:restaurant_id>/menu/', MenuView.as_view(), name='menu'),
+    path('<int:restaurant_id>/menu/add/', AddItemView.as_view(), name='add'),
     path('menu/<int:pk>/edit/', EditItemView.as_view(), name='edit'),
-    path('view/<pk>/', RestaurantView.as_view(), name='view_rest'),
+    path('view/<int:pk>/', RestaurantView.as_view(), name='view_rest'),
     path('add/', AddRestaurantView.as_view(), name='add_restaurant'),
-    path('edit/<pk>/', EditRestaurantView.as_view(), name='edit_restaurant'),
-    path('<restaurant_id>/comment/', CommentRestaurantView.as_view(), name='comment'),
-    path('<pk>/view/comments/', GetCommentsView.as_view(), name='get_comments'),
+    path('edit/<int:pk>/', EditRestaurantView.as_view(), name='edit_restaurant'),
+    path('<int:restaurant_id>/comment/', CommentRestaurantView.as_view(), name='comment'),
+    path('<int:pk>/view/comments/', GetCommentsView.as_view(), name='get_comments'),
     path('search/<search_query>/', SearchView.as_view(), name='search'),
-    path('<restaurant_id>/add/image/', AddImageView.as_view(), name='add_image'),
+    path('<int:restaurant_id>/add/image/', AddImageView.as_view(), name='add_image'),
     path('remove/<int:pk>/image/', RemoveImageView.as_view(), name='remove_image'),
-    path('<restaurant_id>/view/images/', ImageView.as_view(), name="view_image"),
-    path('<restaurant_id>/blogs/', RestBlogView.as_view(), name='view_rest_blogs')
+    path('<int:restaurant_id>/view/images/', ImageView.as_view(), name="view_image"),
+    path('<int:restaurant_id>/blogs/', RestBlogView.as_view(), name='view_rest_blogs')
 ]
