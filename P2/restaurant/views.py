@@ -288,9 +288,9 @@ class SearchView(ListAPIView):
         queryset = Restaurant.objects.all()
         item_queryset = MenuItem.objects.all()
 
-        obj_name = queryset.filter(name__contains=self.kwargs['search_query'])
-        obj_address = queryset.filter(address__contains=self.kwargs['search_query'])
-        obj_item = item_queryset.filter(name__contains=self.kwargs['search_query'])
+        obj_name = queryset.filter(name__contains=self.request.GET.get('query'))
+        obj_address = queryset.filter(address__contains=self.request.GET.get('query'))
+        obj_item = item_queryset.filter(name__contains=self.request.GET.get('query'))
 
         combined = obj_name | obj_address
 
