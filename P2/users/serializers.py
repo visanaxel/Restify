@@ -52,7 +52,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
             # why return user I dont know youtube dude it
             return user
         else:
-            raise serializers.ValidationError({'error': 'Yo passwords dont match'})
+            raise serializers.ValidationError({'error': 'Passwords don\'t match'})
 
         # might need to uncomment this
         # return super().create(validated_data)
