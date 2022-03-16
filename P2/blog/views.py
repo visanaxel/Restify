@@ -40,7 +40,6 @@ class AddBlogView(CreateAPIView):
     
     def create(self, request, *args, **kwargs):
         if (not request.user.is_owner):
-            print("CHECKKKKKKK")
             return Response({'error': 'Not a restaurant owner'}, status=status.HTTP_403_FORBIDDEN)
         
         return super().create(request, *args, **kwargs)
@@ -107,9 +106,6 @@ class RemoveBlogView(DestroyAPIView):
             return Response({'error': 'You do not own a restaurant'}, status=status.HTTP_403_FORBIDDEN)
         
         if (user != blog.author):
-            print(restaurant[0].id)
-            print(blog.rid)
-            print("dude reestaurant != blog restauarant")
             return Response({'error': 'You do not own this blog'}, status=status.HTTP_403_FORBIDDEN)
         
         blog.delete()

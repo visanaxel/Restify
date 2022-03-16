@@ -32,7 +32,3 @@ class Comment(models.Model):
     rid = models.ForeignKey(to=Restaurant, on_delete=SET_NULL,  null=True)
     uid = models.ForeignKey(to=MyUser, on_delete=SET_NULL,  null=True)
 
-
-# class Follows(models.Model):
-#     rid = models.ForeignKey(to=Restaurant, on_delete=SET_NULL,  null=True, )
-#     uid = models.ForeignKey(to=MyUser, on_delete=SET_NULL,  null=True)
