@@ -24,6 +24,8 @@ class RestaurantSerializer(serializers.ModelSerializer):
             'phone_number',
             'owner',
         ]
+        read_only_fields = ('followers', 'likes')
+
 
 class MenuItemSerializer(serializers.ModelSerializer):
     name = serializers.CharField(max_length=200)
