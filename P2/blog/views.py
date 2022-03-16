@@ -19,7 +19,7 @@ class AddBlogView(CreateAPIView):
 
         # Check if user has a restaurant
         if not request.user.is_owner:
-            return Response()
+            return Response({'error': 'User is not an owner.'}, status=status.HTTP_403_FORBIDDEN)
 
         return super().post(request, *args, **kwargs)
 
@@ -50,6 +50,15 @@ class BlogView(RetrieveAPIView):
     serializer_class = BlogSerializer
     lookup_field = 'pk'
 
+    def get(self, request, *args, **kwargs):
+
+        # Check if Blog exists
+        blog = Blog.objects.filter(id=kwargs['pk'])
+        if not bool(blog):
+            return Response({'error': 'Blog not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        return super().get(request, *args, **kwargs)
+
 class EditBlogView(UpdateAPIView):
     queryset = Blog.objects.all()
     serializer_class = BlogEditSerializer
@@ -63,19 +72,15 @@ class EditBlogView(UpdateAPIView):
         
         
         if (bool(blog) == False):
-            return Response({'details': 'Blog not found.'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'Blog not found.'}, status=status.HTTP_404_NOT_FOUND)
 
         
         blog = blog[0]
-        restaurant = Restaurant.objects.filter(owner = user.id)
         if (not user.is_owner):
-            return Response({'details': 'You do not own a restaurant'}, status=status.HTTP_403_FORBIDDEN)
+            return Response({'error': 'User is not an owner'}, status=status.HTTP_403_FORBIDDEN)
         
         if (user != blog.author):
-            print(restaurant[0].id)
-            print(blog.rid)
-            print("dude reestaurant != blog restauarant")
-            return Response({'details': 'You do not own this blog'}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'error': 'User does not own this blog'}, status=status.HTTP_403_FORBIDDEN)
 
         return super().patch(request, *args, **kwargs)
 

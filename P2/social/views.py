@@ -53,6 +53,11 @@ class AddFollowView(CreateAPIView):
         if bool(follow):
             return Response({'error': 'User already following restaurant.'}, status=status.HTTP_400_BAD_REQUEST)
 
+        # Add new OwnerNotification object!
+        user = request.user
+        user_notif = OwnerNotifications(uid=user, rid=restaurant[0], notif_type='f', description=user.username + ' followed your restaurant: ' + restaurant[0].name)
+        user_notif.save()
+
         # increment followers
         restaurant[0].followers += 1
         restaurant[0].save()
