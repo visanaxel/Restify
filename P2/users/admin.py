@@ -12,7 +12,8 @@ class CustomUserAdmin(UserAdmin):
                 'fields': (
                     'description',
                     'profile_pic',
-                    'is_owner'
+                    'is_owner',
+                    'phone_number'
                 ),
             },
         ),
