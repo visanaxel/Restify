@@ -1,14 +1,14 @@
 # Note: VM uses python 3.10.2!
 
 # create venv
-python -m venv venv
+python3 -m venv venv
 
 # activate venv
 source venv/bin/activate
 
 # install required packages in venv
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 
 # makemigrations, migrate, setup db
-python manage.py makemigrations
-python manage.py migrate
+python3 manage.py makemigrations
+python3 manage.py migrate
