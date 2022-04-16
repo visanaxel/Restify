@@ -1,8 +1,10 @@
 import logo from './logo.svg';
 import './App.css';
-import { Register } from './pages/Register/Register';
+import { Login } from './pages/Login/Login';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import { ProfileView } from './pages/Profile';
+import { Register } from './pages/Login/Register';
+
 
 
 function App() {
@@ -10,8 +12,10 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/">
-          <Route path="register" element={<Register />} />
+          <Route path="login" element={<Login />} />
           <Route path="profile" element={<ProfileView />} />
+          <Route path="register" element={<Register />} />
+
         </Route>
       </Routes>
     </BrowserRouter>
