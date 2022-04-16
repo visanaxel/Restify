@@ -6,11 +6,8 @@ import Navbar from "../../components/Navbar/navbar";
 import Footer from "../../components/Footer/footer";
 
 
-export default class Register2 extends React.Component {
-
-
+export const Register = () => {
     
-    render(){
         return(
             <><head>
                 <title>Index</title>
@@ -24,11 +21,11 @@ export default class Register2 extends React.Component {
                 <Navbar></Navbar>
                     <div class="container-fluid bg">
                         <div class="row">
-                            <div class="col-md-4 col-sm-4 col-xs-12"></div>
-                            <div class="col-md-4 col-sm-4 col-xs-12">
+                            <div class="col-md-3 col-sm-4 col-xs-12"></div>
+                            <div class="col-md-6 col-sm-4 col-xs-12">
                                 <RegisterForm></RegisterForm>
                             </div>
-                            <div class="col-md-4 col-sm-4 col-xs-12"></div>
+                            <div class="col-md-3 col-sm-4 col-xs-12"></div>
 
                         </div>
 
@@ -36,13 +33,7 @@ export default class Register2 extends React.Component {
                         <br />
                         <br />
                         <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
-                        <br />
+                       
                     </div>
 
                     <Footer></Footer>
@@ -50,7 +41,7 @@ export default class Register2 extends React.Component {
 
                 </body></>
         )
-    }
+    
 }
 
 // export const Register = () => {
@@ -60,6 +51,4 @@ export default class Register2 extends React.Component {
 //     </>
 // }
 
-export const Register = () => {
-    return new Register2();
-}
+export default Register;
