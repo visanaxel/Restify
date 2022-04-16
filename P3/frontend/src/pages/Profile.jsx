@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import "../components/Profile/profile.css"
-import Button from '../components/Button'
 import Navbar from "../components/Navbar/navbar";
 import Footer from "../components/Footer/footer";
 import Card from "../components/Card/card"
 import axios from 'axios';
 import Axios from 'axios';
 import { useState } from 'react';
+
 
 export const ProfileView = () => {
     const [data, setData] = useState({});
@@ -32,6 +32,8 @@ export const ProfileView = () => {
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossOrigin="anonymous" />
             <Navbar />
             <p className="blog">Profile</p>
+            
+
             <Card data={data}/>
             <Footer />
             <p>{data['email']}</p>

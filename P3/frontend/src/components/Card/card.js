@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import Button from "@material-ui/core/Button";
+
+import Typography from "@material-ui/core/Typography";
 
 function Card(props) {
 
@@ -12,11 +15,17 @@ function Card(props) {
                 
 
                 <div className="profile_box">
+                
                 <p className="title_post2">{props.data['first_name']} {props.data['last_name']}</p>
                 <p align="center">Username: {props.data['username']}</p>
                 <p align="center">Email: <a href={"mailto:" + props.data['email']}>{props.data['email']}</a></p>
                 <p align="center">Phone: <a href={"tel:" + props.data['phone_number']}>{props.data['phone_number']}</a></p>
                 </div>
+                <br></br>
+                <Typography align='center'>
+                    <Button variant="contained">Edit Profile</Button>
+                </Typography>
+                <br></br>
                 <br></br>
                 
             </div>
