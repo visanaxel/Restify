@@ -25,13 +25,28 @@ export const EditProfile = () => {
     const makePost = () => {
 
         const formData = new FormData()
-        formData.append("profile_pic", pic)
-        formData.append("first_name", firstName)
-        formData.append("last_name", lastName)
 
-        formData.append("email", email)
-        formData.append("phone_number", phone)
-        formData.append("username", username)
+        if (firstName !== "") {
+            formData.append("first_name", firstName)
+        }
+        if (lastName !== "") {
+            formData.append("last_name", lastName)
+
+        }
+        if (email !== "") {
+            formData.append("email", email)
+        }
+        if (phone !== "") {
+            formData.append("phone_number", phone)
+
+        }
+        if (username !== "") {
+            formData.append("username", username)
+
+        }
+        if (pic !== null) {
+            formData.append("profile_pic", pic)
+        }
 
         
         const data = {
@@ -70,6 +85,7 @@ export const EditProfile = () => {
 
                 navigate('/profile')
             }).catch((error) => {
+                console.log(error.response)
                 setUsernameError(error.response.data['username'])
                 setEmailError(error.response.data['email'])
                 setPicError(error.response.data['profile_pic'])
