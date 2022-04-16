@@ -13,10 +13,12 @@ export const EditProfile = () => {
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [username, setUsername] = useState("");
+    const [pic, setPic] = useState("");
 
 
     const [usernameError, setUsernameError] = useState("");
     const [emailError, setEmailError] = useState("");
+    const [picError, setPicError] = useState("");
 
     let navigate = useNavigate();
 
@@ -27,7 +29,8 @@ export const EditProfile = () => {
             "last_name": lastName,
             "email": email,
             "phone_number": phone,
-            "username": username
+            "username": username,
+            "profile_pic": pic
         }
         if (firstName === "") {
             delete data['first_name']
@@ -59,12 +62,15 @@ export const EditProfile = () => {
             }).catch((error) => {
                 setUsernameError(error.response.data['username'])
                 setEmailError(error.response.data['email'])
-
+                setPicError(error.response.data['profile_pic'])
                 if (emailError === undefined) {
                     setEmailError("") 
                 } 
                 if (usernameError === undefined) {
                     setUsernameError("") 
+                } 
+                if (picError === undefined) {
+                    setPicError("") 
                 } 
                 console.log("Error:", error);
               });
@@ -80,13 +86,16 @@ export const EditProfile = () => {
                 }}>
                     <div class="form-group">
                         <label for="pic">Upload Profile Picture</label>
-                        <input type="file" class="form-control-file" id="pic" />
+                        <input type="file" class="form-control-file" id="pic" onChange={(e) => {
+                            setPic(e.target.value);
+                        }} />
                         <br></br>
                         <label for="first">First Name</label>
 
                         <input class="form-control" id="first" placeholder="First Name" onChange={(e) => {
                             setFirstName(e.target.value);
                         }} />
+                        <p style={{color: 'red'}}>{picError}</p>
                         <br></br>
 
                         <label for="last">Last Name</label>
