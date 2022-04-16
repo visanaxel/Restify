@@ -13,7 +13,7 @@ export const EditProfile = () => {
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [username, setUsername] = useState("");
-    const [pic, setPic] = useState("");
+    const [pic, setPic] = useState(null);
 
 
     const [usernameError, setUsernameError] = useState("");
@@ -23,6 +23,16 @@ export const EditProfile = () => {
     let navigate = useNavigate();
 
     const makePost = () => {
+
+        const formData = new FormData()
+        formData.append("profile_pic", pic)
+        formData.append("first_name", firstName)
+        formData.append("last_name", lastName)
+
+        formData.append("email", email)
+        formData.append("phone_number", phone)
+        formData.append("username", username)
+
         
         const data = {
             "first_name": firstName,
@@ -49,7 +59,7 @@ export const EditProfile = () => {
         }
         console.log(data)
 
-        Axios.patch("http://127.0.0.1:8000/users/edit/", data, {
+        Axios.patch("http://127.0.0.1:8000/users/edit/", formData, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem('token')}`
             }
@@ -86,16 +96,16 @@ export const EditProfile = () => {
                 }}>
                     <div class="form-group">
                         <label for="pic">Upload Profile Picture</label>
-                        <input type="file" class="form-control-file" id="pic" onChange={(e) => {
-                            setPic(e.target.value);
-                        }} />
+                        <input type="file" class="form-control-file" id="pic" onChange=
+                            {e => setPic(e.target.files[0])}  />
+                                                    <p style={{color: 'red'}}>{picError}</p>
+
                         <br></br>
                         <label for="first">First Name</label>
 
                         <input class="form-control" id="first" placeholder="First Name" onChange={(e) => {
                             setFirstName(e.target.value);
                         }} />
-                        <p style={{color: 'red'}}>{picError}</p>
                         <br></br>
 
                         <label for="last">Last Name</label>
