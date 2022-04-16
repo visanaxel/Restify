@@ -12,5 +12,5 @@ urlpatterns = [
     path('login/', TokenObtainPairView.as_view(), name='login'),
     path('register/', RegisterUserView.as_view(), name='register'),
     path('profile/', ProfileView.as_view(), name='profile'),
-    path('edit/', EditProfileView.as_view(), name='edit')
+    path('edit/', EditProfileView.as_view(), name='edit'),
 ] 
