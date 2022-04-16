@@ -83,7 +83,7 @@ export const EditProfile = () => {
                 console.log(data2)
                 
 
-                navigate('/profile')
+               navigate('/profile') 
             }).catch((error) => {
                 console.log(error.response)
                 setUsernameError(error.response.data['username'])
