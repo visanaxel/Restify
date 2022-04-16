@@ -4,7 +4,8 @@ import Axios from 'axios';
 
 import Typography from "@material-ui/core/Typography";
 import ProfileEdit from '../../pages/Edit_Profile';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const EditProfile = () => {
     const [firstName, setFirstName] = useState("");
@@ -13,9 +14,14 @@ export const EditProfile = () => {
     const [phone, setPhone] = useState("");
     const [username, setUsername] = useState("");
 
+
+    const [usernameError, setUsernameError] = useState("");
+    const [emailError, setEmailError] = useState("");
+
+    let navigate = useNavigate();
+
     const makePost = () => {
-
-
+        
         const data = {
             "first_name": firstName,
             "last_name": lastName,
@@ -47,7 +53,19 @@ export const EditProfile = () => {
         }).then(result => result.data)
             .then(data2 => {
                 console.log(data2)
+                
+
+                navigate('/profile')
             }).catch((error) => {
+                setUsernameError(error.response.data['username'])
+                setEmailError(error.response.data['email'])
+
+                if (emailError === undefined) {
+                    setEmailError("") 
+                } 
+                if (usernameError === undefined) {
+                    setUsernameError("") 
+                } 
                 console.log("Error:", error);
               });
 
@@ -83,6 +101,7 @@ export const EditProfile = () => {
                         <input class="form-control" id="last" placeholder="Username" onChange={(e) => {
                             setUsername(e.target.value);
                         }} />
+                        <p style={{color: 'red'}}>{usernameError}</p>
                         <br></br>
 
                         <label for="email">Email</label>
@@ -90,6 +109,7 @@ export const EditProfile = () => {
                         <input class="form-control" id="email" placeholder="Email" onChange={(e) => {
                             setEmail(e.target.value);
                         }} />
+                        <p style={{color: 'red'}}>{emailError}</p>
                         <br></br>
 
                         <label for="phone">Phone</label>
@@ -104,7 +124,7 @@ export const EditProfile = () => {
                             <Typography align='center'>
                                 <Button type="submit"
                                     onClick={() => { makePost(); }}
-                                    component={Link} to="/profile"
+                                    
                                     variant="contained" name="foo" value="upvote">Submit</Button>
                             </Typography></a>
 
