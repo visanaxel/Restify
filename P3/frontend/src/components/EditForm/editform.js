@@ -14,7 +14,7 @@ export const ItemForm = () => {
     const [pic, setPic] = useState(null);
 
 
-    let navigate = useNavigate();
+    // let navigate = useNavigate();
 
     const makePost = () => {
 
@@ -38,8 +38,8 @@ export const ItemForm = () => {
         const data = {
             "name": name,
             "price": price,
-            "desc": desc,
-            "profile_pic": pic
+            "description": desc,
+            "image": pic
         }
         if (name === "") {
             delete data['name']
@@ -48,7 +48,7 @@ export const ItemForm = () => {
             delete data['price']
         }
         if (desc === "") {
-            delete data['desc']
+            delete data['description']
         }
 
         Axios.patch("http://127.0.0.1:8000/users/edit/", formData, {
@@ -64,8 +64,8 @@ export const ItemForm = () => {
                 console.log(error.response)
                 console.log("Error:", error);
               });
-
-    }
+              return 1;
+}
 
 
     return (
@@ -84,21 +84,21 @@ export const ItemForm = () => {
                         <label for="first">Name</label>
 
                         <input class="form-control" id="name" placeholder="Name" onChange={(e) => {
-                            // setFirstName(e.target.value);
+                            setName(e.target.value);
                         }} />
                         <br></br>
 
                         <label for="last">Description</label>
 
                         <input class="form-control" id="desc" placeholder="Description" onChange={(e) => {
-                            // setLastName(e.target.value);
+                            setDesc(e.target.value);
                         }} />
                         <br></br>
 
                         <label for="username">Price</label>
 
                         <input class="form-control" id="price" placeholder="Price" onChange={(e) => {
-                            // setUsername(e.target.value);
+                            setPrice(e.target.value);
                         }} />
                         {/* <p style={{color: 'red'}}>{usernameError}</p> */}
                         <br></br>
