@@ -4,6 +4,25 @@ import '../../pages/Notification/notification.css';
 
 function NotifCard(props) {
 
+    function typeHeading(type) {
+        if (type === 'm') {
+            return "Menu change!";
+        }
+        if (type === 'n') {
+            return "New item!";
+        }
+        if (type == 'b'){
+            return 'New blog!';
+        }
+        if (type == 'l') {
+            return 'Restaurant liked!';
+        }
+        if (type == "c") {
+            return 'New comment on restaurant!'
+        }
+        return 'Restaurant followed!';
+    }
+
     //console.log(pic);
     
     if (props['data']['results'] !== undefined) {
@@ -25,7 +44,7 @@ function NotifCard(props) {
                         <div className="col-8">
                             <div className="alert alert-primary alert-dismissible fade show" role="alert">
 
-                                <h4 className="alert-heading">{item['notif_type']}</h4>
+                                <h4 className="alert-heading">{typeHeading(item['notif_type'])}</h4>
                                 <p>{item['description']}</p>
 
                             </div>

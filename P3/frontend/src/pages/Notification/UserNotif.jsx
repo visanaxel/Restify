@@ -26,6 +26,7 @@ export const UserNotif = () => {
                 .then(data2 => {
                     var temp = pic.slice();
                     setPic(temp => [...temp, data2['logo']]);
+                    console.log(i);
                 });
             }
             //console.log(json);
@@ -45,7 +46,7 @@ export const UserNotif = () => {
         return (
             <>
                 <Navbar></Navbar>
-                {(data.toString() !== 'false') ? <NotifCard data={data} pic={pic}></NotifCard> : <h1> Please log in to see user notifications.</h1>}
+                {(data.toString() !== 'false') ? <NotifCard data={data} pic={pic}></NotifCard> : <h1 style={{textAlign: 'center'}}> Please log in to see user notifications.</h1>}
 
                 <Footer></Footer>
             </>
