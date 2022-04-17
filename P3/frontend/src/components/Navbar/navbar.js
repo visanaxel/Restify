@@ -21,7 +21,7 @@ function Navbar() {
                   </li>
                   <li className="nav-item">
                     <div className="dropdown">
-                      <a className="btn btn-secondary dropdown-toggle" href="#" style={{color: 'grey', backgroundColor: '#f8f9fa!important', border: '#f8f9fa!important', paddingTop: '8px'}} role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                      <a className="btn btn-secondary dropdown-toggle" href="#" style={{color: 'grey', backgroundColor: 'white', border: '#f8f9fa!', paddingTop: '8px'}} role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                         Profile
                       </a>
                       <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -32,7 +32,7 @@ function Navbar() {
                   </li>
                   <li className="nav-item">
                     <div className="dropdown">
-                      <a className="btn btn-secondary dropdown-toggle" href="#" style={{color: 'grey', backgroundColor: '#f8f9fa!important', border: '#f8f9fa!important', paddingTop: '8px'}} role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                      <a className="btn btn-secondary dropdown-toggle" href="#" style={{color: 'grey', backgroundColor: 'white', border: '#f8f9fa!', paddingTop: '8px'}} role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                         Notifications
                       </a>
                       <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
