@@ -13,7 +13,7 @@ function ResultCard(props) {
             <div id="top_res_cards">
                 <div className="card-deck card_row">
                     <div className="card">
-                        <a href="../restaurant_page/restaurant.html">
+                        <a href={"http://localhost:3000/restaurant/" + props['data']['results'][0]['id']}>
                             <img className="card-img-top" src={props['data']['results'][0]['logo']} alt="Card image cap"/>
                             <div className="card-body">
                                 <h5 className="card-title">{props['data']['results'][0]['name']}</h5>
@@ -21,7 +21,7 @@ function ResultCard(props) {
                         </a>
                     </div>
                     <div className="card">
-                        <a href="../restaurant_page/restaurant.html">
+                        <a href={"http://localhost:3000/restaurant/" + props['data']['results'][1]['id']}>
                             <img className="card-img-top" src={props['data']['results'][1]['logo']} alt="Card image cap"/>
                             <div className="card-body">
                                 <h5 className="card-title">{props['data']['results'][1]['name']}</h5>
@@ -29,7 +29,7 @@ function ResultCard(props) {
                         </a>
                     </div>
                     <div className="card">
-                        <a href="../restaurant_page/restaurant.html">
+                        <a href={"http://localhost:3000/restaurant/" + props['data']['results'][2]['id']}>
                             <img className="card-img-top" src={props['data']['results'][2]['logo']} alt="Card image cap"/>
                             <div className="card-body">
                                 <h5 className="card-title">{props['data']['results'][2]['name']}</h5>
