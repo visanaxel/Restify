@@ -39,6 +39,7 @@ const LoginForm = () => {
             
             console.log(data2['access'])
             localStorage.setItem('token', data2['access'])
+            localStorage.setItem('user', JSON.stringify(data2.data))
             navigate('/profile/');
           })
     }

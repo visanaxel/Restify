@@ -13,9 +13,9 @@ import '../components/Card/restaurant_style.css';
 export const Menu = () => {
     const [items, setItems] = useState([]);
 
-
+    console.log(window.location.pathname)
     useEffect(() => {
-        axios.get("http://127.0.0.1:8000/restaurant/1/menu/", {
+        axios.get("http://127.0.0.1:8000" + window.location.pathname, {
             
         }
         ).then(result => result.data)

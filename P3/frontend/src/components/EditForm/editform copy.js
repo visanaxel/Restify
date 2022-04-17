@@ -65,7 +65,7 @@ export const ItemForm2 = (props) => {
         }).then(result => result.data)
             .then(data2 => {
                 console.log(data2)
-                navigate("/restaurant/1/menu/")
+                navigate("/restaurant/"+data2['rid']+ "/menu/")
 
             }).catch((error) => {
                 console.log(error.response)

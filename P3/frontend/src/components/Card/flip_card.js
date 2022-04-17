@@ -13,9 +13,10 @@ function FlipCard(props) {
     let navigate = useNavigate();
 
 
-    const checkItem = () => {
+    const checkItem = (menu_id) => {
+        console.log(window.location.pathname.split("/")[2])
 
-        Axios.patch("http://127.0.0.1:8000/restaurant/menu/" + window.location.pathname.split("/")[2] + "/edit/", {}, {
+        Axios.patch("http://127.0.0.1:8000/restaurant/menu/" + menu_id.toString() + "/edit/", {}, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem('token')}`
             }
@@ -68,7 +69,7 @@ function FlipCard(props) {
                         <div class="card-body-back"><br />
                             <div class="button-holder">
                             <Typography align='center'>
-                            {(checkItem()) ? <Button type="submit"
+                            {(checkItem(props.data['id'])) ? <Button type="submit"
                                     
                                     id={props.data['id']}
                                     onClick={() => { editItem(props.data['id']);}}
