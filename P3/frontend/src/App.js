@@ -10,8 +10,8 @@ import { Menu } from './pages/Menu';
 import { Edit } from './pages/EditMenu';
 import { Home } from './pages/Home/Home';
 import { SearchResult } from  './pages/SearchResult/SearchResult';
-
-
+import {Edit_Blog_Post} from './pages/Blog_Post/Edit_Blog_Post';
+import { Restaurant_View } from './pages/Restaurant/Restaurant_View';
 
 function App() {
   return (
@@ -27,6 +27,12 @@ function App() {
           <Route path="menu/:menu_id/edit/" element={<Edit />} />
           <Route path="home" element={<Home />} />
           <Route path="search/:query" element={<SearchResult />} />
+          <Route path="blog/edit/:blogId" element={<Edit_Blog_Post />} />
+
+          <Route path="restaurant/:restId" element={<Restaurant_View />} />
+          {/* <Route path="restaurant/edit/:restId" element={<Edit_Blog_Post />} />
+          <Route path="restaurant/add" element={<Edit_Blog_Post />} /> */}
+
 
 
         </Route>
