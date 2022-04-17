@@ -10,6 +10,7 @@ import NotifCard from '../../components/NotifCard/NotifCard';
 export const UserNotif = () => {
 
     const [data, setData] = useState([]);
+    const [pic, setPic] = useState([])
 
     useEffect(() => {
         Axios.get("http://127.0.0.1:8000/notifications/user/", 
@@ -17,18 +18,34 @@ export const UserNotif = () => {
         .then(result => result.data)
         .then(json => {
             //console.log(json);
-            setData(json);})
+
+            for (var i = 0; i < json['results'].length; i++) {
+                //console.log('HI');
+                Axios.get("http://127.0.0.1:8000/restaurant/view/" + json['results'][i]['rid'] + "/")
+                .then(result => result.data)
+                .then(data2 => {
+                    var temp = pic.slice();
+                    setPic(temp => [...temp, data2['logo']]);
+                });
+            }
+            //console.log(json);
+            setData(json);
+        })
         .catch((error) => {
             setData(['false']);
             //console.log(error);
-        })
+        });
+        console.log('i fire once');
+
     }, []);
 
-    if (data !== []) {
+    if (data !== [] && pic !== []) {
+        console.log(pic);
+        //console.log(pic !== []);
         return (
             <>
                 <Navbar></Navbar>
-                {(data.toString() !== 'false') ? <NotifCard data={data}></NotifCard> : <h1> Please log in to see user notifications.</h1>}
+                {(data.toString() !== 'false') ? <NotifCard data={data} pic={pic}></NotifCard> : <h1> Please log in to see user notifications.</h1>}
 
                 <Footer></Footer>
             </>
