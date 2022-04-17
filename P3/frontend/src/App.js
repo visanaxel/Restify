@@ -10,7 +10,7 @@ import { Menu } from './pages/Menu';
 import { Edit } from './pages/EditMenu';
 import { Home } from './pages/Home/Home';
 import { SearchResult } from  './pages/SearchResult/SearchResult';
-
+import { Add } from './pages/AddToMenu'
 
 
 function App() {
@@ -27,6 +27,7 @@ function App() {
           <Route path="menu/:menu_id/edit/" element={<Edit />} />
           <Route path="home" element={<Home />} />
           <Route path="search/:query" element={<SearchResult />} />
+          <Route path="/restaurant/:restaurant_id/menu/add/" element={<Add />} />
 
 
         </Route>
