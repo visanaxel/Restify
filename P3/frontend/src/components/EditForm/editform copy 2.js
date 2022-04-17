@@ -13,6 +13,11 @@ export const ItemForm3 = (props) => {
     const [desc, setDesc] = useState("");
     const [pic, setPic] = useState(null);
 
+    const [picError, setPicError] = useState("");
+    const [nameError, setNameError] = useState("");
+    const [descError, setDescError] = useState("");
+    const [priceError, setPriceError] = useState("");
+
     console.log(props.data)
     // let navigate = useNavigate();
     let navigate = useNavigate();
@@ -35,7 +40,7 @@ export const ItemForm3 = (props) => {
         if (pic !== null) {
             formData.append("image", pic)
         }
-
+        var valid = true
         
         const data = {
             "name": name,
@@ -46,7 +51,10 @@ export const ItemForm3 = (props) => {
         if (name === "") {
             delete data['name']
         }
-        if (price === "" || price === undefined) {
+        if (price === "" || price === undefined || isNaN(price) ) {
+            valid = false
+            console.log("OK")
+            setPriceError("Please enter a valid price.")
             delete data['price']
         }
         if (desc === "") {
@@ -57,7 +65,7 @@ export const ItemForm3 = (props) => {
         }
         console.log(data)
         
-        
+        if (valid) {
         Axios.post("http://127.0.0.1:8000/restaurant/" + window.location.pathname.split("/")[2] + "/menu/add/", formData, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem('token')}`
@@ -69,9 +77,28 @@ export const ItemForm3 = (props) => {
 
             }).catch((error) => {
                 console.log(error.response)
-                console.log("Error:", error);
+                setNameError(error.response.data['name'])
+                setPicError(error.response.data['image'])
+                setDescError(error.response.data['description'])
+                setPriceError(error.response.data['price'])
+
+                if (nameError === undefined) {
+                    setNameError("") 
+                } 
+                if (picError === undefined) {
+                    setPicError("") 
+                } 
+                if (descError === undefined) {
+                    setDescError("") 
+                } 
+                if (priceError === undefined) {
+                    setPriceError("") 
+                } 
               });
-              return 1;
+            } else {
+                setPriceError("Please enter a valid price.")
+            }
+            return 1;
 }
 
 
@@ -85,28 +112,28 @@ export const ItemForm3 = (props) => {
                         <label for="pic">Upload Picture</label>
                         <input type="file" class="form-control-file" id="pic" onChange=
                             {e => setPic(e.target.files[0])}  />
-                                                    {/* <p style={{color: 'red'}}>{picError}</p> */}
+                                                    <p style={{color: 'red'}}>{picError}</p>
 
                         <br></br>
                         <label for="first">Name</label>
 
                         <input class="form-control" id="name" placeholder="Name" onChange={(e) => {
                             setName(e.target.value);
-                        }} />
+                        }} /><p style={{color: 'red'}}>{nameError}</p>
                         <br></br>
 
                         <label for="last">Description</label>
 
                         <input class="form-control" id="desc" placeholder="Description" onChange={(e) => {
                             setDesc(e.target.value);
-                        }} />
+                        }} /><p style={{color: 'red'}}>{descError}</p>
                         <br></br>
 
                         <label for="username">Price</label>
 
                         <input class="form-control" id="price" placeholder="Price" onChange={(e) => {
                             setPrice(e.target.value);
-                        }} />
+                        }} /><p style={{color: 'red'}}>{priceError}</p>
                         {/* <p style={{color: 'red'}}>{usernameError}</p> */}
                         <br></br>
 

@@ -59,7 +59,7 @@ function FlipCard(props) {
                         </div>
                         <div class="card-footer">
                             <medium class="text-muted" id="price">
-                                <div>${props.data['price']}</div>
+                                <div>${parseFloat(props.data['price']).toFixed(2)}</div>
                             </medium>
                         </div>
                     </div>
@@ -84,7 +84,7 @@ function FlipCard(props) {
 
                         <div class="card-footer">
                             <medium class="text-muted" id="price">
-                                <div>${props.data['price']}</div>
+                                <div>${parseFloat(props.data['price']).toFixed(2)}</div>
                             </medium>
                         </div>
                     </div>
