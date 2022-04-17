@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Navbar from "../../components/Navbar/navbar";
-import SideBar from "../../components/Blog_Post/Sidebar";
+
 import Footer from "../../components/Footer/footer";
 import BlogContent from "../../components/Blog_Post/BlogContent";
 import Comments from "../../components/Blog_Post/Comments";
@@ -14,6 +14,8 @@ import './blog.css';
 
 export const Blog_Post = () => {
     console.log("Made it!")
+    const [items, setItems] = useState([]);
+
     var text1 = "http://127.0.0.1:8000/blog/"
     var text2 = useParams()['blogId'];
     let text3 = text1.concat(text2);
@@ -39,6 +41,18 @@ export const Blog_Post = () => {
                 setBlog(data2)
                 console.log(blog);
                 console.log(data2)
+
+                var temp1 = "http://127.0.0.1:8000/restaurant/"
+                var temp2 = data2['rid']
+                var temp3 = temp1.concat(temp2)
+                var result = temp3.concat("/blogs/")
+                axios.get(result).then(result => result.data)
+                    .then(data2 => {
+                        console.log("AHHHH")
+                        console.log(data2)
+                        setItems(data2['results']);
+                    })
+
             })
 
 
@@ -58,8 +72,36 @@ export const Blog_Post = () => {
             <body>
                 <Navbar />
                 <div id="wrapper">
-                    {/* sidebar component */}
-                    <SideBar></SideBar>
+
+                    <div id="sidebar-wrapper">
+                        <ul class="sidebar-nav">
+                            <li class="sidebar-brand">
+                                <a href="#">
+                                    Mcdonalds Blog
+                                </a>
+                            </li>
+                            {items.map((item, i) => {
+                                return (
+                                    <><li>
+                                        <p>{item['title']}</p>
+                                    </li></>
+                                )
+
+                            })}
+
+
+
+                            <li>
+                                <a href="../rest_blog/Create_blog.html" target="_self">
+                                    <button type="button" class="btn btn-outline-primary">Create new Blog post</button>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+
+
                     {/* Actual blog component */}
                     <div id="page-content-wrapper">
                         <div class="container-fluid">
@@ -67,7 +109,7 @@ export const Blog_Post = () => {
                             {/* blog body */}
                             <BlogContent blog={blog}></BlogContent>
                             {/* Comment Section */}
-                            <Comments blog={blog}></Comments>
+                            {/* <Comments blog={blog}></Comments> */}
                         </div>
                     </div>
                 </div>

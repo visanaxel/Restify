@@ -1,6 +1,10 @@
 import axios from 'axios';
 
 const Comments = (props) => {
+
+    // const [items, setItems] = useState([]);
+
+
     return (<>
         <div class="row title">
             <h1 class="mt-0 mb-0">Comments</h1>
