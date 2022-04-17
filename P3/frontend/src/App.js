@@ -6,7 +6,7 @@ import { ProfileView } from './pages/Profile';
 import { ProfileEdit } from './pages/Edit_Profile';
 import { Register } from './pages/Login/Register';
 import { Menu } from './pages/Menu';
-import { EditItem } from './pages/EditMenu';
+import { Edit } from './pages/EditMenu';
 import { Home } from './pages/Home/Home';
 import { SearchResult } from  './pages/SearchResult/SearchResult';
 
@@ -22,7 +22,7 @@ function App() {
           <Route path="profile_edit" element={<ProfileEdit />} />
           <Route path="register" element={<Register />} />
           <Route path="restaurant/:restaurant_id/menu/" element={<Menu />} />
-          <Route path="menu/:menu_id/edit/" element={<EditItem />} />
+          <Route path="menu/:menu_id/edit/" element={<Edit />} />
           <Route path="home" element={<Home />} />
           <Route path="search/:query" element={<SearchResult />} />
 

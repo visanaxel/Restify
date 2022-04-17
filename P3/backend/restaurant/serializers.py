@@ -41,7 +41,8 @@ class MenuItemSerializer(serializers.ModelSerializer):
             'price',
             'description',
             'image',
-            'rid'
+            'rid',
+            'id'
         ]
 
 class RestaurantViewSerializer(serializers.ModelSerializer):

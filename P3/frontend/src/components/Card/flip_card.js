@@ -30,14 +30,15 @@ function FlipCard(props) {
         return owner;   
     }
     const editItem = (menu_id) => {
+        
 
-        Axios.patch("http://127.0.0.1:8000/restaurant/menu/" + window.location.pathname.split("/")[2] + "/edit/", {}, {
+        Axios.patch("http://127.0.0.1:8000/restaurant/menu/" + menu_id.toString() + "/edit/", {}, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem('token')}`
             }
         }).then(result => result.data)
             .then(data2 => {
-                navigate("/menu/" + menu_id + "/edit/")
+                navigate("/menu/" + menu_id.toString() + "/edit/")
             }).catch((error) => {
                 console.log(error.response)
                
@@ -69,8 +70,8 @@ function FlipCard(props) {
                             <Typography align='center'>
                             {(checkItem()) ? <Button type="submit"
                                     
-                                    id={props.data['rid']}
-                                    onClick={() => { editItem(props.data['rid']);}}
+                                    id={props.data['id']}
+                                    onClick={() => { editItem(props.data['id']);}}
                                     variant="contained" name="foo" value="upvote">Edit Item</Button> : <div>[Please login as the owner to edit this item]</div>}
                             </Typography>
                                 

@@ -7,16 +7,17 @@ import ProfileEdit from '../../pages/Edit_Profile';
 import { Link, Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-export const ItemForm = () => {
+export const ItemForm2 = (props) => {
     const [name, setName] = useState("");
-    const [price, setPrice] = useState();
+    const [price, setPrice] = useState("");
     const [desc, setDesc] = useState("");
     const [pic, setPic] = useState(null);
 
-
+    console.log(props.data)
     // let navigate = useNavigate();
+    let navigate = useNavigate();
 
-    const makePost = () => {
+    const makePost = (itemPrice) => {
 
         const formData = new FormData()
 
@@ -24,14 +25,15 @@ export const ItemForm = () => {
             formData.append("name", name)
         }
         if (price !== "") {
+            console.log(price)
             formData.append("price", price)
 
         }
         if (desc !== "") {
-            formData.append("desc", desc)
+            formData.append("description", desc)
         }
         if (pic !== null) {
-            formData.append("profile_pic", pic)
+            formData.append("image", pic)
         }
 
         
@@ -44,21 +46,26 @@ export const ItemForm = () => {
         if (name === "") {
             delete data['name']
         }
-        if (price === "") {
+        if (price === "" || price === undefined) {
             delete data['price']
         }
         if (desc === "") {
             delete data['description']
         }
-
-        Axios.patch("http://127.0.0.1:8000/users/edit/", formData, {
+        if (pic === null) {
+            delete data['image']
+        }
+        console.log(data)
+        
+        
+        Axios.patch("http://127.0.0.1:8000/restaurant/menu/" + window.location.pathname.split("/")[2] + "/edit/", formData, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem('token')}`
             }
         }).then(result => result.data)
             .then(data2 => {
                 console.log(data2)
-                
+                navigate("/restaurant/1/menu/")
 
             }).catch((error) => {
                 console.log(error.response)
@@ -120,4 +127,4 @@ export const ItemForm = () => {
     );
 
 }
-export default ItemForm;
+export default ItemForm2;
