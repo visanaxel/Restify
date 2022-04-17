@@ -23,9 +23,9 @@ export const Home = () => {
         });
     }, [])
 
-    //console.log(data);
-
     if (data !== []) {
+
+        console.log(data);
 
         return (
             <>
