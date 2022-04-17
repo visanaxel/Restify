@@ -23,6 +23,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from itertools import chain
+from rest_framework.pagination import PageNumberPagination
 
 # Create your views here.
 
@@ -31,13 +32,14 @@ class MenuView(ListAPIView):
     model = MenuItem
     context_object_name = 'menu'
     queryset = MenuItem.objects.all()
+    pagination_class = PageNumberPagination
 
     def get(self, request, *args, **kwargs):
         # Check if restaurant exists!
         restaurant = Restaurant.objects.filter(id=kwargs['restaurant_id'])
         if not bool(restaurant):
             return Response({'error': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
-
+        
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
@@ -45,7 +47,7 @@ class MenuView(ListAPIView):
         all = self.queryset
 
         menu = all.filter(rid=self.kwargs['restaurant_id'])
-
+        
         return menu
 
 class AddItemView(CreateAPIView):
