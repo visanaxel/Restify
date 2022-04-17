@@ -7,7 +7,7 @@
 
 #search {
     height: 200px;
-    background-image: url("purple2_cropped.jpg");
+    background-image: url("https://raw.githubusercontent.com/ChunKaiC/chunkaic.github.io/main/purple2_cropped.jpg");
     display: grid;
     justify-content: center;
     text-align: center;
@@ -19,7 +19,7 @@
     margin-right: auto;
 }
 
-.btn-outline-primary {
+.abc {
     color: black;
     background-color:grey;
     background-image: none;
