@@ -33,8 +33,8 @@ function Navbar() {
                         Notifications
                       </a>
                       <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <li><a className="dropdown-item" href="../notifcations/notification.html">User Notifications</a></li>
-                        <li><a className="dropdown-item" href="../notifcations/restaurant_notifs.html">Restaurant Notifications</a></li>
+                        <li><a className="dropdown-item" href="http://localhost:3000/user_notification">User Notifications</a></li>
+                        <li><a className="dropdown-item" href="http://localhost:3000/restaurant_notification">Restaurant Notifications</a></li>
                       </ul>
                     </div>
                   </li>
