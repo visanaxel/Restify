@@ -38,7 +38,7 @@ export const Add = () => {
             <link rel="stylesheet" href="profile.css" />
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossOrigin="anonymous" />
             <Navbar />
-            <p className="blog">Edit Item</p>
+            <p className="blog">Add Item</p>
             
 
             <ItemForm3 data={items} />
