@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import "../components/Profile/profile.css"
 import Navbar from "../components/Navbar/navbar";
+import Button from "@material-ui/core/Button";
+
 import Footer from "../components/Footer/footer";
 import Card from "../components/Card/card";
 import FlipCard from "../components/Card/flip_card";
@@ -14,23 +16,49 @@ import Typography from "@material-ui/core/Typography";
 
 export const Menu = () => {
     const [items, setItems] = useState([]);
+    const [page, setPage] = useState(1);
+    const [prev, setPrev] = useState(false);
+    const [next, setNext] = useState(false);
 
-    console.log(window.location.pathname)
     useEffect(() => {
-        axios.get("http://127.0.0.1:8000" + window.location.pathname, {
-            
+        axios.get("http://127.0.0.1:8000" + window.location.pathname + "?page=" + page, {
+
         }
         ).then(result => result.data)
             .then(data2 => {
-                console.log(data2)
-                console.log(data2['results'])
+                if (data2['next'] === null) {
+                    setNext(false)
+                } else {
+                    setNext(true)
+                }
+                if (data2['previous'] === null) {
+                    setPrev(false)
+                } else {
+                    setPrev(true)
+                }
                 setItems(data2['results']);
-                console.log(data2['results'].length)
-            })
+                console.log(data2['results'])
+            }).catch((error) => {
+                console.log(error.response)
 
-    }, []);
 
+            });
+    }, [page]);
 
+    // const updateItems = (page_num) => {
+    //     console.log('called')
+    //     setPage(page_num)
+    //     axios.get("http://127.0.0.1:8000" + window.location.pathname + "?page=" + page, {
+
+    //     }
+    //     ).then(result => result.data)
+    //         .then(data2 => {
+    //             console.log(data2)
+    //             console.log("RIGHT ABOVE")
+    //             setItems(data2['results']);
+    //         })
+    //     }
+    
 
     return (
 
@@ -47,23 +75,22 @@ export const Menu = () => {
             <Navbar />
             <p className="blog">Menu</p>
 
-
-            {/* {items.map((item, i) => {
-                return (
-                    <><div class="card-deck">{(i % 3 === 0 && i !== 0) ? (</div><div class="card-deck"><FlipCard data={item} />) : (<FlipCard data={item}/>)}</div></>
-                )
-                
-            })} */}
-
             {items.map((item, i) => {
                 return (
-                    <><div class="card-deck"><FlipCard data={item}/></div></>
+                    <><div class="card-deck"><FlipCard data={item} /></div></>
                 )
-                
+
             })}
 
-<Typography align='center'>
-            <AddItem/></Typography>
+            <Typography align='center'>
+                {(prev ? <Button marginRight='50' value="prev" variant="contained" onClick={() => setPage(page - 1)}>Previous</Button> : <div></div>)}
+                {((prev && next) ? <div style={{display: 'inline-block'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> : <p></p>)}
+                {(next ? <Button value="next" variant="contained" onClick={() => setPage(page + 1)}>Next</Button> : <div></div>)}
+                <br></br><br></br>
+                <AddItem /></Typography>
+
+
+
 
             <br></br>
 
