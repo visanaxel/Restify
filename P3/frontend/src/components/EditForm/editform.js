@@ -1,64 +1,123 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from "@material-ui/core/Button";
-import { Link } from 'react-router-dom';
 import Axios from 'axios';
 
 import Typography from "@material-ui/core/Typography";
+import ProfileEdit from '../../pages/Edit_Profile';
+import { Link, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-function FlipCard(props) {
-    console.log("here")
-    console.log(props.data)
-    const [owner, setOwner] = useState(false);
+export const ItemForm = () => {
+    const [name, setName] = useState("");
+    const [price, setPrice] = useState();
+    const [desc, setDesc] = useState("");
+    const [pic, setPic] = useState(null);
 
-    const editItem = () => {
 
-        Axios.patch("http://127.0.0.1:8000/restaurant/menu/" + window.location.pathname.split("/")[2] + "/edit/", {}, {
+    let navigate = useNavigate();
+
+    const makePost = () => {
+
+        const formData = new FormData()
+
+        if (name !== "") {
+            formData.append("name", name)
+        }
+        if (price !== "") {
+            formData.append("price", price)
+
+        }
+        if (desc !== "") {
+            formData.append("desc", desc)
+        }
+        if (pic !== null) {
+            formData.append("profile_pic", pic)
+        }
+
+        
+        const data = {
+            "name": name,
+            "price": price,
+            "desc": desc,
+            "profile_pic": pic
+        }
+        if (name === "") {
+            delete data['name']
+        }
+        if (price === "") {
+            delete data['price']
+        }
+        if (desc === "") {
+            delete data['desc']
+        }
+
+        Axios.patch("http://127.0.0.1:8000/users/edit/", formData, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem('token')}`
             }
         }).then(result => result.data)
             .then(data2 => {
-                console.log("rn")
-                setOwner(true)
-                console.log("2owner:", owner.toString())
+                console.log(data2)
+                
+
             }).catch((error) => {
                 console.log(error.response)
-               
+                console.log("Error:", error);
+              });
 
-            });
-        console.log("owner:", owner.toString())
-        return owner;
-        
     }
-    return ( 
-        <>
-       <div id="form-wrapper">
-        <form id="add"/>
-            <div class="form-group">
-              <label for=1/>Item Name</label>
-              <input type="text" class="form-control" id=1 placeholder="Edit Item Name"/>
-            </div>
-            <div class="form-group">
-                <label for=4/>Price</label>
-                <input type="number" min="1" step="any" class="form-control" id=4 placeholder="Enter price (CAD)"/>
-              </div>
-              <div class="form-group">
-                <label for="exampleFormControlTextarea1"/>Description</label>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="Enter Description"/></textarea>
-              </div>
 
-              <div class="form-group">
-                <label for=3>Photo</label>
-                <input type="file" class="form-control" placeholder="Enter Description" id=3/>
-              </div>
-            <div class="button-holder">
-                <button type="submit" class="btn btn-secondary" onclick="location.href='../menu/restaurant_page.html'">Save Item</button>
-            </div>
-          </form>
 
-    </div></>
+    return (
+        <><div className="cus_card">
+            <div className="cus_container">
+                <form action="http://127.0.0.1:8000/users/edit/" method="post" onSubmit={(e) => {
+                    e.preventDefault();
+                }}>
+                    <div class="form-group">
+                        <label for="pic">Upload Picture</label>
+                        <input type="file" class="form-control-file" id="pic" onChange=
+                            {e => setPic(e.target.files[0])}  />
+                                                    {/* <p style={{color: 'red'}}>{picError}</p> */}
+
+                        <br></br>
+                        <label for="first">Name</label>
+
+                        <input class="form-control" id="name" placeholder="Name" onChange={(e) => {
+                            // setFirstName(e.target.value);
+                        }} />
+                        <br></br>
+
+                        <label for="last">Description</label>
+
+                        <input class="form-control" id="desc" placeholder="Description" onChange={(e) => {
+                            // setLastName(e.target.value);
+                        }} />
+                        <br></br>
+
+                        <label for="username">Price</label>
+
+                        <input class="form-control" id="price" placeholder="Price" onChange={(e) => {
+                            // setUsername(e.target.value);
+                        }} />
+                        {/* <p style={{color: 'red'}}>{usernameError}</p> */}
+                        <br></br>
+
+                
+                        <a href="/profile/" target="_self">
+                            <Typography align='center'>
+                                <Button type="submit"
+                                    onClick={() => { makePost(); }}
+                                    
+                                    variant="contained" name="foo" value="upvote">Save</Button>
+                            </Typography></a>
+
+
+                    </div>
+                </form></div>
+        </div></>
+
     );
-}
 
-export default FlipCard;
+}
+export default ItemForm;

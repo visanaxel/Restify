@@ -4,13 +4,14 @@ import Navbar from "../components/Navbar/navbar";
 import Footer from "../components/Footer/footer";
 import Card from "../components/Card/card";
 import FlipCard from "../components/Card/flip_card";
+import ItemForm from "../components/EditForm/editform";
 import axios from 'axios';
 import Axios from 'axios';
 import { useState } from 'react';
 import '../components/Card/restaurant_style.css';
 
 
-export const Menu = () => {
+export const EditItem = () => {
     const [items, setItems] = useState([]);
 
 
@@ -43,8 +44,8 @@ export const Menu = () => {
                 crossorigin="anonymous"></script>
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossOrigin="anonymous" />
             <Navbar />
-            <Edit/>
-
+            <p>HELLO</p>
+            <ItemForm data={items} />
             <Footer />
 
         </div></>
@@ -52,4 +53,4 @@ export const Menu = () => {
     )
 }
 
-export default Menu;
+export default EditItem;
