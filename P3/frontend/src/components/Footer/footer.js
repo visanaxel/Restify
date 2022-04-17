@@ -4,24 +4,24 @@ function Footer() {
   return ( <>
 <footer className="text-center text-lg-start bg-light text-muted">
             {/* Section: Social media */}
-            <section className="d-flex justify-content-center justify-content-lg-between border-bottom" id="footer">
+            <section className={"d-flex justify-content-center justify-content-lg-between border-bottom"} id="footer">
               <div>
-                <a href className="me-4 text-reset">
+                <a className="me-4 text-reset">
                   <i className="fab fa-facebook-f" />
                 </a>
-                <a href className="me-4 text-reset">
+                <a className="me-4 text-reset">
                   <i className="fab fa-twitter" />
                 </a>
-                <a href className="me-4 text-reset">
+                <a className="me-4 text-reset">
                   <i className="fab fa-google" />
                 </a>
-                <a href className="me-4 text-reset">
+                <a className="me-4 text-reset">
                   <i className="fab fa-instagram" />
                 </a>
-                <a href className="me-4 text-reset">
+                <a className="me-4 text-reset">
                   <i className="fab fa-linkedin" />
                 </a>
-                <a href className="me-4 text-reset">
+                <a className="me-4 text-reset">
                   <i className="fab fa-github" />
                 </a>
               </div>
