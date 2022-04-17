@@ -15,22 +15,22 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import Axios from 'axios';
 import MapCard from '../../components/ResultCard/MapCard';
+import Typography from "@material-ui/core/Typography";
 
 
 export const SearchResult = () => {
 
-    const [data, setData] = useState([])
-    const [page, setPage] = useState(1);
-    const [prev, setPrev] = useState(false);
-    const [next, setNext] = useState(false);
-
     var query = useParams()['query'];
 
-    var url = 'http://127.0.0.1:8000/restaurant/search/?query=' + query + "&page=" + page;
+    const [data, setData] = useState([])
+    const [page, setPage] = useState(1);
+    const [prev, setPrev] = useState(null);
+    const [next, setNext] = useState('http://127.0.0.1:8000/restaurant/search/?query=' + query + '&page=' + page);
+
     //console.log(url)
 
     useEffect(() => {
-        fetch(url, {method: 'GET'})
+        fetch(next, {method: 'GET'})
         .then(response => {
             //console.log('Hi');
             return response.json();
@@ -38,16 +38,8 @@ export const SearchResult = () => {
         .then(json => {
             console.log(json);
             setData(json);
-            if (json['next'] === null) {
-                setNext(false)
-            } else {
-                setNext(true)
-            }
-            if (json['previous'] === null) {
-                setPrev(false)
-            } else {
-                setPrev(true)
-            }
+            setNext(json['next']);
+            setPrev(json['previous']);
         });
     }, [page])
 
@@ -73,10 +65,11 @@ export const SearchResult = () => {
                 </div>
 
                 <MapCard data={data}></MapCard>
-
-                {(prev ? <Button marginRight='50' value="prev" variant="contained" onClick={() => setPage(page - 1)}>Previous</Button> : <div></div>)}
-                {((prev && next) ? <div style={{display: 'inline-block'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> : <p></p>)}
-                {(next ? <Button value="next" variant="contained" onClick={() => setPage(page + 1)}>Next</Button> : <div></div>)}
+                <Typography align='center'>
+                {((prev !== null) ? <Button marginRight='50' value="prev" variant="contained" onClick={() => {setPage(page - 1); setNext(prev)}}>Previous</Button> : <div></div>)}
+                {(((prev !== null) && (next !== null)) ? <div style={{display: 'inline-block'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> : <p></p>)}
+                {((next !== null) ? <Button value="next" variant="contained" onClick={() => setPage(page + 1)}>Next</Button> : <div></div>)}
+                </Typography>
                 <br></br><br></br>
 
                 <Footer></Footer>
