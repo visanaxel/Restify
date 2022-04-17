@@ -24,7 +24,6 @@ function App() {
           <Route path="home" element={<Home />} />
           <Route path="search/:query" element={<SearchResult />} />
 
-
         </Route>
       </Routes>
     </BrowserRouter>
