@@ -4,7 +4,7 @@ function Footer() {
   return ( <>
 <footer className="text-center text-lg-start bg-light text-muted">
             {/* Section: Social media */}
-            <section className={"d-flex justify-content-center justify-content-lg-between border-bottom"} id="footer">
+            <section className="d-flex justify-content-center justify-content-lg-between border-bottom" id="footer">
               <div>
                 <a className="me-4 text-reset">
                   <i className="fab fa-facebook-f" />
@@ -29,7 +29,7 @@ function Footer() {
             </section>
             {/* Section: Social media */}
             {/* Section: Links  */}
-            <section className>
+            <section >
               <div className="container text-center text-md-start mt-5">
                 {/* Grid row */}
                 <div className="row mt-3">
