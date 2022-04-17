@@ -13,6 +13,8 @@ import { SearchResult } from  './pages/SearchResult/SearchResult';
 import {Edit_Blog_Post} from './pages/Blog_Post/Edit_Blog_Post';
 import { Restaurant_View } from './pages/Restaurant/Restaurant_View';
 import { Add } from './pages/AddToMenu'
+import { UserNotif } from './pages/Notification/UserNotif';
+import { RestNotif } from './pages/Notification/RestNotif';
 
 
 function App() {
@@ -37,6 +39,9 @@ function App() {
 
 
           <Route path="/restaurant/:restaurant_id/menu/add/" element={<Add />} />
+
+          <Route path="user_notification" element={<UserNotif />} />
+          <Route path="restaurant_notification" element={<RestNotif />} />
 
         </Route>
       </Routes>

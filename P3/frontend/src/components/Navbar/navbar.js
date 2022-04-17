@@ -22,8 +22,8 @@ function Navbar() {
                         Profile
                       </a>
                       <ul className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                        <li><a className="dropdown-item" href="../profile_page/profile.html">Profile</a></li>
-                        <li><a className="dropdown-item" href="../profile_page/edit_profile.html">Edit Profile</a></li>
+                        <li><a className="dropdown-item" href="http://localhost:3000/profile">Profile</a></li>
+                        <li><a className="dropdown-item" href="http://localhost:3000/profile_edit/">Edit Profile</a></li>
                       </ul>
                     </div>
                   </li>
