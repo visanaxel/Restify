@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "../components/Profile/profile.css"
 import Navbar from "../components/Navbar/navbar";
 import Footer from "../components/Footer/footer";
-import Card2 from "../components/Card/card_edit"
+import EditProfile from "../components/Card/card_edit"
 import axios from 'axios';
 import Axios from 'axios';
 import { useState } from 'react';
@@ -22,7 +22,7 @@ export const ProfileEdit = () => {
             <p className="blog">Profile</p>
             
 
-            <Card2 data={data}/>
+            <EditProfile data={data}/>
             <Footer />
             <p>{data['email']}</p>
 

@@ -8,14 +8,16 @@ import axios from 'axios';
 import Axios from 'axios';
 import { useState } from 'react';
 import '../components/Card/restaurant_style.css';
+import AddItem from "../components/Card/card_add";
+import Typography from "@material-ui/core/Typography";
 
 
 export const Menu = () => {
     const [items, setItems] = useState([]);
 
-
+    console.log(window.location.pathname)
     useEffect(() => {
-        axios.get("http://127.0.0.1:8000/restaurant/1/menu/", {
+        axios.get("http://127.0.0.1:8000" + window.location.pathname, {
             
         }
         ).then(result => result.data)
@@ -60,9 +62,10 @@ export const Menu = () => {
                 
             })}
 
+<Typography align='center'>
+            <AddItem/></Typography>
 
-
-
+            <br></br>
 
             <Footer />
 
