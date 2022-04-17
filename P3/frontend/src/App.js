@@ -10,8 +10,13 @@ import { Menu } from './pages/Menu';
 import { Edit } from './pages/EditMenu';
 import { Home } from './pages/Home/Home';
 import { SearchResult } from  './pages/SearchResult/SearchResult';
+<<<<<<< HEAD
 import {Edit_Blog_Post} from './pages/Blog_Post/Edit_Blog_Post';
 import { Restaurant_View } from './pages/Restaurant/Restaurant_View';
+=======
+import { Add } from './pages/AddToMenu'
+
+>>>>>>> acb1e65cf8897f478c2d5c25a47d0d7be9bd58de
 
 function App() {
   return (
@@ -34,6 +39,7 @@ function App() {
           <Route path="restaurant/add" element={<Edit_Blog_Post />} /> */}
 
 
+          <Route path="/restaurant/:restaurant_id/menu/add/" element={<Add />} />
 
         </Route>
       </Routes>

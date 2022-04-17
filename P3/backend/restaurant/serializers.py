@@ -23,6 +23,7 @@ class RestaurantSerializer(serializers.ModelSerializer):
             'postal_code',
             'phone_number',
             'owner',
+            'id'
         ]
         read_only_fields = ('followers', 'likes')
 

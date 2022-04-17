@@ -8,6 +8,8 @@ import axios from 'axios';
 import Axios from 'axios';
 import { useState } from 'react';
 import '../components/Card/restaurant_style.css';
+import AddItem from "../components/Card/card_add";
+import Typography from "@material-ui/core/Typography";
 
 
 export const Menu = () => {
@@ -60,9 +62,10 @@ export const Menu = () => {
                 
             })}
 
+<Typography align='center'>
+            <AddItem/></Typography>
 
-
-
+            <br></br>
 
             <Footer />
 
