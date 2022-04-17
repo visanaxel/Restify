@@ -1,28 +1,50 @@
 import React, { useState } from 'react';
 import Button from "@material-ui/core/Button";
 import { Link } from 'react-router-dom';
+import Axios from 'axios';
 
 import Typography from "@material-ui/core/Typography";
+import { useNavigate } from 'react-router-dom';
 
 function FlipCard(props) {
     console.log("here")
     console.log(props.data)
+    const [owner, setOwner] = useState(false);
+    let navigate = useNavigate();
 
-    const makePost = () => {
 
-        Axios.patch("http://127.0.0.1:8000/restaurant/menu/:restaurant_id/edit/", formData, {
+    const checkItem = () => {
+
+        Axios.patch("http://127.0.0.1:8000/restaurant/menu/" + window.location.pathname.split("/")[2] + "/edit/", {}, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem('token')}`
             }
         }).then(result => result.data)
             .then(data2 => {
-                console.log(data2)
-
-
+                setOwner(true)
             }).catch((error) => {
                 console.log(error.response)
+               
 
             });
+        return owner;   
+    }
+    const editItem = () => {
+        console.log("OKAYY")
+
+        Axios.patch("http://127.0.0.1:8000/restaurant/menu/" + window.location.pathname.split("/")[2] + "/edit/", {}, {
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem('token')}`
+            }
+        }).then(result => result.data)
+            .then(data2 => {
+                navigate("/restaurant/menu/" + data2['rid'].toString() + "/edit/")
+            }).catch((error) => {
+                console.log(error.response)
+               
+
+            });
+        return owner;   
     }
     return (<>
         <div class="flip-card">
@@ -45,8 +67,13 @@ function FlipCard(props) {
                     <div class="card">
                         <div class="card-body-back"><br />
                             <div class="button-holder">
-                                <button type="submit" class="btn btn-secondary"
-                                    onclick="location.href='../add_edit_menu/edit_menu_item.html'">Edit Item</button>
+                            <Typography align='center'>
+                            {(checkItem()) ? <Button type="submit"
+                                    onClick={() => { editItem();}}
+                                    
+                                    variant="contained" name="foo" value="upvote">Edit Item</Button> : <div>[Please login as the owner to edit this item]</div>}
+                            </Typography>
+                                
                             </div>
                             <h5 class="card-title">{props.data['name']}</h5>
 
