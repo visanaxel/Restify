@@ -29,7 +29,7 @@ function MapCard(props) {
                             <div className="card-deck card_row"> { sublist.map( (element, j) => {
                                 return (<>
                                     <div className="card">
-                                        <a href="../restaurant_page/restaurant.html">
+                                        <a href={"http://localhost:3000/restaurant/" + element['id']}>
                                             <img className="card-img-top" src={element['logo']} alt="Card image cap"/>
                                             <div className="card-body">
                                                 <h5 className="card-title">{element['name']}</h5>
