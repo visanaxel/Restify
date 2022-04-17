@@ -13,7 +13,9 @@ function Navbar() {
                   <li className="nav-item active">
                     <a className="nav-link" href="http://localhost:3000/home">Home <span className="sr-only">(current)</span></a>
                   </li>
-                  <li className="nav-item">
+
+                  
+                  {(localStorage.getItem('token') !== '') ? <> <li className="nav-item">
                     <a className="nav-link" href="../restaurant_page/restaurant.html">My Restaurant</a>
                   </li>
                   <li className="nav-item">
@@ -37,10 +39,9 @@ function Navbar() {
                         <li><a className="dropdown-item" href="http://localhost:3000/restaurant_notification">Restaurant Notifications</a></li>
                       </ul>
                     </div>
-                  </li>
-                  <li id="logout" className="nav-item">
-                    <a className="nav-link" href="#">Logout</a>
-                  </li>
+                  </li></> : <li></li>}
+                  
+                  {(localStorage.getItem('token') !== '') ? <li id="logout" className="nav-item"><a className="nav-link" href="#" >Logout</a></li> : <li id="login" className="nav-item"><a className="nav-link" href="http://localhost:3000/login">Login</a></li>}
                   {/* <li class="nav-item">
                           <a class="nav-link disabled" href="#">Disabled</a>
                       </li> */}
