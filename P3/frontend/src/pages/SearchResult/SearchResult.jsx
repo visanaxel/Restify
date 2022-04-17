@@ -4,6 +4,7 @@ import Navbar from "../../components/Navbar/navbar";
 import Footer from "../../components/Footer/footer";
 import Search from "../../components/Search/Search";
 import SearchBar from "../../components/Search/SearchBar";
+import Button from "@material-ui/core/Button";
 
 import ResultCard from '../../components/ResultCard/ResultCard';
 
@@ -19,11 +20,14 @@ import MapCard from '../../components/ResultCard/MapCard';
 export const SearchResult = () => {
 
     const [data, setData] = useState([])
+    const [page, setPage] = useState(1);
+    const [prev, setPrev] = useState(false);
+    const [next, setNext] = useState(false);
 
     var query = useParams()['query'];
 
-    var url = 'http://127.0.0.1:8000/restaurant/search/?query=' + query;
-    console.log(url)
+    var url = 'http://127.0.0.1:8000/restaurant/search/?query=' + query + "&page=" + page;
+    //console.log(url)
 
     useEffect(() => {
         fetch(url, {method: 'GET'})
@@ -32,13 +36,23 @@ export const SearchResult = () => {
             return response.json();
         })
         .then(json => {
-            //console.log(json);
+            console.log(json);
             setData(json);
+            if (json['next'] === null) {
+                setNext(false)
+            } else {
+                setNext(true)
+            }
+            if (json['previous'] === null) {
+                setPrev(false)
+            } else {
+                setPrev(true)
+            }
         });
-    }, [])
+    }, [page])
 
     if (data !== []) {
-        console.log(data)
+        //console.log(data)
         return (
             <>
                 <div>
@@ -59,6 +73,11 @@ export const SearchResult = () => {
                 </div>
 
                 <MapCard data={data}></MapCard>
+
+                {(prev ? <Button marginRight='50' value="prev" variant="contained" onClick={() => setPage(page - 1)}>Previous</Button> : <div></div>)}
+                {((prev && next) ? <div style={{display: 'inline-block'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> : <p></p>)}
+                {(next ? <Button value="next" variant="contained" onClick={() => setPage(page + 1)}>Next</Button> : <div></div>)}
+                <br></br><br></br>
 
                 <Footer></Footer>
             </>

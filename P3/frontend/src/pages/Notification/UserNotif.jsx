@@ -16,11 +16,11 @@ export const UserNotif = () => {
         {headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}})
         .then(result => result.data)
         .then(json => {
-            console.log(json);
+            //console.log(json);
             setData(json);})
         .catch((error) => {
             setData(['false']);
-            console.log(error);
+            //console.log(error);
         })
     }, []);
 

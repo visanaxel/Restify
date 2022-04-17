@@ -1,14 +1,42 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import Axios from 'axios';
 import '../../pages/Notification/notification.css';
 
 function NotifCard(props) {
 
-    if (props['data']['results'] !== undefined) {
+    const [pic, setPic] = useState([]);
+    
 
+    useEffect(() => {
+        var result = props['data']['results'];
+        if (result == undefined) {
+            return
+        }
+        for (let i = 0; i < result.length; i++) {
+            
+            Axios.get("http://127.0.0.1:8000/restaurant/view/" + result[i]['rid'] + "/")
+            .then(result => result.data)
+            .then(json => {
+                console.log(json);
+                var temp = pic.slice();
+                temp.push(json['logo']);
+                setPic(temp);
+            });
+            
+        }
+    }, []);
+
+    //console.log(pic);
+    
+    if (props['data']['results'] !== undefined && pic !== []) {
+
+        //console.log(result);
         var result = props['data']['results'];
 
+        console.log('bitch1');
+        console.log(pic);
         console.log(result);
+        console.log('bitch2')
 
         return (
             <>
@@ -18,7 +46,7 @@ function NotifCard(props) {
                     <>
                     <div class="row mt-0">
                         <div class="col-2 picture_column d-flex justify-content-end">
-                            <img class="profile_pic" src="https://cdn.mos.cms.futurecdn.net/xDGQ9dbLmMpeEqhiWayMRB.jpg"/>
+                            <img class="profile_pic" src={pic[i]}/>
                         </div>
                         <div class="col-8">
                             <div class="alert alert-primary alert-dismissible fade show" role="alert">
