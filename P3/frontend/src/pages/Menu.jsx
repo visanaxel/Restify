@@ -17,6 +17,8 @@ import Typography from "@material-ui/core/Typography";
 export const Menu = () => {
     const [items, setItems] = useState([]);
     const [page, setPage] = useState(1);
+    const [prev, setPrev] = useState(false);
+    const [next, setNext] = useState(false);
 
     useEffect(() => {
         axios.get("http://127.0.0.1:8000" + window.location.pathname + "?page=" + page, {
@@ -24,7 +26,16 @@ export const Menu = () => {
         }
         ).then(result => result.data)
             .then(data2 => {
-                
+                if (data2['next'] === null) {
+                    setNext(false)
+                } else {
+                    setNext(true)
+                }
+                if (data2['previous'] === null) {
+                    setPrev(false)
+                } else {
+                    setPrev(true)
+                }
                 setItems(data2['results']);
                 console.log(data2['results'])
             }).catch((error) => {
@@ -72,8 +83,10 @@ export const Menu = () => {
             })}
 
             <Typography align='center'>
-                <Button value="prev" variant="contained" onClick={() => setPage(page - 1)} />
-                <Button value="next" variant="contained" onClick={() => setPage(page + 1)} />
+                {(prev ? <Button marginRight='50' value="prev" variant="contained" onClick={() => setPage(page - 1)}>Previous</Button> : <div></div>)}
+                {((prev && next) ? <div style={{display: 'inline-block'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> : <p></p>)}
+                {(next ? <Button value="next" variant="contained" onClick={() => setPage(page + 1)}>Next</Button> : <div></div>)}
+                <br></br><br></br>
                 <AddItem /></Typography>
 
 
