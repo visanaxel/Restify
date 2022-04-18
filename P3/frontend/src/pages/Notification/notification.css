@@ -5,6 +5,7 @@ img {
 }
 
 .profile_pic {
+  object-fit: cover;
   clip-path: circle();
   width: 100px;
   height: 100px;
