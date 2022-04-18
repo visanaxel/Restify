@@ -64,7 +64,11 @@ export const Restaurant_View = () => {
         formData.append("rid", parseInt(text2))
 
         axios.post("http://127.0.0.1:8000/social/like/restaurant/", formData, { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}` } }
-        ).catch(function (error) {
+        ).then(result => result.data)
+        .then(data2 => {
+            console.log("uhoh!")
+            unlike()
+        }).catch(function (error) {
             if (error.response.status == 400) {
                 
                 // unlike()
@@ -74,10 +78,6 @@ export const Restaurant_View = () => {
                 console.log(error.response.status)
                 return
             }
-        }).then(result => result.data)
-        .then(data2 => {
-            console.log("uhoh!")
-            unlike()
         })
 
     }, []);
@@ -234,7 +234,15 @@ export const Restaurant_View = () => {
     //     }
 
     function UpdateLikesFollows () {
-        axios.get(rest_result).catch(function (error) {
+        axios.get(rest_result)
+        .then(result => result.data)
+        .then(data2 => {
+            setLikes(data2['likes'])
+            setFollows(data2['followers'])
+            console.log(data2)
+
+        })
+        .catch(function (error) {
             if (error.response) {
                 if (error.response.status == 404) {
                     console.log("404!")
@@ -244,13 +252,7 @@ export const Restaurant_View = () => {
 
             }
 
-        }).then(result => result.data)
-            .then(data2 => {
-                setLikes(data2['likes'])
-                setFollows(data2['followers'])
-                console.log(data2)
-
-            })
+        })
     }
 
     
@@ -329,9 +331,9 @@ export const Restaurant_View = () => {
             .then(data2 => {
                 console.log(data2)
                 setLiker(false)
+                UpdateLikesFollows();
+            });
 
-                UpdateLikesFollows()
-            })
     }
 
     function like() {
@@ -343,11 +345,17 @@ export const Restaurant_View = () => {
         formData.append("rid", parseInt(text2))
 
         axios.post("http://127.0.0.1:8000/social/like/restaurant/", formData, { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}` } }
-        ).catch(function (error) {
+        )
+        .then(data2 => {
+            console.log(data2)
+            setLiker(true)
+            UpdateLikesFollows()
+        })
+        .catch(function (error) {
             if (error.response) {
                 if (error.response.status == 400) {
                     console.log("HEY")
-                    unlike()
+                    //unlike()
 
                     return
                 } else {
@@ -374,8 +382,7 @@ export const Restaurant_View = () => {
                 console.log(data2)
                 setFollower(false)
                 UpdateLikesFollows()
-
-            })
+            });
     }
 
     function follow() {
@@ -391,7 +398,8 @@ export const Restaurant_View = () => {
             if (error.response) {
                 if (error.response.status == 400) {
                     console.log("HEY")
-                    unfollow()
+                    //UpdateLikesFollows()
+                    setFollower(true)
                     UpdateLikesFollows()
 
                     return
@@ -403,9 +411,7 @@ export const Restaurant_View = () => {
 
             }
         })
-        setFollower(true)
-        UpdateLikesFollows()
-
+        //window.location.reload();
     }
 
     function edit() {
@@ -444,8 +450,8 @@ export const Restaurant_View = () => {
                     <div id="store_logo" class="mb-4">
                         <img id="restlogo" src={restaurant['logo']} alt="restaurant logo" />
                     </div>
-                    {(follower) ? <button type="button" class="follow btn btn-primary" onClick={follow}>Following!</button> : <button type="button" class="follow btn btn-primary" onClick={follow}>Follow</button>}     
-                     {(liker) ?  <button type="button" class="like btn btn-primary ml-4" onClick={like}>Liked!</button> : <button type="button" class="like btn btn-primary ml-4" onClick={like}>Like</button>}
+                    {(follower) ? <button type="button" class="follow btn btn-primary" onClick={unfollow}>Following!</button> : <button type="button" class="follow btn btn-primary" onClick={follow}>Follow</button>}     
+                     {(liker) ?  <button type="button" class="like btn btn-primary ml-4" onClick={unlike}>Liked!</button> : <button type="button" class="like btn btn-primary ml-4" onClick={like}>Like</button>}
                     
                     <h5 class="card-text mt-1">Likes: {likes}</h5>
                     <h5 class="card-text">Followers: {follows}</h5>
