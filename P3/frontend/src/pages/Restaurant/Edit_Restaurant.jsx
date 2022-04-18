@@ -93,7 +93,8 @@ export const Edit_Restaurant = () => {
                 <hr></hr>
                 <label class="mb-0" for="exampleInputPassword1"><h4>Restaurant Logo</h4></label>
 
-                <input type="file" accept="image/png, image/gif, image/jpeg" class="form-control-file mt-0" id="exampleFormControlFile1" onChange={e => setLogo(e.target.files[0])} />
+                <input type="file" accept="image/*"
+ class="form-control-file mt-0" id="exampleFormControlFile1" onChange={e => setLogo(e.target.files[0])} />
                 <p class="mt-0 mb-0" style={{color: 'red'}}></p>
                 <label class="mb-0 mt-3" for="exampleInputPassword1"><h4>Name</h4></label>
                 <div class="row mb-3">
