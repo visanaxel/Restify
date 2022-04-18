@@ -5,6 +5,7 @@ import Footer from "../../components/Footer/footer";
 import Search from "../../components/Search/Search";
 import SearchBar from "../../components/Search/SearchBar";
 import Button from "@material-ui/core/Button";
+import ParticlesBg from 'particles-bg'
 
 import ResultCard from '../../components/ResultCard/ResultCard';
 
@@ -58,7 +59,14 @@ export const SearchResult = () => {
 
                 <Navbar></Navbar>
 
+                <ParticlesBg num={5} type="circle" id="particles-js" bg={{
+                    position: "fixed",
+                    zIndex: "-1",
+                    width: "100%"
+                    }} />
+
                 <SearchBar></SearchBar>
+
 
                 <div class="card-body">
                     <h4>Results</h4>
