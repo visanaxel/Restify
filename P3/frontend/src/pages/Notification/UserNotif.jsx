@@ -66,7 +66,7 @@ export const UserNotif = () => {
                 <Typography align='center'>
                 {((prev !== null) ? <Button marginRight='50' value="prev" variant="contained" onClick={() => {setPage(page - 1); setNext(prev)}}>Previous</Button> : <div></div>)}
                 {(((prev !== null) && (next !== null)) ? <div style={{display: 'inline-block'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> : <p></p>)}
-                {((next !== null && (data.toString() !== 'false')) ? <Button value="next" variant="contained" style={{marginBottom: '100px'}} onClick={() => setPage(page + 1)}>Next</Button> : <div></div>)}
+                {((next !== null && (data.toString() !== 'false')) ? <Button value="next" variant="contained" onClick={() => setPage(page + 1)}>Next</Button> : <div></div>)}
                 </Typography>
 
                 

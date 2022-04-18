@@ -6,8 +6,8 @@ img {
 
 .profile_pic {
   clip-path: circle();
-  width: 80%;
-  height: 80%;
+  width: 100px;
+  height: 100px;
   
   /* margin: auto;    
   display: block; */
