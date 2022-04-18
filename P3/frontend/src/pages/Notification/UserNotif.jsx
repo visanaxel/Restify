@@ -50,6 +50,7 @@ export const UserNotif = () => {
     if (data !== [] ) {
         //console.log(pic);
         //console.log(pic !== []);
+        console.log(data.toString())
         return (
             <>
                 <Navbar></Navbar>
@@ -60,12 +61,12 @@ export const UserNotif = () => {
                     }} />
                     
                 <br></br>
-                {(data.toString() !== 'false') ? <NotifCard data={data}></NotifCard> : <h1 style={{textAlign: 'center'}}> Please log in to see user notifications.</h1>}
+                {(data.toString() !== 'false') ? <NotifCard data={data}></NotifCard> :  <><br></br><br></br><br></br><h1 style={{textAlign: 'center'}}> Please log in to see user notifications.</h1></>}
 
                 <Typography align='center'>
                 {((prev !== null) ? <Button marginRight='50' value="prev" variant="contained" onClick={() => {setPage(page - 1); setNext(prev)}}>Previous</Button> : <div></div>)}
                 {(((prev !== null) && (next !== null)) ? <div style={{display: 'inline-block'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> : <p></p>)}
-                {((next !== null) ? <Button value="next" variant="contained" style={{marginBottom: '100px'}} onClick={() => setPage(page + 1)}>Next</Button> : <div></div>)}
+                {((next !== null && (data.toString() !== 'false')) ? <Button value="next" variant="contained" style={{marginBottom: '100px'}} onClick={() => setPage(page + 1)}>Next</Button> : <div></div>)}
                 </Typography>
 
                 
