@@ -10,12 +10,16 @@ import axios from 'axios';
 import { useState } from 'react';
 import './blog.css';
 import ParticlesBg from 'particles-bg'
+import { useNavigate } from 'react-router-dom';
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+
 
 
 
 export const Blog_Post = () => {
     console.log("Made it!")
-    const [items, setItems] = useState([]);
+    var rid = useParams()['restId'];
 
     var text1 = "http://127.0.0.1:8000/blog/"
     var text2 = useParams()['blogId'];
@@ -23,42 +27,59 @@ export const Blog_Post = () => {
     let result = text3.concat("/view/")
     console.log(result)
 
+    const [items, setItems] = useState([]);
+    const [check, setCheck] = useState(false);
+
+    const [page, setPage] = useState(1);
+    const [prev, setPrev] = useState(false);
+    const [next, setNext] = useState("http://127.0.0.1:8000/restaurant/" + rid + "/blogs/")
+
     const [blog, setBlog] = useState({});
-
-
+    console.log("MADE IT HERE!")
+    let navigate = useNavigate();
+    
     useEffect(() => {
-        axios.get(result).catch(function (error) {
-            if (error.response) {
-                if (error.response.status == 404) {
-                    console.log("404!")
-                } else {
-                    console.log("cry!")
-                }
 
-            }
-        }).then(result => result.data)
-            .then(data2 => {
-                data2['bid'] = text2;
-                setBlog(data2)
-                console.log(blog);
-                console.log(data2)
+        console.log("AHHHHH")
+        Axios.get(next)
+        .then(result => result.data)
+        .then(json => {
+            //console.log(json);
 
-                var temp1 = "http://127.0.0.1:8000/restaurant/"
-                var temp2 = data2['rid']
-                var temp3 = temp1.concat(temp2)
-                var result = temp3.concat("/blogs/")
-                axios.get(result).then(result => result.data)
-                    .then(data2 => {
-                        console.log("AHHHH")
-                        console.log(data2)
-                        setItems(data2['results']);
-                    })
+            // for (var i = 0; i < json['results'].length; i++) {
+            //     //console.log('HI');
+            //     Axios.get("http://127.0.0.1:8000/restaurant/view/" + json['results'][i]['rid'] + "/")
+            //     .then(result => result.data)
+            //     .then(data2 => {
+            //         var temp = pic.slice();
+            //         setPic(temp => [...temp, data2['logo']]);
+            //         console.log(i);
+            //     });
+            // }
+            //console.log(json);
+            setItems(json);
+            setNext(json['next']);
+            setPrev(json['previous']);
+            setCheck(true)
+        })
+        .catch((error) => {
+            setItems(['false']);
+            //console.log(error);
+        });
+        // console.log('i fire once');
+        
+    }, [page]);
 
-            })
+    function create() {
+        navigate('/blog/add')
+    }
+    // console.log(items)
+    if (check) {
+        console.log(items['results']);
+        console.log(prev)
+        console.log(next)
 
-
-    }, []);
-
+        // var result2 = items['results'].splice()
     return (
         <>
             <head>
@@ -76,7 +97,7 @@ export const Blog_Post = () => {
                     position: "fixed",
                     zIndex: "-1",
                     width: "100%"
-                    }} />
+                }} />
                 <div id="wrapper">
 
                     <div id="sidebar-wrapper">
@@ -86,7 +107,7 @@ export const Blog_Post = () => {
                                     Mcdonalds Blog
                                 </a>
                             </li>
-                            {items.map((item, i) => {
+                            {items['results'].map((item, i) => {
                                 return (
                                     <><li>
                                         <p>{item['title']}</p>
@@ -94,13 +115,18 @@ export const Blog_Post = () => {
                                 )
 
                             })}
+                            <Typography align='center'>
+                            {((prev !== null) ? <Button marginRight='50' value="prev" variant="contained" onClick={() => {setPage(page - 1); setNext(prev)}}>Previous</Button> : <div></div>)}
+                            {(((prev !== null) && (next !== null)) ? <div style={{display: 'inline-block'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> : <p></p>)}
+                            {((next !== null && (items.toString() !== 'false')) ? <Button value="next" variant="contained" style={{marginBottom: '100px'}} onClick={() => setPage(page + 1)}>Next</Button> : <div></div>)}
+                                
+                                </Typography>
+
 
 
 
                             <li>
-                                <a href="../rest_blog/Create_blog.html" target="_self">
-                                    <button type="button" class="btn btn-outline-primary">Create new Blog post</button>
-                                </a>
+                                <button type="button" onClick={create} class="btn btn-outline-primary">Create new Blog post</button>
                             </li>
 
                         </ul>
@@ -113,7 +139,7 @@ export const Blog_Post = () => {
                         <div class="container-fluid">
 
                             {/* blog body */}
-                            <BlogContent blog={blog}></BlogContent>
+                            {/* <BlogContent blog={blog}></BlogContent> */}
                             {/* Comment Section */}
                             {/* <Comments blog={blog}></Comments> */}
                         </div>
@@ -127,4 +153,4 @@ export const Blog_Post = () => {
     )
 
 
-}
+}}

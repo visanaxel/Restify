@@ -45,122 +45,203 @@ export const Restaurant_View = () => {
     const [comment, setComment] = useState("");
     const [commentError, setCommentError] = useState("");
 
-    function handle() {
-        const data = {
-            "comment": comment,
-        }
-        if (comment === "") {
-            setCommentError("Please enter a comment")
-            return
-        }
-        var t1 = "http://127.0.0.1:8000/restaurant/"
+    const [owner, setOwner] = useState(false);
 
-        let t3 = t1.concat(temp2);
-        let t_result = t3.concat("/comment/")
-        console.log(comment_result)
-
-        Axios.post(t_result, data, {
+    useEffect(() => {
+        var check = "http://127.0.0.1:8000/restaurant/edit/"
+        var check2 = check.concat(temp2)
+        var final_check = check2.concat("/")
+        Axios.patch(final_check, {}, {
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem('token')}`
             }
-        })
-            .then(result => result.data)
+        }).then(result => result.data)
             .then(data2 => {
-                handle2()
-            }).catch(function (error) {
-                if (error.response) {
-                    if (error.response.status == 401) {
-                        setCommentError("Please login to comment")
-                    } else {
-                        setCommentError("please fill in comment")
-                    };
-                } else {
-                    console.log('Error', error.message);
+                setOwner(true)
+            }).catch((error) => {
+                console.log(error.response)
+               
+            });
+    }, []);
+
+    // for images only hook
+    const [check, setCheck] = useState(false);
+
+    const [data, setData] = useState([]);
+    const [page, setPage] = useState(1);
+    const [prev, setPrev] = useState(null);
+    const [next, setNext] = useState('http://127.0.0.1:8000/restaurant/'+useParams()['restId']+'/view/images/');
+
+    useEffect(() => {
+        Axios.get(next)
+        .then(result => result.data)
+        .then(json => {
+           
+            setData(json);
+            setNext(json['next']);
+            setPrev(json['previous']);
+            setCheck(true)
+        })
+        .catch((error) => {
+            setData(['false']);
+            //console.log(error);
+        });
+        console.log('i fire once');
+
+    }, [page]);
+
+
+    // const checkItem = () => {
+    //     console.log(window.location.pathname.split("/")[2])
+
+    //     Axios.patch("http://127.0.0.1:8000/restaurant/menu/" + menu_id.toString() + "/edit/", {}, {
+    //         headers: {
+    //             "Authorization": `Bearer ${localStorage.getItem('token')}`
+    //         }
+    //     }).then(result => result.data)
+    //         .then(data2 => {
+    //             setOwner(true)
+    //         }).catch((error) => {
+    //             console.log(error.response)
+
+
+    //         });
+    //     return owner;   
+    // }
+
+    function blog() {
+            var temp1 = "http://127.0.0.1:8000/restaurant/"
+            var temp3 = temp1.concat(text2)
+            var result = temp3.concat("/blogs/")
+            axios.get(result).then(result => result.data)
+                .then(data2 => {
+                    console.log("AHHHH")
+                    console.log(data2)
+                    if (data2['results'].length == 0) {
+                        alert("Restaurant has no blogs")
+                    }
+                    var bid = data2['results'][0]['id']
+                    var final_url = "/blog/" + bid + "/"+ text2
+                    navigate(final_url)
+                })
+        }
+
+    function handle() {
+            const data = {
+                "comment": comment,
+            }
+            if (comment === "") {
+                setCommentError("Please enter a comment")
+                return
+            }
+            var t1 = "http://127.0.0.1:8000/restaurant/"
+
+            let t3 = t1.concat(temp2);
+            let t_result = t3.concat("/comment/")
+            console.log(comment_result)
+
+            Axios.post(t_result, data, {
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem('token')}`
                 }
             })
+                .then(result => result.data)
+                .then(data2 => {
+                    handle2()
+                }).catch(function (error) {
+                    if (error.response) {
+                        if (error.response.status == 401) {
+                            setCommentError("Please login to comment")
+                        } else {
+                            setCommentError("please fill in comment")
+                        };
+                    } else {
+                        console.log('Error', error.message);
+                    }
+                })
 
 
-    }
+        }
 
     function handle2() {
 
-        axios.get(comment_result).catch(function (error) {
-            if (error.response) {
-                if (error.response.status == 404) {
-                    console.log("404!")
-                    console.log(comment_result)
-                } else {
-                    console.log("cry!")
+            axios.get(comment_result).catch(function (error) {
+                if (error.response) {
+                    if (error.response.status == 404) {
+                        console.log("404!")
+                        console.log(comment_result)
+                    } else {
+                        console.log("cry!")
+                    }
+
                 }
 
-            }
+            }).then(result => result.data)
+                .then(data2 => {
+                    setItems(data2['results'])
+                    console.log(data2)
+                    setComment("")
+                    setCommentError("")
+                })
 
-        }).then(result => result.data)
-            .then(data2 => {
-                setItems(data2['results'])
-                console.log(data2)
-                setComment("")
-                setCommentError("")
-            })
-
-    }
+        }
     useEffect(() => {
-        axios.get(rest_result).catch(function (error) {
-            if (error.response) {
-                if (error.response.status == 404) {
-                    console.log("404!")
-                } else {
-                    console.log("cry!")
+            axios.get(rest_result).catch(function (error) {
+                if (error.response) {
+                    if (error.response.status == 404) {
+                        console.log("404!")
+                    } else {
+                        console.log("cry!")
+                    }
+
                 }
 
-            }
+            }).then(result => result.data)
+                .then(data2 => {
+                    setRestaurant(data2)
+                    console.log(data2)
 
-        }).then(result => result.data)
-            .then(data2 => {
-                setRestaurant(data2)
-                console.log(data2)
+                })
 
-            })
+            axios.get(comment_result).catch(function (error) {
+                if (error.response) {
+                    if (error.response.status == 404) {
+                        console.log("404!")
+                        console.log(comment_result)
+                    } else {
+                        console.log("cry!")
+                    }
 
-        axios.get(comment_result).catch(function (error) {
-            if (error.response) {
-                if (error.response.status == 404) {
-                    console.log("404!")
-                    console.log(comment_result)
-                } else {
-                    console.log("cry!")
                 }
 
-            }
+            }).then(result => result.data)
+                .then(data2 => {
+                    setItems(data2['results'])
+                    console.log(data2)
+                })
 
-        }).then(result => result.data)
-            .then(data2 => {
-                setItems(data2['results'])
-                console.log(data2)
-            })
+            var img1 = "http://127.0.0.1:8000/restaurant/"
+            var img2 = img1.concat(text2)
+            var img3 = img2.concat("/view/images/")
+            axios.get(img3).catch(function (error) {
+                if (error.response) {
+                    if (error.response.status == 404) {
+                        console.log("404!")
+                        console.log(comment_result)
+                    } else {
+                        console.log("cry!")
+                    }
 
-        var img1 = "http://127.0.0.1:8000/restaurant/"
-        var img2 = img1.concat(text2)
-        var img3 = img2.concat("/view/images/")
-        axios.get(img3).catch(function (error) {
-            if (error.response) {
-                if (error.response.status == 404) {
-                    console.log("404!")
-                    console.log(comment_result)
-                } else {
-                    console.log("cry!")
                 }
 
-            }
-
-        }).then(result => result.data)
-            .then(data2 => {
-                setImages(data2['results'])
-                console.log(data2)
-            })
+            }).then(result => result.data)
+                .then(data2 => {
+                    setImages(data2['results'])
+                    console.log(data2)
+                })
 
 
-    }, []);
+        }, []);
 
     function unlike() {
         console.log("HEYO")
@@ -238,17 +319,19 @@ export const Restaurant_View = () => {
 
     }
 
-    function edit () {
+    function edit() {
         var tempEdit = "/restaurant/edit/"
         navigate(tempEdit.concat(temp2));
     }
 
-    function menu () {
+    function menu() {
         var tempMenu = "/restaurant/"
         var tempMenu2 = tempMenu.concat(temp2)
         var finalMenu = tempMenu2.concat(/menu/)
         navigate(finalMenu);
     }
+
+    if (check){
 
 
     return (
@@ -262,47 +345,18 @@ export const Restaurant_View = () => {
             </head>
             <Navbar />
 
-            <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                <ol class="carousel-indicators">
-                    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-                    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-                </ol>
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img class="d-block w-100" src={restaurant['logo']} alt="First slide" />
-                    </div>
-                    <div class="carousel-item">
-                        <img class="d-block w-100" src={restaurant['logo']} alt="Second slide" />
-                    </div>
-                    <div class="carousel-item">
-                        <img class="d-block w-100" src={restaurant['logo']} alt="Third slide" />
-                    </div>
-                </div>
-                <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="sr-only">Next</span>
-                </a>
-            </div>
+           
 
             {/* <link rel="stylesheet" href="restaurant.css" />
             
 
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossOrigin="anonymous" /> */}
-<<<<<<< HEAD
 
-=======
             <ParticlesBg num={5} type="circle" id="particles-js" bg={{
-                    position: "fixed",
-                    zIndex: "-1",
-                    width: "100%"
-                    }} />
-            <img id="logo" src={restaurant['logo']} alt="restaurant logo" />
->>>>>>> ab7f47d119042450089b2520846758b9c17ed11d
+                position: "fixed",
+                zIndex: "-1",
+                width: "100%"
+            }} />
 
             <div class="card">
                 <div class="card-body">
@@ -323,24 +377,22 @@ export const Restaurant_View = () => {
             </div>
 
             <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title" onClick={menu}>Menu</h5>
-                    </div>
+                <div class="card-body">
+                    <h5 class="card-title" onClick={menu}>Menu</h5>
+                </div>
             </div>
 
             <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Blogs</h5>
-                    </div>
+                <div class="card-body">
+                    <h5 class="card-title" onClick={blog} >Blogs</h5>
+                </div>
             </div>
-
+            {(owner) ? 
             <div class="card">
-                
-                    <div class="card-body" onClick={edit}>
-                        <h5 class="card-title">Edit Restaurant</h5>
-                    </div>
-                
-            </div>
+                <div class="card-body" onClick={edit}>
+                    <h5 class="card-title">Edit Restaurant</h5>
+                </div>
+            </div> : <p></p>}
 
             <div class="row title">
                 <h1 class="mt-0 mb-0">Comments</h1>
@@ -351,7 +403,7 @@ export const Restaurant_View = () => {
                     <div class="form-group">
                         <label for="exampleFormControlTextarea1">Add comment</label>
                         <p>{commentError}</p>
-                        <textarea value = {comment}class="form-control" id="exampleFormControlTextarea1" rows="3" onChange={(e) => { setComment(e.target.value) }}></textarea>
+                        <textarea value={comment} class="form-control" id="exampleFormControlTextarea1" rows="3" onChange={(e) => { setComment(e.target.value) }}></textarea>
                     </div>
 
                     <button type="button" class="btn btn-primary" onClick={handle}>Submit</button>
@@ -374,8 +426,15 @@ export const Restaurant_View = () => {
                 )
 
             })}
+             {/* <Typography align='center'>
+                {(prev ? <Button marginRight='50' value="prev" variant="contained" onClick={() => setPage(page - 1)}>Previous</Button> : <div></div>)}
+                {((prev && next) ? <div style={{display: 'inline-block'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> : <p></p>)}
+                {(next ? <Button value="next" variant="contained" onClick={() => setPage(page + 1)}>Next</Button> : <div></div>)}
+                <br></br><br></br>
+                <AddItem /></Typography> */}
 
 
         </>
     )
+            }
 }
