@@ -16,6 +16,8 @@ import { Add } from './pages/AddToMenu'
 import { Edit_Restaurant } from './pages/Restaurant/Edit_Restaurant';
 import { UserNotif } from './pages/Notification/UserNotif';
 import { RestNotif } from './pages/Notification/RestNotif';
+import { Add_Restaurant } from './pages/Restaurant/Add_Restaurant';
+import { Create_Blog_Post } from './pages/Blog_Post/Create_Blog';
 
 
 function App() {
@@ -27,16 +29,18 @@ function App() {
           <Route path="profile" element={<ProfileView />} />
           <Route path="profile_edit" element={<ProfileEdit />} />
           <Route path="register" element={<Register />} />
-          <Route path="blog/:blogId" element={<Blog_Post />} />
+          <Route path="blog/:blogId/:restId" element={<Blog_Post />} />
           <Route path="restaurant/:restaurant_id/menu/" element={<Menu />} />
           <Route path="menu/:menu_id/edit/" element={<Edit />} />
           <Route path="home" element={<Home />} />
           <Route path="search/:query" element={<SearchResult />} />
           <Route path="blog/edit/:blogId" element={<Edit_Blog_Post />} />
+          <Route path="blog/add" element={<Create_Blog_Post />} />
+
 
           <Route path="restaurant/:restId" element={<Restaurant_View />} />
           <Route path="restaurant/edit/:restId" element={<Edit_Restaurant />} />
-          {/* <Route path="restaurant/add" element={<Edit_Blog_Post />} /> */}
+          <Route path="restaurant/add" element={<Add_Restaurant />} />
 
 
           <Route path="/restaurant/:restaurant_id/menu/add/" element={<Add />} />

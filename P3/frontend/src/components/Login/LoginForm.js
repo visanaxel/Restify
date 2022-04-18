@@ -48,9 +48,9 @@ const LoginForm = () => {
         <form class="form-container">
             <h1>Welcome to Restify</h1>
             <div class="form-group">
-                <label for="exampleInputEmail1">Email address</label>
+                <label for="exampleInputEmail1">Username</label>
                 <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                    placeholder="Enter email" 
+                    placeholder="Enter Username" 
                     value={email} 
                     onChange={(e) => {setEmail(e.target.value)}} />
                 
@@ -68,7 +68,7 @@ const LoginForm = () => {
             <button type="button" class="btn btn-success btn-block" onClick={handle}>Login</button>
             <br />
              
-            <button type="button" class="btn btn-success btn-block" onClick={handle2}>Register as Restaurant</button>
+            <button type="button" class="btn btn-success btn-block" onClick={handle2}>Register</button>
 
 
 
