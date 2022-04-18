@@ -27,9 +27,10 @@ li {
     padding-right: 5px;
 }
 
-.store_logo {
-    width: 300px;
-    clip-path: circle();
+#restlogo {
+    clip-path: none;
+    width: 100%;
+    height:100%;
 }
 
 h5 {

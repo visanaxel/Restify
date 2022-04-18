@@ -31,11 +31,69 @@ const RegisterForm = () => {
             "email": email,
             "password2": password2,
             "phone_number": phone_number
-          }
-        
-          Axios.post("http://127.0.0.1:8000/users/register/", data).catch(function (error) {
+        }
+        var flag = false
+
+        if (username == "") {
+            setUsernameError("This field may not be blank.")
+            flag = true
+        } else {
+            setUsernameError("")
+        }
+        if (password == "") {
+            setPasswordError("This field may not be blank.")
+            flag = true
+
+        } else {
+            setPasswordError("")
+        }
+        if (first_name == "") {
+            setFirst_nameError("This field may not be blank.")
+            flag = true
+
+        } else {
+            setFirst_nameError("")
+
+        }
+        if (last_name == "") {
+            setLast_nameError("This field may not be blank.")
+            flag = true
+
+        } else {
+            setLast_nameError("")
+
+        }
+        if (email == "") {
+            setEmailError("This field may not be blank.")
+            flag = true
+        } else {
+            setEmailError("")
+
+        }
+
+        if (password2 == "") {
+            setPassword2Error("This field may not be blank.")
+            flag = true
+        } else {
+            setPassword2Error("")
+        }
+
+        if (phone_number == "") {
+            setPhone_numberError("This field may not be blank.")
+            flag = true
+        } else {
+            setPhone_numberError("")
+        }
+
+        if (flag) {
+            return
+        }
+
+
+
+        Axios.post("http://127.0.0.1:8000/users/register/", data).catch(function (error) {
             if (error.response) {
-              if (error.response.status == 400) {
+                if (error.response.status == 400) {
                     console.log(error.response.data)
                     console.log("hey")
                     var emailValue = error.response.data["email"];
@@ -47,27 +105,27 @@ const RegisterForm = () => {
                     var last_nameValue = error.response.data["last_name"];
                     var password_dont_mach = error.response.data["error"];
 
-                   
+
 
                     if (emailValue != undefined) {
                         emailValue = error.response.data["email"][0];
                     } else {
-                        emailValue=""
+                        emailValue = ""
                     }
                     if (usernameValue != undefined) {
                         usernameValue = error.response.data["username"][0];
                     } else {
-                        usernameValue=""
+                        usernameValue = ""
                     }
                     if (passwordValue != undefined) {
                         passwordValue = error.response.data["password"][0];
                     } else {
-                        passwordValue=""
+                        passwordValue = ""
                     }
                     if (password2Value != undefined) {
                         password2Value = error.response.data["password2"][0];
                     } else {
-                        password2Value=""
+                        password2Value = ""
                     }
                     if (phone_numberValue != undefined) {
                         phone_numberValue = error.response.data["phone_number"][0];
@@ -88,7 +146,7 @@ const RegisterForm = () => {
                     if (password_dont_mach != undefined) {
                         password2Value = error.response.data["error"];
                     } else {
-                        password2Value=""
+                        password2Value = ""
                     }
 
                     setEmailError(emailValue);
@@ -98,91 +156,95 @@ const RegisterForm = () => {
                     setPassword2Error(password2Value);
                     setPhone_numberError(phone_numberValue);
                     setUsernameError(usernameValue);
-              } else {
-                // setError("Invalid credentials")
-                console.log("cry")
-              };
-            } else { 
-              console.log('Error', error.message);
+                } else {
+                    // setError("Invalid credentials")
+                    console.log("cry")
+                };
+            } else {
+                console.log('Error', error.message);
             }
-          })
-          .then(result => result.data)
-          .then(data2 => {
-            console.log(data2)
-            navigate('/login/');
-          })
+        })
+            .then(result => result.data)
+            .then(data2 => {
+                console.log(data2)
+                navigate('/login/');
+            })
     }
-    
+
 
     return (
-        <form class="form-container">
+        <form className="form-container">
             <h1>Register</h1>
 
-            <div class="form-group">
+            <div className="form-group">
                 <label for="exampleInputEmail1">Email address</label>
-                <input type="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                <input type="name" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
                     placeholder="Enter email"
-                    value={email} 
-                onChange={(e) => {setEmail(e.target.value)}}/>
-                            <p>{emailError}</p>
+                    value={email}
+                    onChange={(e) => { setEmail(e.target.value) }} />
+                <p style={{ color: 'red' }}
+                >{emailError}</p>
 
             </div>
 
-            <div class="form-group">
+            <div className="form-group">
                 <label for="username">Username</label>
-                <input type="name" class="form-control" id="username" placeholder="Username"
-                value={username} 
-                onChange={(e) => {setUsername(e.target.value)}}/>
-                <p>{usernameError}</p>
+                <input type="name" className="form-control" id="username" placeholder="Username"
+                    value={username}
+                    onChange={(e) => { setUsername(e.target.value) }} />
+                <p style={{ color: 'red' }}
+                >{usernameError}</p>
             </div>
 
-            <div class="form-group">
+            <div className="form-group">
                 <label for="phone_number">Phone number</label>
-                <input type="phone_number" class="form-control" id="phone_number" placeholder="647-416-9983"
-                value={phone_number} 
-                onChange={(e) => {setPhone_number(e.target.value)}}/>
-                <p>{phone_numberError}</p>
+                <input type="phone_number" className="form-control" id="phone_number" placeholder="Phone number"
+                    value={phone_number}
+                    onChange={(e) => { setPhone_number(e.target.value) }} />
+                <p style={{ color: 'red' }}
+                >{phone_numberError}</p>
             </div>
 
-            <div class="form-group">
+            <div className="form-group">
                 <label for="first_name">First name</label>
-                <input type="name" class="form-control" id="exampleInputPassword1" placeholder="First name"
-                value={first_name} 
-                onChange={(e) => {setFirst_name(e.target.value)}}/>
-                <p>{first_nameError}</p>
+                <input type="name" className="form-control" id="first_name" placeholder="First name"
+                    value={first_name}
+                    onChange={(e) => { setFirst_name(e.target.value) }} />
+                <p style={{ color: 'red' }}
+                >{first_nameError}</p>
             </div>
 
-            <div class="form-group">
+            <div className="form-group">
                 <label for="name">Last name</label>
-                <input type="name" class="form-control" id="exampleInputPassword1" placeholder="Last name"
-                value={last_name} 
-                onChange={(e) => {setLast_name(e.target.value)}}/>
-                <p>{last_nameError}</p>
+                <input type="name" class="form-control" id="last_name" placeholder="Last name"
+                    value={last_name}
+                    onChange={(e) => { setLast_name(e.target.value) }} />
+                <p style={{ color: 'red' }}
+                >{last_nameError}</p>
             </div>
 
-            <div class="form-group">
+            <div className="form-group">
                 <label for="exampleInputPassword1">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"
-                value={password} 
-                onChange={(e) => {setPassword(e.target.value)}}
+                <input type="password" className="form-control" id="password" placeholder="Password"
+                    value={password}
+                    onChange={(e) => { setPassword(e.target.value) }}
                 />
-                <p>{passwordError}</p>
+                <p style={{ color: 'red' }}
+                >{passwordError}</p>
             </div>
 
-            <div class="form-group">
+            <div className="form-group">
                 <label for="exampleInputPassword1">Confirm Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Confirm Password"
-                value={password2} 
-                onChange={(e) => {setPassword2(e.target.value)}}/>
-                <p>{password2Error}</p>
+                <input type="password" class="form-control" id="Confirm_password" placeholder="Confirm Password"
+                    value={password2}
+                    onChange={(e) => { setPassword2(e.target.value) }} />
+                <p style={{ color: 'red' }}> 
+                    {password2Error}</p>
             </div>
 
-            {/* <div class="form-group">
-                <label for="exampleInputPassword1">Upload Profile Picture</label>
-                <input type="" class="form-control" id="exampleInputPassword1" placeholder="Password"/>
-            </div> */}
 
-            <button type="button" class="btn btn-success btn-block" onClick={handle}>Register</button>
+
+            <button type="button" className="btn btn-success btn-block" onClick={handle}>Register</button>
 
 
         </form>

@@ -65,10 +65,15 @@ export const Add_Restaurant = () => {
         if (name == "") {
             setNameError("Please enter a name")
             flag = true
+        } else {
+            setNameError("")
         }
         if (postal_code == "") {
             setPostal_CodeError("Please enter Postal Code")
             flag = true
+
+        } else {
+            setPostal_CodeError("")
 
         }
         if (logo == null) {
@@ -76,15 +81,22 @@ export const Add_Restaurant = () => {
             flag = true
 
 
+        } else {
+            setLogoError("")
+
         }
         if (address == "") {
             setAddressError("Please add address")
             flag = true
+        } else {
+            setAddressError("")
         }
 
         if (phone_number == "") {
-            setPhoneNumber("Please add phone number")
+            setPhoneNumberError("Please add phone number")
             flag = true
+        } else {
+            setPhoneNumberError("")
         }
 
         if (flag) {
@@ -108,7 +120,7 @@ export const Add_Restaurant = () => {
                 var navi = "/restaurant/"
                 navigate(navi.concat(data2['id']));
             }).catch((error) => {
-
+                console.log(error.response)
             });
     }
     return (
@@ -125,58 +137,59 @@ export const Add_Restaurant = () => {
             </head>
             <Navbar />
 
-            <div class="container-fluid">
+            <div class="container-fluid ">
 
                 <div class="row title">
-                    <div class="col-4">
+                    <div class="col-8">
 
                     </div>
-                    <form>
+                    <form id="dannyform">
                         <div class="form-group">
-                            <label class="mb-0" for="exampleInputPassword1"><h1>Restaurant Logo</h1></label>
+                            <h1>Create Restaurant</h1>
+                            <hr></hr>
+                            <label class="mb-0" for="exampleInputPassword1"><h4>Restaurant Logo</h4></label>
 
-                            <input type="file" class="form-control-file mt-0" id="exampleFormControlFile1" onChange=
-                                {e => setLogo(e.target.files[0])} />
-                            <label class="mb-0" for="exampleInputPassword1"><h1>Name</h1></label>
-                            <div class="row">
-                                <div class="col-10 mr-0">
+                            <input type="file" accept="image/png, image/gif, image/jpeg" class="form-control-file mt-0" id="exampleFormControlFile1" onChange={e => setLogo(e.target.files[0])} />
+                            <p class="mt-0 mb-0" style={{color: 'red'}}>{logoError}</p>
+                            <label class="mb-0 mt-3" for="exampleInputPassword1"><h4>Name</h4></label>
+                            <div class="row mb-3">
+                                <div class="col-12 mr-0">
                                     <input class="form-control" id="exampleInputPassword1" placeholder="Type Name" onChange={(e) => {
                                         setName(e.target.value);
                                     }} />
-                                    <p>{nameError}</p>
-                                    <label class="mb-0" for="exampleInputPassword1"><h1>Address</h1></label>
+                                    <p style={{color: 'red'}}>{nameError}</p>
+                                    <label class="mb-0" for="exampleInputPassword1"><h4>Address</h4></label>
 
                                     <input class="form-control" id="exampleInputPassword1" placeholder="Type Adresss" onChange={(e) => {
                                         setAddress(e.target.value);
                                     }} />
-                                    <p>{addressError}</p>
+                                    <p style={{color: 'red'}}>{addressError}</p>
 
-                                    <label class="mb-0" for="exampleInputPassword1"><h1>Postal Code</h1></label>
+                                    <label class="mb-0" for="exampleInputPassword1"><h4>Postal Code</h4></label>
 
                                     <input class="form-control" id="exampleInputPassword1" placeholder="Type postal code" onChange={(e) => {
                                         setPostal_Code(e.target.value);
                                     }} />
-                                    <p>{postal_codeError}</p>
+                                    <p style={{color: 'red'}}>{postal_codeError}</p>
 
-                                    <label class="mb-0" for="exampleInputPassword1"><h1>Phone Number</h1></label>
+                                    <label class="mb-0" for="exampleInputPassword1"><h4>Phone Number</h4></label>
 
                                     <input class="form-control" id="exampleInputPassword1" placeholder="Phone number" onChange={(e) => {
                                         setPhoneNumber(e.target.value);
                                     }} />
-                                    <p>{phone_numberError}</p>
+                                    <p class="mb-0 mt-0" style={{color: 'red'}}>{phone_numberError}</p>
                                 </div>
                                 <div class="col-5">
                                 </div>
                             </div>
                         </div>
-                        <button type="button" class="btn btn-primary" onClick={handle}>Submit</button>
+                        <button type="button" class="btn btn-primary mt-0" onClick={handle}>Submit</button>
 
                     </form>
                 </div>
 
 
 
-                <hr />
 
             </div>
 

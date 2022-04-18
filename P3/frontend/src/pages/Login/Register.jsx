@@ -44,11 +44,5 @@ export const Register = () => {
     
 }
 
-// export const Register = () => {
-//     return <>
-        
-
-//     </>
-// }
 
 export default Register;
