@@ -108,7 +108,7 @@ export const Restaurant_View = () => {
                         alert("Restaurant has no blogs")
                     } else if (data2['results'].length == 0 && owner==true) {
                         // take to create blog
-
+                        navigate('/blog/add')
                     }
                     var bid = data2['results'][0]['id']
                     var final_url = "/blog/" + bid + "/"+ text2
