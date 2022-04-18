@@ -10,7 +10,6 @@ import { useState } from 'react';
 import './blog2.css';
 import Comments from "../../components/Blog_Post/Comments";
 
-import { Carousel } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 export const Edit_Restaurant = () => {

@@ -11,11 +11,8 @@ import './restaurant.css';
 import Comments from "../../components/Blog_Post/Comments";
 import ParticlesBg from 'particles-bg'
 
-import { Carousel } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-
-// import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 
