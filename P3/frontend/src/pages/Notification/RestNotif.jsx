@@ -6,6 +6,7 @@ import Axios from 'axios';
 import Navbar from "../../components/Navbar/navbar";
 import Footer from "../../components/Footer/footer";
 import NotifCard from '../../components/NotifCard/NotifCard';
+import ParticlesBg from 'particles-bg'
 
 export const RestNotif = () => {
 
@@ -46,10 +47,11 @@ export const RestNotif = () => {
         return (
             <>
                 <Navbar></Navbar>
-
-                <br></br>
-                <br></br>
-
+                <ParticlesBg num={5} type="circle" id="particles-js" bg={{
+                    position: "fixed",
+                    zIndex: "-1",
+                    width: "100%"
+                    }} />
                 {(data.toString() !== 'false') ? <NotifCard data={data} pic={pic}></NotifCard> : <h2 style={{textAlign: 'center'}}> You do not own a restaurant.</h2>}
 
                 <br></br>

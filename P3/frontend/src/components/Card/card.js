@@ -10,8 +10,8 @@ function Card(props) {
    console.log(props.data['username'])
 
     return (<>
-        <div className="cus_card">
-            <div className="cus_container">
+        <div className="cus_card" style={{backgroundColor: 'rgba(255, 255, 255, 0.8)'}}>
+            <div className="cus_container" >
                 <img src={props.data['profile_pic']} className="img-author" alt="Avatar" />
                 
 
