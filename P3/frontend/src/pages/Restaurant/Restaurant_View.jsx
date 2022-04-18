@@ -338,9 +338,14 @@ export const Restaurant_View = () => {
                 <link rel="stylesheet" href="restaurant.css" />
             </head>
             <Navbar />
-
+            <ParticlesBg num={5} type="circle" id="particles-js" bg={{
+                    position: "fixed",
+                    zIndex: "-1",
+                    width: "100%"
+                    }} />
+            <p className="blog">Edit Item</p>   
            
-            <body>
+            <body style={{margin: '200 px'}}>
 
             <div class="card">
                 <div class="card-body">
