@@ -54,6 +54,9 @@ export const RestNotif = () => {
                 {((next !== null && (data.toString() !== 'false')) ? <Button value="next" variant="contained" onClick={() => setPage(page + 1)}>Next</Button> : <div></div>)}
                 </Typography>
 
+                <br></br>
+                <br></br>
+
 
                 <Footer></Footer>
             </>
