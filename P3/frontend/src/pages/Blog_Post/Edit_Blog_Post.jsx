@@ -82,7 +82,7 @@ export const Edit_Blog_Post = () => {
                 <div id="page-content-wrapper">
                     <div class="container-fluid">
                         
-                        <div class="row title">
+                        <div className="row title">
                             <form>
                                 <div class="form-group">
                                 <label class = "mb-0" for="exampleInputPassword1"><h1>Blog Banner</h1></label>
@@ -111,7 +111,7 @@ export const Edit_Blog_Post = () => {
                                     <textarea class="form-control" id="exampleFormControlTextarea1" rows="15" cols="140" onChange={(e) => {
                             setContent(e.target.value);
                         }}></textarea>
-                                    <button type="submit" class="btn btn-primary" onClick={handle}>Submit</button>
+                                    <button type="button" class="btn btn-primary" onClick={handle}>Submit</button>
                                 </div>
                             
 

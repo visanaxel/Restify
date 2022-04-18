@@ -16,7 +16,7 @@ function Navbar() {
 
                   
                   {(localStorage.getItem('token') !== '') ? <> <li className="nav-item">
-                    <a className="nav-link" href="../restaurant_page/restaurant.html">My Restaurant</a>
+                    <a className="nav-link" href="http://localhost:3000/restaurant/add">My Restaurant</a>
                   </li>
                   <li className="nav-item">
                     <div className="dropdown">

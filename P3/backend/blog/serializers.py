@@ -19,7 +19,8 @@ class BlogSerializer(serializers.ModelSerializer):
             'rid',
             'likes',
             'author',
-            'date'
+            'date',
+            'id'
         ]
         
 class BlogEditSerializer(serializers.ModelSerializer):
