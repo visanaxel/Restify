@@ -96,7 +96,7 @@ export const Restaurant_View = () => {
     // Check if follower
 
     useEffect(() => {
-        if (follows == 0) {
+        if (follower == 0) {
             return
         }
         
@@ -110,14 +110,15 @@ export const Restaurant_View = () => {
                 
                 // unlike()
                 setFollower(true)
+                return
             } else {
                 console.log(error.response.status)
+                return
                 
             }
         }).then(result => result.data)
         .then(data2 => {
             unfollow()
-            setFollower(false)
         })
 
     }, []);
@@ -448,7 +449,7 @@ export const Restaurant_View = () => {
         navigate(finalMenu);
     }
 
-    if (check && check2 && follows >= 0 && likes >= 0){
+    if (check && check2 && follows > 0 && likes > 0){
 
 
     return (
