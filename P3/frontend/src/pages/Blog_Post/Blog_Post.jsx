@@ -37,6 +37,39 @@ export const Blog_Post = () => {
     const [blog, setBlog] = useState({});
     console.log("MADE IT HERE!")
     let navigate = useNavigate();
+
+    const [owner, setOwner] = useState(false);
+
+    // Check if user owns this blog post
+   
+
+    useEffect(() => {
+        axios.get(result).catch(function (error) {
+            if (error.response) {
+                if (error.response.status == 404) {
+                    console.log("404!")
+                } else {
+                    console.log("cry!")
+                }
+
+            }
+        }).then(result => result.data)
+            .then(data2 => {
+                setBlog(data2)
+                var url = "http://127.0.0.1:8000/blog/"+data2['id']+"/edit/"
+                Axios.patch(url, {}, {
+                    headers: {
+                        "Authorization": `Bearer ${localStorage.getItem('token')}`
+                    }
+                }).then(result => result.data)
+                    .then(data2 => {
+                        setOwner(true)
+                    }).catch((error) => {
+                        console.log(error.response)
+                       
+                    });
+            })
+    }, []);
     
     useEffect(() => {
 
@@ -44,19 +77,7 @@ export const Blog_Post = () => {
         Axios.get(next)
         .then(result => result.data)
         .then(json => {
-            //console.log(json);
-
-            // for (var i = 0; i < json['results'].length; i++) {
-            //     //console.log('HI');
-            //     Axios.get("http://127.0.0.1:8000/restaurant/view/" + json['results'][i]['rid'] + "/")
-            //     .then(result => result.data)
-            //     .then(data2 => {
-            //         var temp = pic.slice();
-            //         setPic(temp => [...temp, data2['logo']]);
-            //         console.log(i);
-            //     });
-            // }
-            //console.log(json);
+            
             setItems(json);
             setNext(json['next']);
             setPrev(json['previous']);
@@ -72,6 +93,37 @@ export const Blog_Post = () => {
 
     function create() {
         navigate('/blog/add')
+    }
+
+    function edit(){
+        navigate('/blog/edit/'+blog['id'])
+    }
+
+    function del(){
+        var url = "http://127.0.0.1:8000/blog/"+text2+"/remove/"
+        Axios.delete(url, {headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}}).then(result => result.data)
+        .then(data2 => {
+            var url = "http://127.0.0.1:8000/restaurant/"+rid+"/blogs/"
+            Axios.get(url).then(result => result.data)
+            .then(data2 => {
+                if (data2['count'] == 0) {
+                    navigate("/restaurant/"+rid)
+                } else {
+                    console.log("aposidfhasiodfhp")
+                    var blog = data2['results'][0]['id']
+                    navigate("/blog/"+blog+"/"+rid)
+                    window.location.reload();
+
+                }
+            })
+        })
+    }
+
+    function goTo (item) {
+        console.log("clicked!")
+        navigate('/blog/'+item['id']+'/'+rid)
+        window.location.reload();
+
     }
     // console.log(items)
     if (check) {
@@ -93,24 +145,31 @@ export const Blog_Post = () => {
             </head>
             <body>
                 <Navbar />
-                <ParticlesBg num={5} type="circle" id="particles-js" bg={{
-                    position: "fixed",
-                    zIndex: "-1",
-                    width: "100%"
-                }} />
+               
                 <div id="wrapper">
 
                     <div id="sidebar-wrapper">
                         <ul class="sidebar-nav">
-                            <li class="sidebar-brand">
-                                <a href="#">
-                                    Mcdonalds Blog
-                                </a>
+                        {(owner) ? 
+                        <>
+                            <li className="mt-3">
+                                <button style={{width:"80%"}} type="button" onClick={create} class="btn btn-outline-primary">Create new Blog post</button>
                             </li>
+                            <li className="mt-3">
+                                <button style={{width:"80%"}} type="button" onClick={edit} class="btn btn-outline-primary">Edit Blog post</button>
+                            </li>
+                            <li className="mt-3 mb-5">
+                                <button style={{width:"80%"}} type="button" onClick={del} class="btn btn-outline-primary">Delete Blog post</button>
+                            </li>
+
+                            </>:<p></p>}
+
                             {items['results'].map((item, i) => {
                                 return (
                                     <><li>
-                                        <p>{item['title']}</p>
+                                        <button style={{width:"80%"}} type="button" onClick={() =>goTo(item)} class="btn btn-outline-secondary mb-3">{item['title']}</button>
+
+                                        {/* <p onClick={() =>goTo(item)}>{item['title']}</p> */}
                                     </li></>
                                 )
 
@@ -125,9 +184,7 @@ export const Blog_Post = () => {
 
 
 
-                            <li>
-                                <button type="button" onClick={create} class="btn btn-outline-primary">Create new Blog post</button>
-                            </li>
+                           
 
                         </ul>
                     </div>
@@ -139,7 +196,7 @@ export const Blog_Post = () => {
                         <div class="container-fluid">
 
                             {/* blog body */}
-                            {/* <BlogContent blog={blog}></BlogContent> */}
+                            <BlogContent blog={blog}></BlogContent>
                             {/* Comment Section */}
                             {/* <Comments blog={blog}></Comments> */}
                         </div>

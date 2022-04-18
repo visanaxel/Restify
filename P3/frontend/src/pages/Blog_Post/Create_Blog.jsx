@@ -32,14 +32,23 @@ export const Create_Blog_Post = () => {
         if (title == "") {
             setTitleError("Please enter a blog title")
             flag = true
+        } else {
+            setTitleError("")
+
         }
         if (content == "") {
             setContentError("Please include content")
             flag = true
+        } else {
+            setContentError("")
+
         }
         if (image == null) {
             setImageError("Please include an image")
             flag = true
+        } else {
+            setImageError("")
+
         }
 
         if (flag) {
@@ -59,7 +68,9 @@ export const Create_Blog_Post = () => {
             .then(data2 => {
                 var navi = "/blog/"
                 navi.concat()
-                navigate(navi.concat(data2['id']));
+
+                var url = "/blog/" + data2['id'] + "/" + data2['rid']
+                navigate(url);
             }).catch((error) => {
 
             });
@@ -77,64 +88,59 @@ export const Create_Blog_Post = () => {
             <link rel="stylesheet" href="blog.css" />
         </head>
         <Navbar />
-        <ParticlesBg num={5} type="circle" id="particles-js" bg={{
+        {/* <ParticlesBg num={5} type="circle" id="particles-js" bg={{
             position: "fixed",
             zIndex: "-1",
             width: "100%"
-        }} />
-        <div id="wrapper">
+        }} /> */}
+        <br></br>
+        <div class="container-fluid ">
 
-            <div id="page-content-wrapper">
-                <div class="container-fluid">
-
-                    <div className="row title">
-                        <form>
-                            <div class="form-group">
-                                <label class="mb-0" for="exampleInputPassword1"><h1>Blog Banner</h1></label>
-
-                                <input type="file" class="form-control-file mt-0" id="exampleFormControlFile1" onChange=
-                                    {e => setImage(e.target.files[0])} />
-                                <p>{imageError}</p>
-                                <label class="mb-0" for="exampleInputPassword1"><h1>Title</h1></label>
-                                <div class="row">
-                                    <div class="col-10 mr-0">
-                                        <input class="form-control" id="exampleInputPassword1" placeholder="Type Title" onChange={(e) => {
-                                            setTitle(e.target.value);
-                                        }} />
-                                        <p>{titleError}</p>
-
-                                    </div>
-                                    <div class="col-5">
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <hr />
-
-                    <div class="row text_body">
-
-                        <div class="form-group">
-                            <label for="exampleFormControlTextarea1">Example text area</label>
-                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="15" cols="140" onChange={(e) => {
-                                setContent(e.target.value);
-                            }}></textarea>
-                            <p>{contentError}</p>
-                            <button type="button" class="btn btn-primary" onClick={handle}>Submit</button>
-                        </div>
-
-
-                    </div>
-
-                    <hr />
+            <div class="row title">
+                <div class="col-8">
 
                 </div>
+                <form id="dannyform">
+                    <div class="form-group">
+                        <h1>Create Blog Post</h1>
+                        <hr></hr>
+                        <label class="mb-0" for="exampleInputPassword1"><h4>Post Banner</h4></label>
+
+                        <input type="file" accept="image/png, image/gif, image/jpeg" class="form-control-file mt-0" id="exampleFormControlFile1" onChange={e => setImage(e.target.files[0])} />
+                        <p class="mt-0 mb-0" style={{ color: 'red' }}>{imageError}</p>
+                        <label class="mb-0 mt-3" for="exampleInputPassword1"><h4>Title</h4></label>
+                        <div class="row mb-3">
+                            <div class="col-12 mr-0">
+                                <input class="form-control" id="exampleInputPassword1" placeholder="Type Name" onChange={(e) => {
+                                    setTitle(e.target.value);
+                                }} />
+                                <p style={{ color: 'red' }}>{titleError}</p>
+                                <label class="mb-0" for="exampleInputPassword1"><h4>Content</h4></label>
+
+                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" cols="140" onChange={(e) => {
+                                    setContent(e.target.value);
+                                }}></textarea>
+                                                                <p style={{ color: 'red' }}>{contentError}</p>
+
+                                <button type="button" class="btn btn-primary mt-1" onClick={handle}>Submit</button>
+
+                                <br></br>
+                            </div>
+                            <div class="col-5">
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
             </div>
+
+
+
 
         </div>
 
-        <Footer />
 
+        <Footer />
 
     </>
 
