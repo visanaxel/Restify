@@ -18,6 +18,7 @@ import { UserNotif } from './pages/Notification/UserNotif';
 import { RestNotif } from './pages/Notification/RestNotif';
 import { Add_Restaurant } from './pages/Restaurant/Add_Restaurant';
 import { Create_Blog_Post } from './pages/Blog_Post/Create_Blog';
+import { UserFeed } from './pages/Notification/UserFeed';
 
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
 
           <Route path="user_notification" element={<UserNotif />} />
           <Route path="restaurant_notification" element={<RestNotif />} />
+          <Route path="feed" element={<UserFeed />} />
 
         </Route>
       </Routes>
