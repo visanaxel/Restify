@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 
 function Navbar() {
+
+  function logout() {
+    console.log('logout')
+    localStorage.removeItem('token');
+  }
+
   return ( <>
 <header id="nav">
             <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -15,7 +21,7 @@ function Navbar() {
                   </li>
 
                   
-                  {(localStorage.getItem('token') !== '') ? <> <li className="nav-item">
+                  {(localStorage.getItem('token') !== '' && localStorage.getItem('token') !== null && localStorage.getItem('token') !== undefined) ? <> <li className="nav-item">
                     <a className="nav-link" href="http://localhost:3000/restaurant/add">My Restaurant</a>
                   </li>
                   <li className="nav-item">
@@ -41,7 +47,7 @@ function Navbar() {
                     </div>
                   </li></> : <li></li>}
                   
-                  {(localStorage.getItem('token') !== '') ? <li id="logout" className="nav-item"><a className="nav-link" href="#" >Logout</a></li> : <li id="login" className="nav-item"><a className="nav-link" href="http://localhost:3000/login">Login</a></li>}
+                  {(localStorage.getItem('token') !== '' && localStorage.getItem('token') !== null && localStorage.getItem('token') !== undefined) ? <li id="logout" className="nav-item"><a className="nav-link" href="http://localhost:3000/login" onClick={logout}>Logout</a></li> : <li id="login" className="nav-item"><a className="nav-link" href="http://localhost:3000/login">Login</a></li>}
                   {/* <li class="nav-item">
                           <a class="nav-link disabled" href="#">Disabled</a>
                       </li> */}
