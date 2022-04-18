@@ -112,7 +112,8 @@ export const Blog_Post = () => {
                     console.log("aposidfhasiodfhp")
                     var blog = data2['results'][0]['id']
                     navigate("/blog/"+blog+"/"+rid)
-                    
+                    window.location.reload();
+
                 }
             })
         })
@@ -121,6 +122,8 @@ export const Blog_Post = () => {
     function goTo (item) {
         console.log("clicked!")
         navigate('/blog/'+item['id']+'/'+rid)
+        window.location.reload();
+
     }
     // console.log(items)
     if (check) {
@@ -150,13 +153,13 @@ export const Blog_Post = () => {
                         {(owner) ? 
                         <>
                             <li className="mt-3">
-                                <button type="button" onClick={create} class="btn btn-outline-primary">Create new Blog post</button>
+                                <button style={{width:"80%"}} type="button" onClick={create} class="btn btn-outline-primary">Create new Blog post</button>
                             </li>
                             <li className="mt-3">
-                                <button type="button" onClick={edit} class="btn btn-outline-primary">Edit Blog post</button>
+                                <button style={{width:"80%"}} type="button" onClick={edit} class="btn btn-outline-primary">Edit Blog post</button>
                             </li>
                             <li className="mt-3 mb-5">
-                                <button type="button" onClick={del} class="btn btn-outline-primary">Delete Blog post</button>
+                                <button style={{width:"80%"}} type="button" onClick={del} class="btn btn-outline-primary">Delete Blog post</button>
                             </li>
 
                             </>:<p></p>}
@@ -164,7 +167,9 @@ export const Blog_Post = () => {
                             {items['results'].map((item, i) => {
                                 return (
                                     <><li>
-                                        <button onClick={() =>navigate('/blog/'+item['id']+'/'+rid+'/')}>{item['title']}</button>
+                                        <button style={{width:"80%"}} type="button" onClick={() =>goTo(item)} class="btn btn-outline-secondary mb-3">{item['title']}</button>
+
+                                        {/* <p onClick={() =>goTo(item)}>{item['title']}</p> */}
                                     </li></>
                                 )
 
