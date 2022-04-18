@@ -1,6 +1,7 @@
 
 from xml.etree.ElementTree import Comment
 from django.urls import path, include
+from restaurant.views import GetUserRestaurantView
 from restaurant.views import AddImageView, ImageView, RemoveImageView, RestBlogView, SearchView
 from restaurant.views import CommentRestaurantView, GetCommentsView
 from restaurant.views import AddRestaurantView, EditRestaurantView, RestaurantView, MenuView, AddItemView, EditItemView
@@ -20,5 +21,7 @@ urlpatterns = [
     path('<int:restaurant_id>/add/image/', AddImageView.as_view(), name='add_image'),
     path('remove/<int:pk>/image/', RemoveImageView.as_view(), name='remove_image'),
     path('<int:restaurant_id>/view/images/', ImageView.as_view(), name="view_image"),
-    path('<int:restaurant_id>/blogs/', RestBlogView.as_view(), name='view_rest_blogs')
+    path('<int:restaurant_id>/blogs/', RestBlogView.as_view(), name='view_rest_blogs'),
+    path('<int:pk>/GetUserRest/', GetUserRestaurantView.as_view(), name='get_user_restaurant_view')
+
 ]
