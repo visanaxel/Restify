@@ -108,6 +108,7 @@ export const Restaurant_View = () => {
                         alert("Restaurant has no blogs")
                     } else if (data2['results'].length == 0 && owner==true) {
                         // take to create blog
+
                     }
                     var bid = data2['results'][0]['id']
                     var final_url = "/blog/" + bid + "/"+ text2
@@ -417,7 +418,9 @@ export const Restaurant_View = () => {
                 {(((prev2 !== null) && (next2 !== null)) ? <div style={{display: 'inline-block'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> : <p></p>)}
                 {((next2 !== null && (items['results'].toString() !== 'false')) ? <Button value="next" variant="contained" onClick={() => setPage2(page2 + 1)}>Next</Button> : <div></div>)}
                 </Typography>
-
+            <br></br>
+            <br></br>
+            <Footer></Footer>
 </body>
         </>
     )
