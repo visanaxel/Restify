@@ -46,7 +46,29 @@ export const UserNotif = () => {
         return (
             <>
                 <Navbar></Navbar>
-                {(data.toString() !== 'false') ? <NotifCard data={data} pic={pic}></NotifCard> : <h1 style={{textAlign: 'center'}}> Please log in to see user notifications.</h1>}
+                
+                <br></br>
+                <br></br>
+
+                {(data.toString() !== 'false') ? <NotifCard data={data} pic={pic}></NotifCard> : <h2 style={{textAlign: 'center'}}> Please log in to see user notifications.</h2>}
+                
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
 
                 <Footer></Footer>
             </>
