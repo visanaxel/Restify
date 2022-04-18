@@ -9,6 +9,7 @@ import Axios from 'axios';
 import axios from 'axios';
 import { useState } from 'react';
 import './blog.css';
+import ParticlesBg from 'particles-bg'
 
 
 
@@ -71,6 +72,11 @@ export const Blog_Post = () => {
             </head>
             <body>
                 <Navbar />
+                <ParticlesBg num={5} type="circle" id="particles-js" bg={{
+                    position: "fixed",
+                    zIndex: "-1",
+                    width: "100%"
+                    }} />
                 <div id="wrapper">
 
                     <div id="sidebar-wrapper">

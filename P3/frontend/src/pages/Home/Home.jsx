@@ -6,6 +6,7 @@ import Navbar from "../../components/Navbar/navbar";
 import Footer from "../../components/Footer/footer";
 import Search from "../../components/Search/Search";
 import ResultCard from '../../components/ResultCard/ResultCard';
+import ParticlesBg from 'particles-bg'
 
 export const Home = () => {
 

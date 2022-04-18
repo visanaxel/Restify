@@ -9,6 +9,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import './restaurant.css';
 import Comments from "../../components/Blog_Post/Comments";
+import ParticlesBg from 'particles-bg'
 
 
 
@@ -89,9 +90,14 @@ export const Restaurant_View = () => {
             </head>
             {/* <Navbar /> */}
             {/* <link rel="stylesheet" href="restaurant.css" />
+            
 
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossOrigin="anonymous" /> */}
-
+            <ParticlesBg num={5} type="circle" id="particles-js" bg={{
+                    position: "fixed",
+                    zIndex: "-1",
+                    width: "100%"
+                    }} />
             <img id="logo" src={restaurant['logo']} alt="restaurant logo" />
 
             <div class="card">

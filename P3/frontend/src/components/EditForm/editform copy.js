@@ -97,7 +97,7 @@ export const ItemForm2 = (props) => {
 
 
     return (
-        <><div className="cus_card">
+        <><div className="cus_card" style={{backgroundColor: 'rgba(255, 255, 255, 0.8)'}}>
             <div className="cus_container">
                 <form action="http://127.0.0.1:8000/users/edit/" method="post" onSubmit={(e) => {
                     e.preventDefault();

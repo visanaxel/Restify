@@ -12,6 +12,7 @@ import { useState } from 'react';
 import '../components/Card/restaurant_style.css';
 import AddItem from "../components/Card/card_add";
 import Typography from "@material-ui/core/Typography";
+import ParticlesBg from 'particles-bg'
 
 
 export const Menu = () => {
@@ -73,6 +74,11 @@ export const Menu = () => {
                 crossorigin="anonymous"></script>
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossOrigin="anonymous" />
             <Navbar />
+            <ParticlesBg num={5} type="circle" id="particles-js" bg={{
+                    position: "fixed",
+                    zIndex: "-1",
+                    width: "100%"
+                    }} />
             <p className="blog">Menu</p>
 
             {items.map((item, i) => {
