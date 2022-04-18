@@ -37,6 +37,32 @@ function ResultCard(props) {
                         </a>
                     </div>
                 </div>
+                <div className="card-deck card_row">
+                    <div className="card">
+                        <a href={"http://localhost:3000/restaurant/" + props['data']['results'][3]['id']}>
+                            <img className="card-img-top" src={props['data']['results'][3]['logo']} alt="Card image cap"/>
+                            <div className="card-body">
+                                <h5 className="card-title">{props['data']['results'][3]['name']}</h5>
+                            </div>
+                        </a>
+                    </div>
+                    <div className="card">
+                        <a href={"http://localhost:3000/restaurant/" + props['data']['results'][4]['id']}>
+                            <img className="card-img-top" src={props['data']['results'][4]['logo']} alt="Card image cap"/>
+                            <div className="card-body">
+                                <h5 className="card-title">{props['data']['results'][4]['name']}</h5>
+                            </div>
+                        </a>
+                    </div>
+                    <div className="card">
+                        <a href={"http://localhost:3000/restaurant/" + props['data']['results'][5]['id']}>
+                            <img className="card-img-top" src={props['data']['results'][5]['logo']} alt="Card image cap"/>
+                            <div className="card-body">
+                                <h5 className="card-title">{props['data']['results'][5]['name']}</h5>
+                            </div>
+                        </a>
+                    </div>
+                </div>
             </div>
             </>
         )
