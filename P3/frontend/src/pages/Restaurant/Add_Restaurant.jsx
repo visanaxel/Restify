@@ -137,6 +137,7 @@ export const Add_Restaurant = () => {
             </head>
             <Navbar />
 
+            <br></br>
             <div class="container-fluid ">
 
                 <div class="row title">
