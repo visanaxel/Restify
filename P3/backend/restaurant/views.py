@@ -7,6 +7,7 @@ from django.http import Http404, HttpResponseForbidden, QueryDict
 from django.http import Http404
 from django.shortcuts import render
 from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView, CreateAPIView, DestroyAPIView
+from users.models import MyUser
 from blog.models import Blog
 from blog.serializers import BlogSerializer
 from notifications.models import OwnerNotifications
@@ -254,9 +255,9 @@ class CommentRestaurantView(CreateAPIView):
         serializer.save(uid=user, rid=restaurant)
 
         # notify owner!
-        print(logo=user.profile_pic)
+        pp = MyUser.objects.get(id=user.id).profile_pic
         OwnerNotifications.objects.create(rid=restaurant, uid = user, notif_type='c', \
-            description = user.username + " commented on your page: " + self.request.data['comment'], logo=user.profile_pic) 
+            description = user.username + " commented on your page: " + self.request.data['comment'], logo=pp) 
 
 class GetCommentsView(ListAPIView):
 

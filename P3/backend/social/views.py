@@ -121,7 +121,8 @@ class LikeRestView(CreateAPIView):
             return Response({'error': 'User already liked the restaurant.'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Add new OnwerNotification object!
-        user_notif = OwnerNotifications(uid=user, rid=restaurant[0], notif_type='l', description=user.username + ' liked your restaurant: ' + restaurant[0].name, logo=user.profile_pic)
+        pp = MyUser.objects.get(id=user.id).profile_pic
+        user_notif = OwnerNotifications(uid=user, rid=restaurant[0], notif_type='l', description=user.username + ' liked your restaurant: ' + restaurant[0].name, logo=pp)
         user_notif.save()
 
         # increment restaurant likes count!
@@ -184,7 +185,8 @@ class LikeBlogView(CreateAPIView):
 
         # Create owner notification!
         restaurant = blog[0].rid
-        user_notif = OwnerNotifications(uid=user, rid=restaurant, notif_type='l', description=user.username + ' liked your blog: ' + blog[0].title, logo=user.profile_pic)
+        pp = MyUser.objects.get(id=user.id).profile_pic
+        user_notif = OwnerNotifications(uid=user, rid=restaurant, notif_type='l', description=user.username + ' liked your blog: ' + blog[0].title, logo=pp)
         user_notif.save()
 
         # increment blog likes count!
