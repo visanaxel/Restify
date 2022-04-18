@@ -10,6 +10,9 @@ import { useState } from 'react';
 import './restaurant.css';
 import Comments from "../../components/Blog_Post/Comments";
 import ParticlesBg from 'particles-bg'
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+
 
 import { useNavigate } from 'react-router-dom';
 
@@ -21,6 +24,10 @@ export const Restaurant_View = () => {
     let navigate = useNavigate();
 
     console.log("Made it!")
+    const [page2, setPage2] = useState(1);
+    const [prev2, setPrev2] = useState(null);
+    const [next2, setNext2] = useState("http://127.0.0.1:8000/restaurant/"+useParams()['restId']+"/view/comments")
+    const [check2, setCheck2] = useState(false)
 
     var text1 = "http://127.0.0.1:8000/restaurant/view/"
     var text2 = useParams()['restId'];
@@ -44,6 +51,8 @@ export const Restaurant_View = () => {
 
     const [owner, setOwner] = useState(false);
 
+
+    // Check if user owns this restaurant
     useEffect(() => {
         var check = "http://127.0.0.1:8000/restaurant/edit/"
         var check2 = check.concat(temp2)
@@ -87,25 +96,6 @@ export const Restaurant_View = () => {
 
     }, [page]);
 
-
-    // const checkItem = () => {
-    //     console.log(window.location.pathname.split("/")[2])
-
-    //     Axios.patch("http://127.0.0.1:8000/restaurant/menu/" + menu_id.toString() + "/edit/", {}, {
-    //         headers: {
-    //             "Authorization": `Bearer ${localStorage.getItem('token')}`
-    //         }
-    //     }).then(result => result.data)
-    //         .then(data2 => {
-    //             setOwner(true)
-    //         }).catch((error) => {
-    //             console.log(error.response)
-
-
-    //         });
-    //     return owner;   
-    // }
-
     function blog() {
             var temp1 = "http://127.0.0.1:8000/restaurant/"
             var temp3 = temp1.concat(text2)
@@ -114,8 +104,10 @@ export const Restaurant_View = () => {
                 .then(data2 => {
                     console.log("AHHHH")
                     console.log(data2)
-                    if (data2['results'].length == 0) {
+                    if (data2['results'].length == 0 && owner==false) {
                         alert("Restaurant has no blogs")
+                    } else if (data2['results'].length == 0 && owner==true) {
+                        // take to create blog
                     }
                     var bid = data2['results'][0]['id']
                     var final_url = "/blog/" + bid + "/"+ text2
@@ -144,7 +136,9 @@ export const Restaurant_View = () => {
             })
                 .then(result => result.data)
                 .then(data2 => {
-                    handle2()
+                    // handle2()
+                    setPage2(page2+1)
+                    setNext2("http://127.0.0.1:8000/restaurant/"+text2+"/view/comments")
                 }).catch(function (error) {
                     if (error.response) {
                         if (error.response.status == 401) {
@@ -160,28 +154,28 @@ export const Restaurant_View = () => {
 
         }
 
-    function handle2() {
+    // function handle2() {
+    //     // GETTING COMMENTS
+    //         axios.get(comment_result).catch(function (error) {
+    //             if (error.response) {
+    //                 if (error.response.status == 404) {
+    //                     console.log("404!")
+    //                     console.log(comment_result)
+    //                 } else {
+    //                     console.log("cry!")
+    //                 }
 
-            axios.get(comment_result).catch(function (error) {
-                if (error.response) {
-                    if (error.response.status == 404) {
-                        console.log("404!")
-                        console.log(comment_result)
-                    } else {
-                        console.log("cry!")
-                    }
+    //             }
 
-                }
+    //         }).then(result => result.data)
+    //             .then(data2 => {
+    //                 setItems(data2['results'])
+    //                 console.log(data2)
+    //                 setComment("")
+    //                 setCommentError("")
+    //             })
 
-            }).then(result => result.data)
-                .then(data2 => {
-                    setItems(data2['results'])
-                    console.log(data2)
-                    setComment("")
-                    setCommentError("")
-                })
-
-        }
+    //     }
     useEffect(() => {
             axios.get(rest_result).catch(function (error) {
                 if (error.response) {
@@ -200,22 +194,8 @@ export const Restaurant_View = () => {
 
                 })
 
-            axios.get(comment_result).catch(function (error) {
-                if (error.response) {
-                    if (error.response.status == 404) {
-                        console.log("404!")
-                        console.log(comment_result)
-                    } else {
-                        console.log("cry!")
-                    }
-
-                }
-
-            }).then(result => result.data)
-                .then(data2 => {
-                    setItems(data2['results'])
-                    console.log(data2)
-                })
+                // GETTING COMMENTS
+          
 
             var img1 = "http://127.0.0.1:8000/restaurant/"
             var img2 = img1.concat(text2)
@@ -239,6 +219,22 @@ export const Restaurant_View = () => {
 
 
         }, []);
+
+        useEffect(() => {
+            Axios.get(next2)
+            .then(result => result.data)
+            .then(json => {
+                setItems(json);
+                setNext2(json['next']);
+                setPrev2(json['previous']);
+                setCheck2(true)
+            })
+            .catch((error) => {
+                setItems(['false']);
+            });
+            console.log('i fire once');
+    
+        }, [page2]);
 
     function unlike() {
         console.log("HEYO")
@@ -328,7 +324,7 @@ export const Restaurant_View = () => {
         navigate(finalMenu);
     }
 
-    if (check){
+    if (check && check2){
 
 
     return (
@@ -343,31 +339,22 @@ export const Restaurant_View = () => {
             <Navbar />
 
            
-
-            {/* <link rel="stylesheet" href="restaurant.css" />
-            
-
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossOrigin="anonymous" /> */}
-
-            <ParticlesBg num={5} type="circle" id="particles-js" bg={{
-                position: "fixed",
-                zIndex: "-1",
-                width: "100%"
-            }} />
+            <body>
 
             <div class="card">
                 <div class="card-body">
-                    <div class="store_logo">
-                        <img id="logo" src={restaurant['logo']} alt="restaurant logo" />
+                <h1 class="card-title">{restaurant['name']}</h1>
+
+                    <div id="store_logo" class="mb-4">
+                        <img id="restlogo" src={restaurant['logo']} alt="restaurant logo" />
                     </div>
-                    <h5 class="card-title">{restaurant['name']}</h5>
                     <p>
                         <button type="button" class="btn btn-secondary" onClick={follow}>Follow</button><span> : </span><label>{restaurant['followers']}</label>
                         <button type="button" class="btn btn-secondary" onClick={like}>Like</button><span> : </span><label>{restaurant['likes']}</label>
                     </p>
-                    <p class="card-text">Address: {restaurant['address']}</p>
-                    <p class="card-text">Postal Code: {restaurant['postal_code']}</p>
-                    <p class="card-text">Phone number: {restaurant['phone_number']}</p>
+                    <h5 class="card-text">Address: {restaurant['address']}</h5>
+                    <h5 class="card-text">Postal Code: {restaurant['postal_code']}</h5>
+                    <h5 class="card-text">Phone number: {restaurant['phone_number']}</h5>
 
 
                 </div>
@@ -391,11 +378,11 @@ export const Restaurant_View = () => {
                 </div>
             </div> : <p></p>}
 
-            <div class="row title">
+            <div class="row ml-4">
                 <h1 class="mt-0 mb-0">Comments</h1>
             </div>
 
-            <div class="row comment_post mb-3">
+            <div class="row mb-3 ml-3">
                 <form class="col-8">
                     <div class="form-group">
                         <label for="exampleFormControlTextarea1">Add comment</label>
@@ -407,15 +394,17 @@ export const Restaurant_View = () => {
                 </form>
             </div>
 
-            {items.map((item, i) => {
+                
+            {items['results'].map((item, i) => {
                 return (
-                    <div class="row comment">
+                    <div class="row ml-4">
                         <div class="col-8">
                             <div class="row">
 
                                 <div class="col-10 pl-1">
                                     <h5>{item['username']}</h5>
                                     <p>{item['comment']}</p>
+                                    <hr></hr>
                                 </div>
                             </div>
                         </div>
@@ -423,14 +412,13 @@ export const Restaurant_View = () => {
                 )
 
             })}
-             {/* <Typography align='center'>
-                {(prev ? <Button marginRight='50' value="prev" variant="contained" onClick={() => setPage(page - 1)}>Previous</Button> : <div></div>)}
-                {((prev && next) ? <div style={{display: 'inline-block'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> : <p></p>)}
-                {(next ? <Button value="next" variant="contained" onClick={() => setPage(page + 1)}>Next</Button> : <div></div>)}
-                <br></br><br></br>
-                <AddItem /></Typography> */}
+             <Typography align='center'>
+                {((prev2 !== null) ? <Button marginRight='50' value="prev" variant="contained" onClick={() => {setPage2(page2 - 1); setNext2(prev2)}}>Previous</Button> : <div></div>)}
+                {(((prev2 !== null) && (next2 !== null)) ? <div style={{display: 'inline-block'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> : <p></p>)}
+                {((next2 !== null && (items['results'].toString() !== 'false')) ? <Button value="next" variant="contained" onClick={() => setPage2(page2 + 1)}>Next</Button> : <div></div>)}
+                </Typography>
 
-
+</body>
         </>
     )
             }
