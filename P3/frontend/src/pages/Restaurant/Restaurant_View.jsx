@@ -57,8 +57,10 @@ export const Restaurant_View = () => {
     const [follows, setFollows] = useState(0);
     const [likes, setLikes] = useState(0);
 
+
     // Check if liker
     useEffect(() => {
+        
         data['rid'] = parseInt(text2)
         const formData = new FormData()
         formData.append("rid", parseInt(text2))
@@ -67,12 +69,17 @@ export const Restaurant_View = () => {
         ).then(result => result.data)
         .then(data2 => {
             console.log("uhoh!")
+            if (likes == 0) {
+            }
             unlike()
+
+            
         }).catch(function (error) {
             if (error.response.status == 400) {
                 
                 // unlike()
                 setLiker(true)
+                
                 return
             } else {
                 console.log(error.response.status)
@@ -84,6 +91,7 @@ export const Restaurant_View = () => {
 
     // Check if follower
     useEffect(() => {
+        
         data['rid'] = parseInt(text2)
         const formData = new FormData()
         formData.append("rid", parseInt(text2))
@@ -102,6 +110,10 @@ export const Restaurant_View = () => {
             }
         }).then(result => result.data)
         .then(data2 => {
+            if (follower == 0) {
+                
+
+            }
             unfollow()
         })
 
@@ -178,6 +190,8 @@ export const Restaurant_View = () => {
             if (comment === "") {
                 setCommentError("Please enter a comment")
                 return
+            } else {
+                setCommentError("")
             }
             var t1 = "http://127.0.0.1:8000/restaurant/"
 
@@ -192,6 +206,7 @@ export const Restaurant_View = () => {
             })
                 .then(result => result.data)
                 .then(data2 => {
+                    setComment("")
                     // handle2()
                     setPage2(page2+1)
                     setNext2("http://127.0.0.1:8000/restaurant/"+text2+"/view/comments")
@@ -394,7 +409,11 @@ export const Restaurant_View = () => {
         formData.append("rid", parseInt(text2))
 
         axios.post("http://127.0.0.1:8000/social/follow/", formData, { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}` } }
-        ).catch(function (error) {
+        ).then(data2 => {
+            console.log(data2)
+            setFollower(true)
+            UpdateLikesFollows()
+        }).catch(function (error) {
             if (error.response) {
                 if (error.response.status == 400) {
                     console.log("HEY")

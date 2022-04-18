@@ -99,7 +99,9 @@ body {
 
     
 
-
+.bootan {
+    overflow: scroll;
+}
 
 .text_body {
     font-size: 25px;

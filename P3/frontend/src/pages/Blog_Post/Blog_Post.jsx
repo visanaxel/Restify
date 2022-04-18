@@ -167,7 +167,7 @@ export const Blog_Post = () => {
                             {items['results'].map((item, i) => {
                                 return (
                                     <><li>
-                                        <button style={{width:"80%"}} type="button" onClick={() =>goTo(item)} class="btn btn-outline-secondary mb-3">{item['title']}</button>
+                                        <button style={{width:"80%"}} type="button" onClick={() =>goTo(item)} class="btn btn-outline-secondary mb-3 bootan">{item['title']}</button>
 
                                         {/* <p onClick={() =>goTo(item)}>{item['title']}</p> */}
                                     </li></>

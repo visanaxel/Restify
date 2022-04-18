@@ -17,6 +17,8 @@ const BlogContent = (props) => {
         ).then(result => result.data)
         .then(data2 => {
             console.log("uhoh!")
+            if (likes == 0) {
+            }
             unlike()
         }).catch(function (error) {
             if (error.response.status == 400) {
@@ -154,7 +156,7 @@ const BlogContent = (props) => {
 
             </div>
             <div class="row title">
-                <h5 class="mt-0 mb-0">{props.blog['date']}</h5>
+                <h5 class="mt-0 mb-0">{props.blog['date'].slice(0, 10)}</h5>
             </div>
 
             <div class="row title">
@@ -162,7 +164,7 @@ const BlogContent = (props) => {
             </div>
 
             <div class="row title">
-            {(liker) ?  <button type="button" class="like btn btn-primary ml-4" onClick={unlike}>Liked!</button> : <button type="button" class="like btn btn-primary ml-4" onClick={like}>Like</button>}
+            {(liker) ?  <button type="button" class="like btn btn-primary" onClick={unlike}>Liked!</button> : <button type="button" class="like btn btn-primary" onClick={like}>Like</button>}
 
             </div>
 
