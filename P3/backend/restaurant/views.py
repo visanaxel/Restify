@@ -107,7 +107,8 @@ class AddItemView(CreateAPIView):
                 UserNotifications.objects.create(uid=follower.uid, 
                                                 rid=restaurant[0], 
                                                 notif_type='n',
-                                                description=desc)
+                                                description=desc,
+                                                logo=restaurant[0].logo)
 
         return Response(status=status.HTTP_201_CREATED)
 
@@ -149,7 +150,8 @@ class EditItemView(UpdateAPIView):
                 UserNotifications.objects.create(uid=follower.uid, 
                                                 rid=restaurant[0], 
                                                 notif_type='n',
-                                                description=desc)
+                                                description=desc,
+                                                logo=restaurant[0].logo)
 
 class RestaurantView(RetrieveAPIView):
     queryset = Restaurant.objects.all()
