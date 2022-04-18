@@ -118,6 +118,27 @@ export const Add_Restaurant = () => {
             .then(data2 => {
                 console.log(data2)
                 var navi = "/restaurant/"
+
+                // like
+                const formData = new FormData()
+                formData.append("rid", parseInt(data2['id']))
+
+                axios.post("http://127.0.0.1:8000/social/like/restaurant/", formData, { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}` } }
+                ).then(result => result.data)
+                .then(data2 => {
+                    console.log("uhoh!")
+                })
+
+                // follow
+                const formData2 = new FormData()
+                formData.append("rid", parseInt(data2['id']))
+
+                axios.post("http://127.0.0.1:8000/social/follow/", formData2, { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}` } }
+                ).then(result => result.data)
+                .then(data2 => {
+                    console.log("uhoh!")
+                })
+
                 navigate(navi.concat(data2['id']));
             }).catch((error) => {
                 console.log(error.response)

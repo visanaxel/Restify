@@ -54,18 +54,14 @@ export const Restaurant_View = () => {
     const [follower, setFollower] = useState(false);
     const [liker, setLiker] = useState(false);
 
-    const [follows, setFollows] = useState(-1);
-    const [likes, setLikes] = useState(-1);
+    const [follows, setFollows] = useState(0);
+    const [likes, setLikes] = useState(0);
 
     useEffect(() =>{UpdateLikesFollows();}, []);
 
     // Check if liker
     useEffect(() => {
 
-        if (likes == 0) {
-            return
-        }
-        
         data['rid'] = parseInt(text2)
         const formData = new FormData()
         formData.append("rid", parseInt(text2))
@@ -96,10 +92,6 @@ export const Restaurant_View = () => {
     // Check if follower
 
     useEffect(() => {
-        if (follows == 0) {
-            return
-        }
-        
         data['rid'] = parseInt(text2)
         const formData = new FormData()
         formData.append("rid", parseInt(text2))
@@ -448,7 +440,7 @@ export const Restaurant_View = () => {
         navigate(finalMenu);
     }
 
-    if (check && check2 && follows >= 0 && likes >= 0){
+    if (check && check2){
 
 
     return (
