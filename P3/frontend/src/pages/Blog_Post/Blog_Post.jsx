@@ -117,6 +117,11 @@ export const Blog_Post = () => {
             })
         })
     }
+
+    function goTo (item) {
+        console.log("clicked!")
+        navigate('/blog/'+item['id']+'/'+rid)
+    }
     // console.log(items)
     if (check) {
         console.log(items['results']);
@@ -159,7 +164,7 @@ export const Blog_Post = () => {
                             {items['results'].map((item, i) => {
                                 return (
                                     <><li>
-                                        <p>{item['title']}</p>
+                                        <button onClick={() =>navigate('/blog/'+item['id']+'/'+rid+'/')}>{item['title']}</button>
                                     </li></>
                                 )
 

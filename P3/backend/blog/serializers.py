@@ -33,5 +33,5 @@ class BlogEditSerializer(serializers.ModelSerializer):
             'title',
             'content',
             'image',
-               
+            'rid'
         ]
