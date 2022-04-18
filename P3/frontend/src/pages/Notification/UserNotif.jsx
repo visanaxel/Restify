@@ -9,6 +9,7 @@ import NotifCard from '../../components/NotifCard/NotifCard';
 import ParticlesBg from 'particles-bg'
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import UserCard from '../../components/NotifCard/UserCard';
 
 export const UserNotif = () => {
 
@@ -61,7 +62,7 @@ export const UserNotif = () => {
                     }} />
                     
                 <br></br>
-                {(data.toString() !== 'false') ? <NotifCard data={data}></NotifCard> :  <><br></br><br></br><br></br><h1 style={{textAlign: 'center'}}> Please log in to see user notifications.</h1></>}
+                {(data.toString() !== 'false') ? <UserCard data={data}></UserCard> :  <><br></br><br></br><br></br><h1 style={{textAlign: 'center'}}> Please log in to see user notifications.</h1></>}
 
                 <Typography align='center'>
                 {((prev !== null) ? <Button marginRight='50' value="prev" variant="contained" onClick={() => {setPage(page - 1); setNext(prev)}}>Previous</Button> : <div></div>)}
@@ -71,8 +72,6 @@ export const UserNotif = () => {
 
                 <br></br>
                 <br></br>
-
-                
 
                 <Footer></Footer>
             </>
