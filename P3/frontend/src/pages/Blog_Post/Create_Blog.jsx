@@ -106,7 +106,8 @@ export const Create_Blog_Post = () => {
                         <hr></hr>
                         <label class="mb-0" for="exampleInputPassword1"><h4>Post Banner</h4></label>
 
-                        <input type="file" accept="image/png, image/gif, image/jpeg" class="form-control-file mt-0" id="exampleFormControlFile1" onChange={e => setImage(e.target.files[0])} />
+                        <input type="file" accept="image/*"
+ class="form-control-file mt-0" id="exampleFormControlFile1" onChange={e => setImage(e.target.files[0])} />
                         <p class="mt-0 mb-0" style={{ color: 'red' }}>{imageError}</p>
                         <label class="mb-0 mt-3" for="exampleInputPassword1"><h4>Title</h4></label>
                         <div class="row mb-3">
