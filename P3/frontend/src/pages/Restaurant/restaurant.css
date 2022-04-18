@@ -28,7 +28,7 @@ li {
 }
 
 #restlogo {
-    clip-path: none;
+    object-fit: cover;
     width: 100%;
     height:100%;
 }
