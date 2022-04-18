@@ -51,6 +51,61 @@ export const Restaurant_View = () => {
 
     const [owner, setOwner] = useState(false);
 
+    const [follower, setFollower] = useState(false);
+    const [liker, setLiker] = useState(false);
+
+    const [follows, setFollows] = useState(0);
+    const [likes, setLikes] = useState(0);
+
+    // Check if liker
+    useEffect(() => {
+        data['rid'] = parseInt(text2)
+        const formData = new FormData()
+        formData.append("rid", parseInt(text2))
+
+        axios.post("http://127.0.0.1:8000/social/like/restaurant/", formData, { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}` } }
+        ).catch(function (error) {
+            if (error.response.status == 400) {
+                
+                // unlike()
+                setLiker(true)
+                return
+            } else {
+                console.log(error.response.status)
+                return
+            }
+        }).then(result => result.data)
+        .then(data2 => {
+            console.log("uhoh!")
+            unlike()
+        })
+
+    }, []);
+
+    // Check if follower
+    useEffect(() => {
+        data['rid'] = parseInt(text2)
+        const formData = new FormData()
+        formData.append("rid", parseInt(text2))
+
+        axios.post("http://127.0.0.1:8000/social/follow/", formData, { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}` } }
+        ).catch(function (error) {
+            if (error.response.status == 400) {
+                
+                // unlike()
+                setFollower(true)
+                return
+            } else {
+                console.log(error.response.status)
+                return
+                
+            }
+        }).then(result => result.data)
+        .then(data2 => {
+            unfollow()
+        })
+
+    }, []);
 
     // Check if user owns this restaurant
     useEffect(() => {
@@ -177,6 +232,30 @@ export const Restaurant_View = () => {
     //             })
 
     //     }
+
+    function UpdateLikesFollows () {
+        axios.get(rest_result).catch(function (error) {
+            if (error.response) {
+                if (error.response.status == 404) {
+                    console.log("404!")
+                } else {
+                    console.log("cry!")
+                }
+
+            }
+
+        }).then(result => result.data)
+            .then(data2 => {
+                setLikes(data2['likes'])
+                setFollows(data2['followers'])
+                console.log(data2)
+
+            })
+    }
+
+    
+
+
     useEffect(() => {
             axios.get(rest_result).catch(function (error) {
                 if (error.response) {
@@ -191,6 +270,8 @@ export const Restaurant_View = () => {
             }).then(result => result.data)
                 .then(data2 => {
                     setRestaurant(data2)
+                    setLikes(data2['likes'])
+                    setFollows(data2['followers'])
                     console.log(data2)
 
                 })
@@ -243,9 +324,13 @@ export const Restaurant_View = () => {
         var temp2 = text2
         var temp3 = temp1.concat(temp2)
         var final = temp3.concat("/")
+        
         axios.delete(final, { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}` } }).then(result => result.data)
             .then(data2 => {
                 console.log(data2)
+                setLiker(false)
+
+                UpdateLikesFollows()
             })
     }
 
@@ -263,6 +348,7 @@ export const Restaurant_View = () => {
                 if (error.response.status == 400) {
                     console.log("HEY")
                     unlike()
+
                     return
                 } else {
                     console.log(error.response.status)
@@ -272,7 +358,9 @@ export const Restaurant_View = () => {
 
             }
         })
-
+        setLiker(true)
+        UpdateLikesFollows()
+        console.log(likes)
     }
 
     function unfollow() {
@@ -284,6 +372,9 @@ export const Restaurant_View = () => {
         axios.delete(final, { headers: { "Authorization": `Bearer ${localStorage.getItem('token')}` } }).then(result => result.data)
             .then(data2 => {
                 console.log(data2)
+                setFollower(false)
+                UpdateLikesFollows()
+
             })
     }
 
@@ -301,6 +392,8 @@ export const Restaurant_View = () => {
                 if (error.response.status == 400) {
                     console.log("HEY")
                     unfollow()
+                    UpdateLikesFollows()
+
                     return
                 } else {
                     console.log(error.response.status)
@@ -310,6 +403,8 @@ export const Restaurant_View = () => {
 
             }
         })
+        setFollower(true)
+        UpdateLikesFollows()
 
     }
 
@@ -349,10 +444,11 @@ export const Restaurant_View = () => {
                     <div id="store_logo" class="mb-4">
                         <img id="restlogo" src={restaurant['logo']} alt="restaurant logo" />
                     </div>
-                    <p>
-                        <button type="button" class="btn btn-secondary" onClick={follow}>Follow</button><span> : </span><label>{restaurant['followers']}</label>
-                        <button type="button" class="btn btn-secondary" onClick={like}>Like</button><span> : </span><label>{restaurant['likes']}</label>
-                    </p>
+                    {(follower) ? <button type="button" class="follow btn btn-primary" onClick={follow}>Following!</button> : <button type="button" class="follow btn btn-primary" onClick={follow}>Follow</button>}     
+                     {(liker) ?  <button type="button" class="like btn btn-primary ml-4" onClick={like}>Liked!</button> : <button type="button" class="like btn btn-primary ml-4" onClick={like}>Like</button>}
+                    
+                    <h5 class="card-text mt-1">Likes: {likes}</h5>
+                    <h5 class="card-text">Followers: {follows}</h5>
                     <h5 class="card-text">Address: {restaurant['address']}</h5>
                     <h5 class="card-text">Postal Code: {restaurant['postal_code']}</h5>
                     <h5 class="card-text">Phone number: {restaurant['phone_number']}</h5>

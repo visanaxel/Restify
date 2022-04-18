@@ -143,3 +143,14 @@ img {
   z-index: 100;
 }
 
+#restlogo {
+    clip-path: none;
+    width: 10px;
+    height: 10px;
+}
+
+#store_logo{
+    width: 10px;
+    height: 10px;
+}
+

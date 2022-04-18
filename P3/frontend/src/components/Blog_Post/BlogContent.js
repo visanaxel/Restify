@@ -1,7 +1,11 @@
 import axios from 'axios';
+import { useState } from 'react';
 
 const BlogContent = (props) => {
     console.log(props.blog['title'])
+    const [liker, setLiker] = useState(false);
+    const [likes, setLikes] = useState(0);
+
 
     function handle2() {
         console.log("HEYO")
@@ -43,8 +47,8 @@ const BlogContent = (props) => {
 
     return (
         <>
-             <div class="row photo_row mt-0">
-                    <img src={props.blog['image']}/>
+             <div class="row mt-0" id="store2_logo">
+                    <img id="rest2logo" src={props.blog['image']}/>
             </div>
 
             <div class="row title">
@@ -52,11 +56,15 @@ const BlogContent = (props) => {
 
             </div>
             <div class="row title">
-                <p class="mt-0 mb-0">{props.blog['date']}</p>
+                <h5 class="mt-0 mb-0">{props.blog['date']}</h5>
             </div>
 
             <div class="row title">
-                <input onClick={handle} width="30px" type="image" src="https://raw.githubusercontent.com/ChunKaiC/chunkaic.github.io/main/like.png" class="like"></input> <p class="ml-5">Likes: {props.blog['likes']}</p>
+                <h5 class="">Likes: </h5>
+            </div>
+
+            <div class="row title">
+                 {(liker) ?  <button type="button" class="like btn btn-primary" onClick={console.log("hey")}>Liked!</button> : <button type="button" class="like btn btn-primary" onClick={console.log("hey")}>Like</button>}
             </div>
 
             <hr/> 

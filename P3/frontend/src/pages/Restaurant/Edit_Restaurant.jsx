@@ -24,7 +24,8 @@ export const Edit_Restaurant = () => {
     const [postal_code, setPostal_Code] = useState("");
     const [logo, setLogo] = useState(null);
     const [address, setAddress] = useState("");
-    // ADD PHONE NUMBER!
+    const [phone_number, setPhoneNumber] = useState("");
+
 
     let navigate = useNavigate();
 
@@ -45,6 +46,9 @@ export const Edit_Restaurant = () => {
         if (address !== "") {
             formData.append("address", address)
         }
+        if (phone_number !== "") {
+            formData.append("phone_number", phone_number)
+        }
 
         Axios.patch(rest_result, formData, {
             headers: {
@@ -63,78 +67,82 @@ export const Edit_Restaurant = () => {
     return (
         <>
         
-        <head>
-                <title>Blog</title>
-                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-                    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-                    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-                    crossorigin="anonymous"></script>
-                <link rel="stylesheet" href="blog2.css" />
-            </head>
-            {/* <Navbar /> */}
+        
 
-                    <div class="container-fluid">
-                        
-                        <div class="row title">
-                            <div class="col-4">
+<head>
+    <title>Blog</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="blog2.css" />
+</head>
+<Navbar />
 
-                            </div>
-                            <form>
-                                <div class="form-group">
-                                <label class = "mb-0" for="exampleInputPassword1"><h1>Restaurant Logo</h1></label>
+<br></br>
+<div class="container-fluid ">
 
-                                    <input  type="file" class="form-control-file mt-0" id="exampleFormControlFile1" onChange=
-                            {e => setLogo(e.target.files[0])} />
-                                    <label class = "mb-0" for="exampleInputPassword1"><h1>Title</h1></label>
-                                    <div class="row">
-                                        <div class="col-10 mr-0">
-                                            <input class="form-control" id="exampleInputPassword1" placeholder="Type Name" onChange={(e) => {
+    <div class="row title">
+        <div class="col-8">
+
+        </div>
+        <form id="dannyform">
+            <div class="form-group">
+                <h1>Edit Restaurant</h1>
+                <hr></hr>
+                <label class="mb-0" for="exampleInputPassword1"><h4>Restaurant Logo</h4></label>
+
+                <input type="file" accept="image/png, image/gif, image/jpeg" class="form-control-file mt-0" id="exampleFormControlFile1" onChange={e => setLogo(e.target.files[0])} />
+                <p class="mt-0 mb-0" style={{color: 'red'}}></p>
+                <label class="mb-0 mt-3" for="exampleInputPassword1"><h4>Name</h4></label>
+                <div class="row mb-3">
+                    <div class="col-12 mr-0">
+                        <input class="form-control" id="exampleInputPassword1" placeholder="Type Name" onChange={(e) => {
                             setName(e.target.value);
                         }} />
-                                                            <label class = "mb-0" for="exampleInputPassword1"><h1>Address</h1></label>
+                        <p style={{color: 'red'}}></p>
+                        <label class="mb-0" for="exampleInputPassword1"><h4>Address</h4></label>
 
-                         <input class="form-control" id="exampleInputPassword1" placeholder="Type Adresss" onChange={(e) => {
+                        <input class="form-control" id="exampleInputPassword1" placeholder="Type Adresss" onChange={(e) => {
                             setAddress(e.target.value);
                         }} />
-                                                            <label class = "mb-0" for="exampleInputPassword1"><h1>Postal Code</h1></label>
+                        <p style={{color: 'red'}}></p>
 
-                         <input class="form-control" id="exampleInputPassword1" placeholder="Type postal code" onChange={(e) => {
+                        <label class="mb-0" for="exampleInputPassword1"><h4>Postal Code</h4></label>
+
+                        <input class="form-control" id="exampleInputPassword1" placeholder="Type postal code" onChange={(e) => {
                             setPostal_Code(e.target.value);
                         }} />
-                                        </div>
-                                        <div class="col-5">
-                                        </div>
-                                    </div>
-                                </div>
-                                <button type="button" class="btn btn-primary" onClick={handle}>Submit</button>
+                        <p style={{color: 'red'}}></p>
 
-                            </form>
-                        </div>
-                        
-                        {/* <div class="row text_body">
-                            
-                                <div class="form-group">
-                                    <label for="exampleFormControlTextarea1">Example text area</label>
-                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="15" cols="140" onChange={(e) => {
-                            setContent(e.target.value);
-                        }}></textarea>
-                                    <button type="submit" class="btn btn-primary" onClick={handle}>Submit</button>
-                                </div>
-                            
+                        <label class="mb-0" for="exampleInputPassword1"><h4>Phone Number</h4></label>
 
-                        </div> */}
-
-                        <hr />
-
+                        <input class="form-control" id="exampleInputPassword1" placeholder="Phone number" onChange={(e) => {
+                            setPhoneNumber(e.target.value);
+                        }} />
+                        <p class="mb-0 mt-0" style={{color: 'red'}}></p>
                     </div>
+                    <div class="col-5">
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary mt-0" onClick={handle}>Submit</button>
+
+        </form>
+    </div>
 
 
-            <Footer />
 
 
-        </>
-        
+</div>
+
+
+<Footer />
+
+
+</>
+
     )
 
 }
