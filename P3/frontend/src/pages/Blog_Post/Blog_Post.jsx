@@ -202,7 +202,11 @@ export const Blog_Post = () => {
                         </div>
                     </div>
                 </div>
+
             </body>
+            <br></br>
+            <br></br>
+            <Footer></Footer>
         </>
 
 

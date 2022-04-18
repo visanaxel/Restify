@@ -444,7 +444,6 @@ export const Restaurant_View = () => {
                     zIndex: "-1",
                     width: "100%"
                     }} />
-            <p className="blog">Edit Item</p>   
            
             <body style={{margin: '200 px'}}>
 
