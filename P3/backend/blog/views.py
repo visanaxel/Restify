@@ -36,7 +36,7 @@ class AddBlogView(CreateAPIView):
         followers = Follows.objects.filter(rid=restaurant)
         for follower in followers:
             desc = serializer.data['title'].capitalize() + " blog was posted for " + restaurant.name + "!"
-            UserNotifications.objects.create(uid=follower.uid, rid=restaurant, notif_type='b', description=desc)
+            UserNotifications.objects.create(uid=follower.uid, rid=restaurant, notif_type='b', description=desc, logo=restaurant.logo)
     
     def create(self, request, *args, **kwargs):
         if (not request.user.is_owner):

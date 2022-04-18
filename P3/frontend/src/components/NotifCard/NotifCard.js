@@ -39,7 +39,7 @@ function NotifCard(props) {
                     <>
                     <div className="row mt-0">
                         <div className="col-2 picture_column d-flex justify-content-end">
-                            <img className="profile_pic" src={props.pic[i]}/>
+                            <img className="profile_pic" src={item['logo']}/>
                         </div>
                         <div className="col-8">
                             <div className="alert alert-primary alert-dismissible fade show" role="alert">

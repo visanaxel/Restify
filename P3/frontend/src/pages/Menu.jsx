@@ -59,6 +59,18 @@ export const Menu = () => {
     //             setItems(data2['results']);
     //         })
     //     }
+
+    var result = items.reduce((resultArray, item, index) => { 
+        const chunkIndex = Math.floor(index/3)
+      
+        if(!resultArray[chunkIndex]) {
+          resultArray[chunkIndex] = [] // start a new chunk
+        }
+      
+        resultArray[chunkIndex].push(item)
+      
+        return resultArray
+    }, [])
     
 
     return (
@@ -81,10 +93,18 @@ export const Menu = () => {
                     }} />
             <p className="blog">Menu</p>
 
-            {items.map((item, i) => {
+            {result.map((sub, i) => {
                 return (
-                    <><div class="card-deck"><FlipCard data={item} /></div></>
-                )
+                    <><div class="card-deck">
+
+                        {sub.map( (element, j) => {
+                            
+                            return <FlipCard data={element} />;
+
+                        })}
+                        
+                    </div></>
+                );
 
             })}
 

@@ -10,10 +10,12 @@ rest_notification_choices = (('a', 'item added'), ('e', 'item edited'))
 class UserNotificationSerializer(serializers.ModelSerializer):
     uid = MyUserSerializer
     rid = RestaurantSerializer
+    logo = rid['logo']
     
     class Meta:
         model = UserNotifications
         fields = [
+            'logo',
             'uid', 
             'rid', 
             'notif_type',

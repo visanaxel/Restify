@@ -7,31 +7,37 @@ import Navbar from "../../components/Navbar/navbar";
 import Footer from "../../components/Footer/footer";
 import NotifCard from '../../components/NotifCard/NotifCard';
 import ParticlesBg from 'particles-bg'
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
 
 export const UserNotif = () => {
 
     const [data, setData] = useState([]);
-    const [pic, setPic] = useState([])
+    const [page, setPage] = useState(1);
+    const [prev, setPrev] = useState(null);
+    const [next, setNext] = useState('http://127.0.0.1:8000/notifications/user/');
 
     useEffect(() => {
-        Axios.get("http://127.0.0.1:8000/notifications/user/", 
+        Axios.get(next, 
         {headers: {"Authorization": `Bearer ${localStorage.getItem('token')}`}})
         .then(result => result.data)
         .then(json => {
             //console.log(json);
 
-            for (var i = 0; i < json['results'].length; i++) {
-                //console.log('HI');
-                Axios.get("http://127.0.0.1:8000/restaurant/view/" + json['results'][i]['rid'] + "/")
-                .then(result => result.data)
-                .then(data2 => {
-                    var temp = pic.slice();
-                    setPic(temp => [...temp, data2['logo']]);
-                    console.log(i);
-                });
-            }
+            // for (var i = 0; i < json['results'].length; i++) {
+            //     //console.log('HI');
+            //     Axios.get("http://127.0.0.1:8000/restaurant/view/" + json['results'][i]['rid'] + "/")
+            //     .then(result => result.data)
+            //     .then(data2 => {
+            //         var temp = pic.slice();
+            //         setPic(temp => [...temp, data2['logo']]);
+            //         console.log(i);
+            //     });
+            // }
             //console.log(json);
             setData(json);
+            setNext(json['next']);
+            setPrev(json['previous']);
         })
         .catch((error) => {
             setData(['false']);
@@ -39,11 +45,12 @@ export const UserNotif = () => {
         });
         console.log('i fire once');
 
-    }, []);
+    }, [page]);
 
-    if (data !== [] && pic !== []) {
-        console.log(pic);
+    if (data !== [] ) {
+        //console.log(pic);
         //console.log(pic !== []);
+        console.log(data.toString())
         return (
             <>
                 <Navbar></Navbar>
@@ -52,7 +59,17 @@ export const UserNotif = () => {
                     zIndex: "-1",
                     width: "100%"
                     }} />
-                {(data.toString() !== 'false') ? <NotifCard data={data} pic={pic}></NotifCard> : <h1 style={{textAlign: 'center'}}> Please log in to see user notifications.</h1>}
+                    
+                <br></br>
+                {(data.toString() !== 'false') ? <NotifCard data={data}></NotifCard> :  <><br></br><br></br><br></br><h1 style={{textAlign: 'center'}}> Please log in to see user notifications.</h1></>}
+
+                <Typography align='center'>
+                {((prev !== null) ? <Button marginRight='50' value="prev" variant="contained" onClick={() => {setPage(page - 1); setNext(prev)}}>Previous</Button> : <div></div>)}
+                {(((prev !== null) && (next !== null)) ? <div style={{display: 'inline-block'}}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div> : <p></p>)}
+                {((next !== null && (data.toString() !== 'false')) ? <Button value="next" variant="contained" style={{marginBottom: '100px'}} onClick={() => setPage(page + 1)}>Next</Button> : <div></div>)}
+                </Typography>
+
+                
 
                 <Footer></Footer>
             </>
