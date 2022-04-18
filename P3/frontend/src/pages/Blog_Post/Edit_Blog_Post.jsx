@@ -7,6 +7,7 @@ import Axios from 'axios';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import ParticlesBg from 'particles-bg'
 
 export const Edit_Blog_Post = () => {
     console.log("Made it!")
@@ -71,6 +72,11 @@ export const Edit_Blog_Post = () => {
                 <link rel="stylesheet" href="blog.css" />
             </head>
             {/* <Navbar /> */}
+            <ParticlesBg num={5} type="circle" id="particles-js" bg={{
+                    position: "fixed",
+                    zIndex: "-1",
+                    width: "100%"
+                    }} />
             <div id="wrapper">
 
                 <div id="page-content-wrapper">

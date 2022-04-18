@@ -6,6 +6,7 @@ from users.models import MyUser
 from restaurant.models import MenuItem;
 from restaurant.models import Restaurant
 from django.db import models
+from rest_framework.pagination import PageNumberPagination
 
 from users.serializers import MyUserSerializer
 
@@ -34,6 +35,7 @@ class MenuItemSerializer(serializers.ModelSerializer):
     description = serializers.CharField(max_length=400)
     image = serializers.ImageField(required=False)
     rid = RestaurantSerializer
+    
 
     class Meta:
         model = MenuItem

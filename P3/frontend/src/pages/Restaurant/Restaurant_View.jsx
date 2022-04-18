@@ -9,6 +9,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import './restaurant.css';
 import Comments from "../../components/Blog_Post/Comments";
+import ParticlesBg from 'particles-bg'
 
 import { Carousel } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
@@ -289,9 +290,19 @@ export const Restaurant_View = () => {
             </div>
 
             {/* <link rel="stylesheet" href="restaurant.css" />
+            
 
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossOrigin="anonymous" /> */}
+<<<<<<< HEAD
 
+=======
+            <ParticlesBg num={5} type="circle" id="particles-js" bg={{
+                    position: "fixed",
+                    zIndex: "-1",
+                    width: "100%"
+                    }} />
+            <img id="logo" src={restaurant['logo']} alt="restaurant logo" />
+>>>>>>> ab7f47d119042450089b2520846758b9c17ed11d
 
             <div class="card">
                 <div class="card-body">
