@@ -5,7 +5,7 @@ from django.db.models import SET_NULL
 
 class MyUser(AbstractUser):
     description = models.CharField(max_length=200, default='')
-    profile_pic = models.ImageField(default='https://cbwc.ca/wp-content/uploads/2019/03/blank-profile-picture-973460_640.png', upload_to='pictures/') # Change to local pic
+    profile_pic = models.ImageField(default='../media/koala.jpg', blank=True) # Change to local pic
     # restauarant user or regular user
     is_owner = models.BooleanField(default=False)
     phone_number = models.CharField(max_length=20) 

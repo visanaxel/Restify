@@ -2,6 +2,7 @@ from importlib.resources import read_text
 from django.http import Http404
 from django.shortcuts import render
 from rest_framework.views import APIView
+from users.models import MyUser
 from blog.serializers import BlogSerializer
 from restaurant.models import Restaurant
 from restaurant.serializers import AddRestaurantSerializer
@@ -25,6 +26,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from social.models import LikeBlog, LikeRest
+
 
 # Views here:
 class AddFollowView(CreateAPIView):
@@ -55,7 +57,9 @@ class AddFollowView(CreateAPIView):
 
         # Add new OwnerNotification object!
         user = request.user
-        user_notif = OwnerNotifications(uid=user, rid=restaurant[0], notif_type='f', description=user.username + ' followed your restaurant: ' + restaurant[0].name)
+        print(user.id)
+        pp = MyUser.objects.get(id=user.id).profile_pic
+        user_notif = OwnerNotifications(uid=user, rid=restaurant[0], notif_type='f', description=user.username + ' followed your restaurant: ' + restaurant[0].name, logo=pp)
         user_notif.save()
 
         # increment followers
@@ -117,7 +121,7 @@ class LikeRestView(CreateAPIView):
             return Response({'error': 'User already liked the restaurant.'}, status=status.HTTP_400_BAD_REQUEST)
 
         # Add new OnwerNotification object!
-        user_notif = OwnerNotifications(uid=user, rid=restaurant[0], notif_type='l', description=user.username + ' liked your restaurant: ' + restaurant[0].name)
+        user_notif = OwnerNotifications(uid=user, rid=restaurant[0], notif_type='l', description=user.username + ' liked your restaurant: ' + restaurant[0].name, logo=user.profile_pic)
         user_notif.save()
 
         # increment restaurant likes count!
@@ -180,7 +184,7 @@ class LikeBlogView(CreateAPIView):
 
         # Create owner notification!
         restaurant = blog[0].rid
-        user_notif = OwnerNotifications(uid=user, rid=restaurant, notif_type='l', description=user.username + ' liked your blog: ' + blog[0].title)
+        user_notif = OwnerNotifications(uid=user, rid=restaurant, notif_type='l', description=user.username + ' liked your blog: ' + blog[0].title, logo=user.profile_pic)
         user_notif.save()
 
         # increment blog likes count!

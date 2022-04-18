@@ -14,6 +14,7 @@ class OwnerNotifications(models.Model):
     rid = models.ForeignKey(to=Restaurant, on_delete=SET_NULL, null=True)
     notif_type = models.CharField(max_length=1, choices=owner_notification_choices)
     description = models.CharField(max_length=400)
+    logo = models.ImageField(default='../media/koala.jpg', blank=True)
     date = models.DateTimeField(auto_now_add=True)
 
 class UserNotifications(models.Model):

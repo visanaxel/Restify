@@ -26,4 +26,4 @@ class OwnerNotificationSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = OwnerNotifications
-        fields = ['id', 'uid', 'description']
+        fields = ['logo', 'id', 'uid', 'description']

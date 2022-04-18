@@ -254,8 +254,9 @@ class CommentRestaurantView(CreateAPIView):
         serializer.save(uid=user, rid=restaurant)
 
         # notify owner!
+        print(logo=user.profile_pic)
         OwnerNotifications.objects.create(rid=restaurant, uid = user, notif_type='c', \
-            description = user.username + " commented on your page: " + self.request.data['comment']) 
+            description = user.username + " commented on your page: " + self.request.data['comment'], logo=user.profile_pic) 
 
 class GetCommentsView(ListAPIView):
 

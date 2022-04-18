@@ -41,7 +41,7 @@ export const RestNotif = () => {
 
     }, []);
 
-    if (data !== [] && pic !== []) {
+    if (data !== []) {
         console.log(pic);
         //console.log(pic !== []);
         return (
@@ -52,6 +52,9 @@ export const RestNotif = () => {
                     zIndex: "-1",
                     width: "100%"
                     }} />
+
+                <br></br>
+
                 {(data.toString() !== 'false') ? <NotifCard data={data} pic={pic}></NotifCard> : <h2 style={{textAlign: 'center'}}> You do not own a restaurant.</h2>}
 
                 <br></br>
