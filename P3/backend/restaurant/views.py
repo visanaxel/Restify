@@ -403,3 +403,30 @@ class RestBlogView(ListAPIView):
             return Response(error, status=status.HTTP_404_NOT_FOUND)
 
         return super().get(request, *args, **kwargs)
+
+class GetUserRestaurantView(RetrieveAPIView):
+    queryset = Restaurant.objects.all()
+    serializer_class = RestaurantSerializer
+    look_field = 'pk'
+
+    def retrieve(self, request, *args, **kwargs):
+        restaurant = Restaurant.objects.get(owner=kwargs['pk'])
+        temp = {'rid': restaurant.id}
+        print(temp)
+        return Response(temp)
+        
+    def get(self, request, *args, **kwargs):
+
+        # Check if restaurant exists
+        print("HEYO")
+        print(kwargs['pk'])
+        # owner 17
+        restaurant = Restaurant.objects.get(owner=kwargs['pk'])
+        # request['id2'] = restaurant[0]
+        print("HEYO")
+        print(restaurant)
+        
+        if not bool(restaurant):
+            return Response({'error': 'Restaurant not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        return self.retrieve(request, *args, **kwargs)
