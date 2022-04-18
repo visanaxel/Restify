@@ -54,6 +54,24 @@ export const RestNotif = () => {
                     }} />
                 {(data.toString() !== 'false') ? <NotifCard data={data} pic={pic}></NotifCard> : <h2 style={{textAlign: 'center'}}> You do not own a restaurant.</h2>}
 
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+                <br></br>
+
                 <Footer></Footer>
             </>
         );
