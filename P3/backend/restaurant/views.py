@@ -150,7 +150,7 @@ class EditItemView(UpdateAPIView):
 
                 UserNotifications.objects.create(uid=follower.uid, 
                                                 rid=restaurant[0], 
-                                                notif_type='n',
+                                                notif_type='m',
                                                 description=desc,
                                                 logo=restaurant[0].logo)
 
