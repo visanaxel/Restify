@@ -38,6 +38,12 @@ export const Home = () => {
                         crossOrigin="anonymous"></script>
                     <link rel='stylesheet' href='./Home.css'/>
                 </div>
+
+                <ParticlesBg num={5} type="circle" id="particles-js" bg={{
+                    position: "fixed",
+                    zIndex: "-1",
+                    width: "100%"
+                    }} />
     
                 <Navbar></Navbar>
     
