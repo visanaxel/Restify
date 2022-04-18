@@ -112,7 +112,7 @@ export const EditProfile = () => {
                 }}>
                     <div class="form-group">
                         <label for="pic">Upload Profile Picture</label>
-                        <input type="file" class="form-control-file" id="pic" onChange=
+                        <input type="file" accept="image/*" class="form-control-file" id="pic" onChange=
                             {e => setPic(e.target.files[0])}  />
                                                     <p style={{color: 'red'}}>{picError}</p>
 

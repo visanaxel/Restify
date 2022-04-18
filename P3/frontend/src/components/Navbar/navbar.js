@@ -21,7 +21,11 @@ function Navbar() {
                   </li>
 
                   
-                  {(localStorage.getItem('token') !== '' && localStorage.getItem('token') !== null && localStorage.getItem('token') !== undefined) ? <> <li className="nav-item">
+                  {(localStorage.getItem('token') !== '' && localStorage.getItem('token') !== null && localStorage.getItem('token') !== undefined) ? <> 
+                  <li className="nav-item">
+                    <a className="nav-link" href="http://localhost:3000/feed">Feed</a>
+                  </li>
+                  <li className="nav-item">
                     <a className="nav-link" href="http://localhost:3000/restaurant/add">My Restaurant</a>
                   </li>
                   <li className="nav-item">

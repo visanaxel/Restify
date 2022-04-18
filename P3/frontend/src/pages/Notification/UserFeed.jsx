@@ -9,14 +9,14 @@ import NotifCard from '../../components/NotifCard/NotifCard';
 import ParticlesBg from 'particles-bg'
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import UserCard from '../../components/NotifCard/UserCard';
+import FeedCard from '../../components/NotifCard/FeedCard';
 
-export const UserNotif = () => {
+export const UserFeed = () => {
 
     const [data, setData] = useState([]);
     const [page, setPage] = useState(1);
     const [prev, setPrev] = useState(null);
-    const [next, setNext] = useState('http://127.0.0.1:8000/notifications/user/');
+    const [next, setNext] = useState('http://127.0.0.1:8000/social/feed/');
 
     useEffect(() => {
         Axios.get(next, 
@@ -62,7 +62,7 @@ export const UserNotif = () => {
                     }} />
                     
                 <br></br>
-                {(data.toString() !== 'false') ? <UserCard data={data}></UserCard> :  <><br></br><br></br><br></br><h1 style={{textAlign: 'center'}}> Please log in to see user notifications.</h1></>}
+                {(data.toString() !== 'false') ? <FeedCard data={data}></FeedCard> :  <><br></br><br></br><br></br><h1 style={{textAlign: 'center'}}> Please log in to see user notifications.</h1></>}
 
                 <Typography align='center'>
                 {((prev !== null) ? <Button marginRight='50' value="prev" variant="contained" onClick={() => {setPage(page - 1); setNext(prev)}}>Previous</Button> : <div></div>)}
@@ -72,6 +72,8 @@ export const UserNotif = () => {
 
                 <br></br>
                 <br></br>
+
+                
 
                 <Footer></Footer>
             </>

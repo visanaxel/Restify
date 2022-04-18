@@ -60,7 +60,10 @@ export const ItemForm2 = (props) => {
         if (pic === null) {
             delete data['image']
         }
-        console.log(data)
+        if (parseFloat(price) <= 0) {
+            setPriceError("The price must be positive.")
+        }
+        else {
         
         
         Axios.patch("http://127.0.0.1:8000/restaurant/menu/" + window.location.pathname.split("/")[2] + "/edit/", formData, {
@@ -92,6 +95,7 @@ export const ItemForm2 = (props) => {
                     setPriceError("") 
                 } 
               });
+            }
               return 1;
 }
 
