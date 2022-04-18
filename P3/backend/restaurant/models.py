@@ -31,4 +31,5 @@ class Comment(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     rid = models.ForeignKey(to=Restaurant, on_delete=SET_NULL,  null=True)
     uid = models.ForeignKey(to=MyUser, on_delete=SET_NULL,  null=True)
+    profile_pic = models.ImageField(null=True, blank=True)
 

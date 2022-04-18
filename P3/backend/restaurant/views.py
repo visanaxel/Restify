@@ -103,7 +103,7 @@ class AddItemView(CreateAPIView):
         followers = Follows.objects.filter(rid=restaurant[0])
         for follower in followers:
                 name = request.data.get('name')
-                desc = restaurant[0].name + ': Menu item #' + str(new.id) + ' was added!'
+                desc = restaurant[0].name + ': ' + new.name + ' was added!'
 
                 UserNotifications.objects.create(uid=follower.uid, 
                                                 rid=restaurant[0], 
@@ -146,7 +146,7 @@ class EditItemView(UpdateAPIView):
         followers = Follows.objects.filter(rid=restaurant[0])
         for follower in followers:
                 item = MenuItem.objects.get(id=self.kwargs['pk'])
-                desc = restaurant[0].name + ": modified menu item #" + str(item.id) + "!"
+                desc = restaurant[0].name + ": " + item.name + " was modified!"
 
                 UserNotifications.objects.create(uid=follower.uid, 
                                                 rid=restaurant[0], 
